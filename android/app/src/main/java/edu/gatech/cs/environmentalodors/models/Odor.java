@@ -1,4 +1,4 @@
-package models;
+package edu.gatech.cs.environmentalodors.models;
 
 /**
  * Odor describes an environmental odor as experienced by an individual.

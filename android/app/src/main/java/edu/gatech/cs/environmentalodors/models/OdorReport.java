@@ -1,4 +1,4 @@
-package models;
+package edu.gatech.cs.environmentalodors.models;
 
 import android.location.Location;
 

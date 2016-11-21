@@ -1,6 +1,4 @@
-package models;
-
-import java.util.Date;
+package edu.gatech.cs.environmentalodors.models;
 
 public class User {
     /* // Things that may or may not be useful to us.
