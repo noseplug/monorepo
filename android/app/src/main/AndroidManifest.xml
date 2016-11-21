@@ -31,17 +31,17 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
-
-        </activity>
-        <activity
-            android:name=".ReportFormActivity"
-            android:label="@string/title_activity_report_form"
-            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ReportFormActivity"
+            android:label="@string/title_activity_report_form"
+            android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
     </application>
 
