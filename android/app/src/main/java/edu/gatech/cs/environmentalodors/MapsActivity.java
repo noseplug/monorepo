@@ -1,5 +1,6 @@
 package edu.gatech.cs.environmentalodors;
 
+import android.app.Application;
 import android.content.Intent;
 import android.location.Location;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import edu.gatech.cs.environmentalodors.events.LocationEvent;
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
+import edu.gatech.cs.environmentalodors.models.OdorEvent;
 
 public class MapsActivity extends FragmentActivity {
     private static final String TAG = MapsActivity.class.getSimpleName();
@@ -29,7 +31,6 @@ public class MapsActivity extends FragmentActivity {
     private static final float INITIAL_LOCATION_ZOOM_FACTOR = (float) 10.0;
 
     private GoogleApiClientWrapper googleApiClientWrapper;
-
     private GoogleMap mMap;
 
     @Override
@@ -72,7 +73,9 @@ public class MapsActivity extends FragmentActivity {
     @Subscribe
     public void onOdorReportEvent(OdorReportEvent odorReportEvent) {
         Log.v(TAG, "Received an odor report event");
-        // TODO: Create odor events and markers on the map.
+        OdorEvent odorEvent = new OdorEvent(odorReportEvent.odorReport);
+        ApplicationState.getInstance().addOdorEvent(odorEvent);
+        // TODO: draw morker on the map.
     }
 
     private void initMaps() {

@@ -1,6 +1,8 @@
 package edu.gatech.cs.environmentalodors.models;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.UUID;
 
 /**
  * OdorEvent is a group of spatiotemporally related {@link OdorReport}s.
@@ -18,5 +20,10 @@ import java.util.Collection;
  * Many OdorEvents will only have a single OdorReport.
  */
 public class OdorEvent {
-    private Collection<OdorReport> odorReports;
+    public final UUID uuid = UUID.randomUUID();
+    private Collection<OdorReport> odorReports = new HashSet<>(1);
+
+    public OdorEvent(OdorReport odorReport) {
+        odorReports.add(odorReport);
+    }
 }
