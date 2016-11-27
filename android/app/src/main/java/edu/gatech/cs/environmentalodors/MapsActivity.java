@@ -21,6 +21,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import edu.gatech.cs.environmentalodors.events.LocationEvent;
+import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
 
 public class MapsActivity extends FragmentActivity {
     private static final String TAG = MapsActivity.class.getSimpleName();
@@ -66,6 +67,12 @@ public class MapsActivity extends FragmentActivity {
                 .zoom(INITIAL_LOCATION_ZOOM_FACTOR)
                 .build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
+    }
+
+    @Subscribe
+    public void onOdorReportEvent(OdorReportEvent odorReportEvent) {
+        Log.v(TAG, "Received an odor report event");
+        // TODO: Create odor events and markers on the map.
     }
 
     private void initMaps() {
