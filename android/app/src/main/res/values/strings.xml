@@ -2,4 +2,7 @@
     <string name="app_name">Environmental Odors</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_report_form">ReportFormActivity</string>
+    <string name="title_activity_report_form_description">ReportFormDescriptionActivity</string>
+    <string name="odor_type_prompt">Choose a type</string>
+
 </resources>

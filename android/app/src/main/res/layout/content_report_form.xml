@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,7 +14,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="edu.gatech.cs.environmentalodors.ReportFormActivity"
+    tools:context="edu.gatech.cs.environmentalodors.ReportFormDateTimeActivity"
     tools:showIn="@layout/activity_report_form">
     <LinearLayout
         android:focusable="true"
@@ -19,7 +23,7 @@
         android:layout_height="0px"/>
 
     <TextView
-        android:text="Report Form"
+        android:text="      "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/form_title"
@@ -58,23 +62,69 @@
         <!--android:id="@+id/select_date"-->
         <!--android:datePickerMode="spinner" />-->
     <TextView
-        android:text="Time"
+        android:text="Time Start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/select_date"
         android:layout_marginTop="23dp"
         android:layout_marginLeft="20dp"
-        android:id="@+id/time"/>
+        android:id="@+id/time_start"/>
 
     <TimePicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/timePicker"
         android:timePickerMode="spinner"
-        android:layout_below="@+id/time"
+        android:layout_below="@+id/time_start"
         android:layout_marginLeft="20dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Time End"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timePicker"
+        android:layout_marginTop="23dp"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/time_end"/>
+
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timePicker2"
+        android:timePickerMode="spinner"
+        android:layout_below="@+id/time_end"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/time_start"
+        android:layout_below="@+id/timePicker2"
+        android:layout_alignEnd="@+id/time_start"
+        android:id="@+id/location_label" />
+
+    <TextView
+        android:text="xxxxxx=======xx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/time_start"
+        android:layout_below="@+id/location_label"
+        android:layout_alignEnd="@+id/time_start"
+        android:id="@+id/location" />
+    <TextView
+        android:text="xxxxxxxx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_below="@+id/location"
+        android:id="@+id/odor_type" />
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -83,5 +133,5 @@
 
     </FrameLayout>
 
-
 </RelativeLayout>
+</ScrollView>

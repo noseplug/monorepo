@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="edu.gatech.cs.environmentalodors.ReportFormDateTimeActivity">
+    tools:context="edu.gatech.cs.environmentalodors.ReportFormDescriptionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,14 +21,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_report_form" />
+    <include layout="@layout/content_report_form_description" />
+
 
     <Button
-        android:id="@+id/right_arrow"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:text="Submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@mipmap/right_arrow" />
+        android:id="@+id/submit_btn"
+        android:background="#3498DB"
+        android:textColor="#ECF0F1" />
 
 </android.support.design.widget.CoordinatorLayout>

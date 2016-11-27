@@ -30,7 +30,11 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:label="@string/title_activity_maps"></activity>
+        <activity
+            android:name=".ReportFormDateTimeActivity"
+            android:label="@string/title_activity_report_form"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,11 +42,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ReportFormActivity"
-            android:label="@string/title_activity_report_form"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:name=".ReportFormDescriptionActivity"
+            android:label="@string/title_activity_report_form_description"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

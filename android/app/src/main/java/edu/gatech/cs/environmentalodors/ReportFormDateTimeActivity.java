@@ -2,15 +2,16 @@ package edu.gatech.cs.environmentalodors;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -20,8 +21,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class ReportFormActivity extends AppCompatActivity {
-    private TimePicker timePicker;
+public class ReportFormDateTimeActivity extends AppCompatActivity {
+    private TimePicker startTimePicker;
+    private TimePicker endTimePicker;
     private EditText date_et;
     Calendar myCalendar = Calendar.getInstance();
     boolean firstClick = true;
@@ -31,17 +33,36 @@ public class ReportFormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_report_form);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setTitle("Report Form - Select Date and Time");
+        Button next = (Button) findViewById(R.id.right_arrow);
+        startTimePicker = (TimePicker) findViewById(R.id.timePicker);
+        endTimePicker = (TimePicker) findViewById(R.id.timePicker2);
+        date_et = (EditText) findViewById(R.id.select_date);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                String dateString = date_et.getText().toString();
+                int startTimeHour, startTimeMinute;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    startTimeHour= startTimePicker.getHour();
+                    startTimeMinute = startTimePicker.getMinute();
+                } else {
+                    startTimeHour = startTimePicker.getCurrentHour();
+                    startTimeMinute = startTimePicker.getCurrentMinute();
+                }
+                int endTimeHour, endTimeMinute;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    endTimeHour= startTimePicker.getHour();
+                    endTimeMinute = startTimePicker.getMinute();
+                } else {
+                    endTimeHour = startTimePicker.getCurrentHour();
+                    endTimeMinute = startTimePicker.getCurrentMinute();
+                }
+                Intent intent = new Intent(ReportFormDateTimeActivity.this, ReportFormDescriptionActivity.class);
+                startActivity(intent);
             }
         });
-        timePicker = (TimePicker) findViewById(R.id.timePicker);
-        date_et = (EditText) findViewById(R.id.select_date);
 
         final DatePickerDialog.OnDateSetListener dateDialog = new DatePickerDialog.OnDateSetListener() {
 
@@ -57,6 +78,7 @@ public class ReportFormActivity extends AppCompatActivity {
 
         };
 
+
         date_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -67,7 +89,7 @@ public class ReportFormActivity extends AppCompatActivity {
 
                 }
                 if (view.hasFocus()) {
-                    new DatePickerDialog(ReportFormActivity.this, dateDialog, myCalendar
+                    new DatePickerDialog(ReportFormDateTimeActivity.this, dateDialog, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                             myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 }
