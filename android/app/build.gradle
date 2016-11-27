@@ -32,5 +32,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:10.0.0'
     compile 'com.google.android.gms:play-services-maps:10.0.0'
     compile 'com.android.support:design:24.2.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
     testCompile 'junit:junit:4.12'
 }
