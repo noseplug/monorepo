@@ -1,13 +1,10 @@
 package edu.gatech.cs.environmentalodors;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -18,7 +15,12 @@ import org.greenrobot.eventbus.EventBus;
 
 import edu.gatech.cs.environmentalodors.events.LocationEvent;
 
-class GoogleApiClientWrapper implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+/**
+ * GoogleApiClientWrapper wraps the GoogleApiClient. This should help separate the activities from
+ * the API boilerplate.
+ */
+class GoogleApiClientWrapper implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = GoogleApiClientWrapper.class.getSimpleName();
 
     private GoogleApiClient googleApiClient;
@@ -31,10 +33,11 @@ class GoogleApiClientWrapper implements GoogleApiClient.ConnectionCallbacks, Goo
                 .build();
     }
 
+    // onStart and onStop are used to keep the wrapper aware of the activity lifecycle.
+
     void onStart() {
         googleApiClient.connect();
     }
-
     void onStop() {
         googleApiClient.disconnect();
     }

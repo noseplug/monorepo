@@ -1,11 +1,10 @@
 package edu.gatech.cs.environmentalodors;
 
-import android.app.Application;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
@@ -19,7 +18,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import edu.gatech.cs.environmentalodors.events.LocationEvent;
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
@@ -27,13 +25,16 @@ import edu.gatech.cs.environmentalodors.models.OdorEvent;
 
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_LOCATION;
 
+/**
+ * MapsActivity is the home page of the environmental odor app.
+ */
 public class MapsActivity extends FragmentActivity implements View.OnClickListener {
     private static final String TAG = MapsActivity.class.getSimpleName();
 
     private static final float INITIAL_LOCATION_ZOOM_FACTOR = (float) 10.0;
 
-    private GoogleApiClientWrapper googleApiClientWrapper;
-    private GoogleMap mMap;
+    private GoogleApiClientWrapper googleApi;
+    private GoogleMap map;
 
     private Location selectedLocation; // Starts at the user's last known location.
 
@@ -41,7 +42,7 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        googleApiClientWrapper = new GoogleApiClientWrapper(this);
+        googleApi = new GoogleApiClientWrapper(this);
         initMaps();
         initOnClickListeners();
     }
@@ -49,14 +50,14 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onStart() {
         super.onStart();
-        googleApiClientWrapper.onStart();
+        googleApi.onStart();
         EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        googleApiClientWrapper.onStop();
+        googleApi.onStop();
         EventBus.getDefault().unregister(this);
     }
 
@@ -66,13 +67,13 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
         selectedLocation = locationEvent.location;
         LatLng current = new LatLng(selectedLocation.getLatitude(),
                 selectedLocation.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(current).title("Where you are"));
+        map.addMarker(new MarkerOptions().position(current).title("Where you are"));
 
         CameraPosition pos = new CameraPosition.Builder()
                 .target(current)
                 .zoom(INITIAL_LOCATION_ZOOM_FACTOR)
                 .build();
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
 
     @Subscribe
@@ -91,7 +92,7 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                mMap = googleMap;
+                map = googleMap;
             }
         });
     }

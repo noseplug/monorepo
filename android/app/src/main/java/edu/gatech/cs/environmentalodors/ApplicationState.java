@@ -1,7 +1,5 @@
 package edu.gatech.cs.environmentalodors;
 
-import android.content.Context;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
