@@ -25,13 +25,17 @@ import edu.gatech.cs.environmentalodors.events.LocationEvent;
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
 import edu.gatech.cs.environmentalodors.models.OdorEvent;
 
-public class MapsActivity extends FragmentActivity {
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_LOCATION;
+
+public class MapsActivity extends FragmentActivity implements View.OnClickListener {
     private static final String TAG = MapsActivity.class.getSimpleName();
 
     private static final float INITIAL_LOCATION_ZOOM_FACTOR = (float) 10.0;
 
     private GoogleApiClientWrapper googleApiClientWrapper;
     private GoogleMap mMap;
+
+    private Location selectedLocation; // Starts at the user's last known location.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +63,9 @@ public class MapsActivity extends FragmentActivity {
     @Subscribe
     public void onLocationEvent(LocationEvent locationEvent) {
         Log.v(TAG, "Received a location event");
-        Location loc = locationEvent.location;
-        LatLng current = new LatLng(loc.getLatitude(), loc.getLongitude());
+        selectedLocation = locationEvent.location;
+        LatLng current = new LatLng(selectedLocation.getLatitude(),
+                selectedLocation.getLongitude());
         mMap.addMarker(new MarkerOptions().position(current).title("Where you are"));
 
         CameraPosition pos = new CameraPosition.Builder()
@@ -93,11 +98,22 @@ public class MapsActivity extends FragmentActivity {
 
     private void initOnClickListeners() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.report_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MapsActivity.this.startActivity(new Intent(MapsActivity.this, ReportFormDateTimeActivity.class));
-            }
-        });
+        fab.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.report_fab:
+                Log.v(TAG, "Clicked FAB, launching odor report activity");
+                Intent reportIntent = new Intent(this, ReportFormDateTimeActivity.class);
+                reportIntent.putExtra(SELECTED_LOCATION, selectedLocation);
+                this.startActivity(reportIntent);
+                break;
+
+            default:
+                String name = this.getResources().getResourceEntryName(v.getId());
+                throw new RuntimeException("Clicked an unknown view: " + name);
+        }
     }
 }
