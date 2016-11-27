@@ -12,6 +12,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -23,6 +24,8 @@ import edu.gatech.cs.environmentalodors.events.LocationEvent;
 
 public class MapsActivity extends FragmentActivity {
     private static final String TAG = MapsActivity.class.getSimpleName();
+
+    private static final float INITIAL_LOCATION_ZOOM_FACTOR = (float) 10.0;
 
     private GoogleApiClientWrapper googleApiClientWrapper;
 
@@ -57,7 +60,12 @@ public class MapsActivity extends FragmentActivity {
         Location loc = locationEvent.location;
         LatLng current = new LatLng(loc.getLatitude(), loc.getLongitude());
         mMap.addMarker(new MarkerOptions().position(current).title("Where you are"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
+
+        CameraPosition pos = new CameraPosition.Builder()
+                .target(current)
+                .zoom(INITIAL_LOCATION_ZOOM_FACTOR)
+                .build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
 
     private void initMaps() {
