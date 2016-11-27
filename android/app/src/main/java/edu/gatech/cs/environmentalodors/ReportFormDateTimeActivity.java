@@ -18,11 +18,16 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TimePicker;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
+import edu.gatech.cs.environmentalodors.models.OdorReport;
+
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_LOCATION;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_REPORT_DATE;
 
 public class ReportFormDateTimeActivity extends AppCompatActivity {
     private TimePicker startTimePicker;
@@ -34,6 +39,7 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
 
     private Location location;
 
+    private Date reportDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +75,11 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
                     endTimeHour = startTimePicker.getCurrentHour();
                     endTimeMinute = startTimePicker.getCurrentMinute();
                 }
+                //report.setLocation(location);
+                //report.setReportDate(reportDate);
                 Intent intent = new Intent(ReportFormDateTimeActivity.this, ReportFormDescriptionActivity.class);
+                intent.putExtra(SELECTED_LOCATION, location);
+                intent.putExtra(SELECTED_REPORT_DATE, reportDate);
                 startActivity(intent);
             }
         });
@@ -128,7 +138,7 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
 
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
+        reportDate = myCalendar.getTime();
         date_et.setText(sdf.format(myCalendar.getTime()));
     }
 

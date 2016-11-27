@@ -7,4 +7,5 @@ package edu.gatech.cs.environmentalodors;
 public final class IntentExtraNames {
     private static final String pkg = IntentExtraNames.class.getPackage().getName();
     public static final String SELECTED_LOCATION = pkg + ".SelectedLocation";
+    public static final String SELECTED_REPORT_DATE = pkg + ".SelectedReportDate";
 }

@@ -1,5 +1,6 @@
 package edu.gatech.cs.environmentalodors;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import java.util.Date;
+
 import edu.gatech.cs.environmentalodors.models.Odor;
+
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_LOCATION;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_REPORT_DATE;
 
 public class ReportFormDescriptionActivity extends AppCompatActivity {
     private Odor.Type[] typeSpinner;
@@ -48,6 +54,9 @@ public class ReportFormDescriptionActivity extends AppCompatActivity {
         ArrayAdapter<String> strengthAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, strStrengthSpinner);
         strengthSpinner.setAdapter(strengthAdapter);
+
+        Location location = getIntent().getParcelableExtra(SELECTED_LOCATION);
+        Date reportDate = getIntent().getParcelableExtra(SELECTED_REPORT_DATE);
     }
 
 }

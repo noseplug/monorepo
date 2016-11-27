@@ -10,10 +10,50 @@ import java.util.Date;
 public class OdorReport {
     private User user;
     private Date creationDate; // When the report was created.
-
     private Date reportDate;   // When the odor was smelled.
     private Location location;
     private Odor odor;
 
     // TODO: how do we represent duration?
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getReportDate() {
+        return reportDate;
+    }
+
+    public void setReportDate(Date reportDate) {
+        this.reportDate = reportDate;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public Odor getOdor() {
+        return odor;
+    }
+
+    public void setOdor(Odor odor) {
+        this.odor = odor;
+    }
+
 }
