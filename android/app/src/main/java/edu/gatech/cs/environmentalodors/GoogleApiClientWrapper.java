@@ -21,7 +21,6 @@ import edu.gatech.cs.environmentalodors.events.LocationEvent;
 class GoogleApiClientWrapper implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = GoogleApiClientWrapper.class.getSimpleName();
 
-
     private GoogleApiClient googleApiClient;
 
     GoogleApiClientWrapper(Context ctx) {
@@ -44,6 +43,9 @@ class GoogleApiClientWrapper implements GoogleApiClient.ConnectionCallbacks, Goo
     public void onConnected(@Nullable Bundle bundle) {
         Log.v(TAG, "Connected");
 
+        // TODO: Make sure this doesn't crap out if location (wifi-based) is not turned on.
+        // TODO: Only navigate to the current location on first startup instead of every
+        // time we connect to Google.
         Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         if (location == null) {
             Log.w(TAG, "No location returned from Google");
