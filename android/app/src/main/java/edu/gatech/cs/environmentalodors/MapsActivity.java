@@ -8,12 +8,14 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,7 +38,8 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
     private GoogleApiClientWrapper googleApi;
     private GoogleMap map;
 
-    private Location selectedLocation; // Starts at the user's last known location.
+    private LatLng selectedLocation; // Starts at the user's last known location.
+    private Marker userMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +62,23 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
     protected void onStop() {
         super.onStop();
         googleApi.onStop();
-        //EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe
-    public void onLocationEvent(LocationEvent locationEvent) {
+    public void onLocationEvent(LocationEvent locationEvent){
         Log.v(TAG, "Received a location event");
         selectedLocation = locationEvent.location;
-        LatLng current = new LatLng(selectedLocation.getLatitude(),
-                selectedLocation.getLongitude());
-        map.addMarker(new MarkerOptions().position(current).title("Where you are"));
+        LatLng current = locationEvent.location;
+
+        if (userMarker != null) {
+            userMarker.remove();
+        }
+        userMarker = map.addMarker(new MarkerOptions().position(current).title("Where you are"));
 
         CameraPosition pos = new CameraPosition.Builder()
                 .target(current)
@@ -82,11 +92,12 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
         Log.v(TAG, "Received an odor report event");
         OdorEvent odorEvent = new OdorEvent(odorReportEvent.odorReport);
         ApplicationState.getInstance().addOdorEvent(odorEvent);
-        // TODO: draw morker on the map.
+
         map.addMarker(new MarkerOptions()
-                .position(new LatLng(10, 10))
-                .title("Hello world"));
+                .position(odorReportEvent.odorReport.getLocation())
+                .title("Odor Report"));
     }
+
 
     private void initMaps() {
         setContentView(R.layout.activity_maps);
@@ -97,6 +108,13 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
+                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+                    @Override
+                    public void onMapClick(LatLng latLng) {
+                        EventBus.getDefault().post(new LocationEvent(latLng));
+                    }
+                });
             }
         });
     }

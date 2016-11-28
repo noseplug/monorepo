@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Date;
 
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
@@ -27,7 +29,7 @@ public class ReportFormDescriptionActivity extends AppCompatActivity {
     Spinner strengthSpinner;
     Spinner typeSpinner;
 
-    Location location;
+    LatLng location;
     Date reportDate;
 
     @Override
