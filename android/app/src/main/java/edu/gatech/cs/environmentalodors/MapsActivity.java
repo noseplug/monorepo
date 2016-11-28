@@ -13,6 +13,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -78,7 +80,8 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
         if (userMarker != null) {
             userMarker.remove();
         }
-        userMarker = map.addMarker(new MarkerOptions().position(current).title("Where you are"));
+        BitmapDescriptor userIcon = BitmapDescriptorFactory.fromAsset("user_icon.png");
+        userMarker = map.addMarker(new MarkerOptions().position(current).title("You are Here").zIndex(-1.0f).icon(userIcon));
 
         CameraPosition pos = new CameraPosition.Builder()
                 .target(current)
