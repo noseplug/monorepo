@@ -1,12 +1,12 @@
 package edu.gatech.cs.environmentalodors.events;
 
-import android.location.Location;
-
 import com.google.android.gms.maps.model.LatLng;
 
-public class LocationEvent {
+import edu.gatech.cs.environmentalodors.models.OdorReport;
+
+public class CreateOdorReportEvent {
     public final LatLng location;
-    public LocationEvent(LatLng location) {
+    public CreateOdorReportEvent(LatLng location) {
         this.location = location;
     }
 }

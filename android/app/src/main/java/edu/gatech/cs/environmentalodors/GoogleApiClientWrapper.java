@@ -10,6 +10,7 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -49,11 +50,13 @@ class GoogleApiClientWrapper implements GoogleApiClient.ConnectionCallbacks,
         // TODO: Make sure this doesn't crap out if location (wifi-based) is not turned on.
         // TODO: Only navigate to the current location on first startup instead of every
         // time we connect to Google.
-        Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        if (location == null) {
+        Location temp = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+
+        if (temp == null) {
             Log.w(TAG, "No location returned from Google");
         } else {
             Log.d(TAG, "Posting location to EventBus");
+            LatLng location = new LatLng(temp.getLatitude(), temp.getLongitude());
             EventBus.getDefault().post(new LocationEvent(location));
         }
     }
@@ -67,4 +70,15 @@ class GoogleApiClientWrapper implements GoogleApiClient.ConnectionCallbacks,
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(TAG, "Connection failed: " + connectionResult);
     }
+/*
+    public static com.google.android.gms.maps.model.LatLng latLngFromLocation(android.location.Location l) {
+        com.google.android.gms.maps.model.LatLng ret
+            = new com.google.android.gms.maps.model.LatLng(
+                l.getLatitude(),
+                l.getLongitude()
+            );
+
+        return ret;
+    }
+    */
 }

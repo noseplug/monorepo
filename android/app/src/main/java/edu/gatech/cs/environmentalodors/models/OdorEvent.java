@@ -26,4 +26,5 @@ public class OdorEvent {
     public OdorEvent(OdorReport odorReport) {
         odorReports.add(odorReport);
     }
+    public OdorReport getFirstOdorReport() {return (OdorReport) odorReports.toArray()[0]; }
 }

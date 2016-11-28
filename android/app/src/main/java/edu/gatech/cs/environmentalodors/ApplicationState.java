@@ -16,8 +16,9 @@ public class ApplicationState {
         return odorEvents.get(uuid);
     }
 
-    public void addOdorEvent(OdorEvent event) {
+    public UUID addOdorEvent(OdorEvent event) {
         odorEvents.put(event.uuid, event);
+        return event.uuid;
     }
 
     // Singleton stuff

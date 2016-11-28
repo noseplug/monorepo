@@ -14,6 +14,21 @@ public class Odor {
         this.description = description;
     }
 
+    public Strength getStrength()
+    {
+        return strength;
+    }
+
+    public Type getType()
+    {
+        return type;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
     public enum Strength {
         LIGHT,          // "Barely noticeable."
         MODERATE,       // "You can smell it, but it doesn't affect normal life."

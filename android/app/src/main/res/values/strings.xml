@@ -4,5 +4,6 @@
     <string name="title_activity_report_form">ReportFormActivity</string>
     <string name="title_activity_report_form_description">ReportFormDescriptionActivity</string>
     <string name="odor_type_prompt">Choose a type</string>
+    <string name="title_activity_odor_event_details">OdorEventDetailsActivity</string>
 
 </resources>

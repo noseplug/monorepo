@@ -2,6 +2,8 @@ package edu.gatech.cs.environmentalodors.models;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Date;
 
 /**
@@ -11,7 +13,7 @@ public class OdorReport {
     private User user;
     private Date creationDate; // When the report was created.
     private Date reportDate;   // When the odor was smelled.
-    private Location location;
+    private LatLng location;
     private Odor odor;
 
     // TODO: how do we represent duration?
@@ -40,11 +42,11 @@ public class OdorReport {
         this.reportDate = reportDate;
     }
 
-    public Location getLocation() {
+    public LatLng getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(LatLng location) {
         this.location = location;
     }
 
