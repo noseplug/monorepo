@@ -80,7 +80,8 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
                 Intent intent = new Intent(ReportFormDateTimeActivity.this, ReportFormDescriptionActivity.class);
                 intent.putExtra(SELECTED_LOCATION, location);
                 intent.putExtra(SELECTED_REPORT_DATE, reportDate);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
+                finish();
             }
         });
 

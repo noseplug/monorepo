@@ -8,18 +8,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.Date;
 
+import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
 import edu.gatech.cs.environmentalodors.models.Odor;
+import edu.gatech.cs.environmentalodors.models.OdorReport;
+
+import org.greenrobot.eventbus.EventBus;
 
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_LOCATION;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_REPORT_DATE;
 
 public class ReportFormDescriptionActivity extends AppCompatActivity {
-    private Odor.Type[] typeSpinner;
-    private Odor.Strength[] strengthSpinner;
+    private OdorReport report = new OdorReport();
+    Spinner strengthSpinner;
+    Spinner typeSpinner;
+
+    Location location;
+    Date reportDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,36 +37,56 @@ public class ReportFormDescriptionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Report Form - Details");
+
+        strengthSpinner = (Spinner) findViewById(R.id.strength_spinner);
+        typeSpinner = (Spinner) findViewById(R.id.type_spinner);
+
+        location = getIntent().getParcelableExtra(SELECTED_LOCATION);
+        reportDate = getIntent().getParcelableExtra(SELECTED_REPORT_DATE);
+
         Button next = (Button) findViewById(R.id.submit_btn);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Congratulations! You have successfully submitted an odor report!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                // HACK: this should be done along the way but I need something to test the maps and show event page with
+
+                Odor odor = new Odor(
+                        Odor.Strength.values()[(int) strengthSpinner.getSelectedItemId()],
+                        Odor.Type.values()[(int) typeSpinner.getSelectedItemId()],
+                        ((EditText) findViewById(R.id.affect)).getText().toString());
+
+                report.setOdor(odor);
+                report.setLocation(location);
+                report.setReportDate(reportDate);
+
+                EventBus.getDefault().post(new OdorReportEvent(report));
+                // end HACK
+                finish();
             }
         });
-        this.typeSpinner = Odor.Type.values();
-        String[] strTypeSpinner = new String[typeSpinner.length];
-        for (int i = 0; i < typeSpinner.length; i++) {
-            strTypeSpinner[i] = typeSpinner[i].toString();
+
+        String[] strTypeSpinner = new String[Odor.Type.values().length];
+        for (int i = 0; i < Odor.Type.values().length; i++) {
+            strTypeSpinner[i] = Odor.Type.values()[i].toString();
         }
         Spinner s = (Spinner) findViewById(R.id.type_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, strTypeSpinner);
         s.setAdapter(adapter);
 
-        this.strengthSpinner = Odor.Strength.values();
-        String[] strStrengthSpinner = new String[strengthSpinner.length];
-        for (int i = 0; i < strengthSpinner.length; i++) {
-            strStrengthSpinner[i] = strengthSpinner[i].toString();
+
+        String[] strStrengthSpinner = new String[Odor.Strength.values().length];
+        for (int i = 0; i < Odor.Strength.values().length; i++) {
+            strStrengthSpinner[i] = Odor.Strength.values()[i].toString();
         }
-        Spinner strengthSpinner = (Spinner) findViewById(R.id.strength_spinner);
         ArrayAdapter<String> strengthAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, strStrengthSpinner);
         strengthSpinner.setAdapter(strengthAdapter);
 
-        Location location = getIntent().getParcelableExtra(SELECTED_LOCATION);
-        Date reportDate = getIntent().getParcelableExtra(SELECTED_REPORT_DATE);
+
     }
 
 }

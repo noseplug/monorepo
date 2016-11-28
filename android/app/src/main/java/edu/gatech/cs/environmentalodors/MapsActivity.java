@@ -45,20 +45,21 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
         googleApi = new GoogleApiClientWrapper(this);
         initMaps();
         initOnClickListeners();
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         googleApi.onStart();
-        EventBus.getDefault().register(this);
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         googleApi.onStop();
-        EventBus.getDefault().unregister(this);
+        //EventBus.getDefault().unregister(this);
     }
 
     @Subscribe
@@ -82,6 +83,9 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
         OdorEvent odorEvent = new OdorEvent(odorReportEvent.odorReport);
         ApplicationState.getInstance().addOdorEvent(odorEvent);
         // TODO: draw morker on the map.
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(10, 10))
+                .title("Hello world"));
     }
 
     private void initMaps() {
@@ -104,6 +108,8 @@ public class MapsActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+
+
         switch (v.getId()) {
             case R.id.report_fab:
                 Log.v(TAG, "Clicked FAB, launching odor report activity");
