@@ -1,6 +1,5 @@
 package edu.gatech.cs.environmentalodors;
 
-import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +24,6 @@ import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_LOCATIO
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_REPORT_DATE;
 
 public class ReportFormDescriptionActivity extends AppCompatActivity {
-    private OdorReport report = new OdorReport();
     Spinner strengthSpinner;
     Spinner typeSpinner;
 
@@ -60,10 +58,8 @@ public class ReportFormDescriptionActivity extends AppCompatActivity {
                         Odor.Type.values()[(int) typeSpinner.getSelectedItemId()],
                         ((EditText) findViewById(R.id.affect)).getText().toString());
 
-                report.setOdor(odor);
-                report.setLocation(location);
-                report.setReportDate(reportDate);
-
+                // TODO: get the data for the report params below that are null
+                OdorReport report = new OdorReport(null, null, reportDate, location, odor);
                 EventBus.getDefault().post(new OdorReportEvent(report));
                 // end HACK
                 finish();
