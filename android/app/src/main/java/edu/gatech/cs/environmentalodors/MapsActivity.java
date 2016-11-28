@@ -74,6 +74,7 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
