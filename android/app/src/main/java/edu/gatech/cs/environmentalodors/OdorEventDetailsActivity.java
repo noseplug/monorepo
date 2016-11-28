@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.UUID;
@@ -28,10 +30,13 @@ public class OdorEventDetailsActivity extends AppCompatActivity {
 
         UUID reportID = ((ParcelUuid) getIntent().getParcelableExtra(ODOR_EVENT_ID)).getUuid();
         OdorEvent odorEvent = ApplicationState.getInstance().getOdorEvent(reportID);
-        String description = odorEvent.getFirstOdorReport().getOdor().getDescription();
+        String description = odorEvent.getOdorReports().get(0).getOdor().getDescription();
 
         Log.v(TAG, String.format("Starting activity with odor event %s (%s)",
                 reportID, description));
+
+        // ListView listView = (ListView) this.findViewById(R.id.odor_report_list);
+        // listView.setAdapter(new SimpleAdapter())
 
         TextView descriptionBox = (TextView) findViewById(R.id.description);
         descriptionBox.append(description);

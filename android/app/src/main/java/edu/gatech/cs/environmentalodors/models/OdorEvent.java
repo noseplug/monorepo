@@ -1,7 +1,9 @@
 package edu.gatech.cs.environmentalodors.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,10 +23,13 @@ import java.util.UUID;
  */
 public class OdorEvent {
     public final UUID uuid = UUID.randomUUID();
-    private Collection<OdorReport> odorReports = new HashSet<>(1);
+    private List<OdorReport> odorReports = new ArrayList<>(1);
 
     public OdorEvent(OdorReport odorReport) {
         odorReports.add(odorReport);
     }
-    public OdorReport getFirstOdorReport() {return (OdorReport) odorReports.toArray()[0]; }
+
+    public List<OdorReport> getOdorReports() {
+        return odorReports;
+    }
 }
