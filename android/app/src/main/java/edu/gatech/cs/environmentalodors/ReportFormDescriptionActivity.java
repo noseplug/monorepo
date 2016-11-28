@@ -20,8 +20,8 @@ import edu.gatech.cs.environmentalodors.models.OdorReport;
 
 import org.greenrobot.eventbus.EventBus;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_LOCATION;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_REPORT_DATE;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
 
 public class ReportFormDescriptionActivity extends AppCompatActivity {
     Spinner strengthSpinner;
@@ -41,8 +41,8 @@ public class ReportFormDescriptionActivity extends AppCompatActivity {
         strengthSpinner = (Spinner) findViewById(R.id.strength_spinner);
         typeSpinner = (Spinner) findViewById(R.id.type_spinner);
 
-        location = getIntent().getParcelableExtra(SELECTED_LOCATION);
-        reportDate = getIntent().getParcelableExtra(SELECTED_REPORT_DATE);
+        location = getIntent().getParcelableExtra(LOCATION);
+        reportDate = getIntent().getParcelableExtra(REPORT_DATE);
 
         Button next = (Button) findViewById(R.id.submit_btn);
         next.setOnClickListener(new View.OnClickListener() {

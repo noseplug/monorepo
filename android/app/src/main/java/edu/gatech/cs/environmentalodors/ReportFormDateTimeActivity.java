@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,16 +19,13 @@ import android.widget.TimePicker;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import edu.gatech.cs.environmentalodors.models.OdorReport;
-
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_LOCATION;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_REPORT_DATE;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
 
 public class ReportFormDateTimeActivity extends AppCompatActivity {
     private TimePicker startTimePicker;
@@ -55,7 +51,7 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
         endTimePicker = (TimePicker) findViewById(R.id.timePicker2);
         date_et = (EditText) findViewById(R.id.select_date);
 
-        location = getIntent().getParcelableExtra(SELECTED_LOCATION);
+        location = getIntent().getParcelableExtra(LOCATION);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +76,8 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
                 //report.setLocation(location);
                 //report.setReportDate(reportDate);
                 Intent intent = new Intent(ReportFormDateTimeActivity.this, ReportFormDescriptionActivity.class);
-                intent.putExtra(SELECTED_LOCATION, location);
-                intent.putExtra(SELECTED_REPORT_DATE, reportDate);
+                intent.putExtra(LOCATION, location);
+                intent.putExtra(REPORT_DATE, reportDate);
                 startActivityForResult(intent, 0);
                 finish();
             }

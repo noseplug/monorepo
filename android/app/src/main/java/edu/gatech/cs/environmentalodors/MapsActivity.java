@@ -29,7 +29,7 @@ import edu.gatech.cs.environmentalodors.events.LocationEvent;
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
 import edu.gatech.cs.environmentalodors.models.OdorEvent;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_LOCATION;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_EVENT_ID;
 
 /**
@@ -172,7 +172,7 @@ public class MapsActivity extends FragmentActivity implements
     @Subscribe
     public void onCreateOdorReportEvent(CreateOdorReportEvent e) {
         Intent reportIntent = new Intent(this, ReportFormDateTimeActivity.class);
-        reportIntent.putExtra(SELECTED_LOCATION, e.location);
+        reportIntent.putExtra(LOCATION, e.location);
         this.startActivity(reportIntent);
     }
 }
