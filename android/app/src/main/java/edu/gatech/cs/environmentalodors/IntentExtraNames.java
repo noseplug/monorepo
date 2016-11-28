@@ -8,5 +8,5 @@ public final class IntentExtraNames {
     private static final String pkg = IntentExtraNames.class.getPackage().getName();
     public static final String SELECTED_LOCATION = pkg + ".SelectedLocation";
     public static final String SELECTED_REPORT_DATE = pkg + ".SelectedReportDate";
-    public static final String REPORT_ID = pkg + ".ReportID";
+    public static final String ODOR_EVENT_ID = pkg + ".ReportID";
 }

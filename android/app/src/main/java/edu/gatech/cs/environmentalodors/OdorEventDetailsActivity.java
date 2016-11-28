@@ -14,27 +14,28 @@ import java.util.UUID;
 
 import edu.gatech.cs.environmentalodors.models.OdorEvent;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_ID;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_EVENT_ID;
 
 public class OdorEventDetailsActivity extends AppCompatActivity {
     private static final String TAG = OdorEventDetailsActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_odor_event_details);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        UUID reportID = ((ParcelUuid) getIntent().getParcelableExtra(REPORT_ID)).getUuid();
-        OdorEvent r = ApplicationState.getInstance().getOdorEvent(reportID);
+        setContentView(R.layout.activity_odor_event_details);
+        setSupportActionBar((Toolbar) this.findViewById(R.id.toolbar));
+
+        UUID reportID = ((ParcelUuid) getIntent().getParcelableExtra(ODOR_EVENT_ID)).getUuid();
+        OdorEvent odorEvent = ApplicationState.getInstance().getOdorEvent(reportID);
+        String description = odorEvent.getFirstOdorReport().getOdor().getDescription();
+
+        Log.v(TAG, String.format("Starting activity with odor event %s (%s)",
+                reportID, description));
 
         TextView descriptionBox = (TextView) findViewById(R.id.description);
-        assert r != null;
-        assert r.getFirstOdorReport() != null;
-        assert r.getFirstOdorReport().getOdor() != null;
-        assert r.getFirstOdorReport().getOdor().getDescription() != null;
-        Log.v(TAG, r.getFirstOdorReport().getOdor().getDescription());
-        descriptionBox.append(r.getFirstOdorReport().getOdor().getDescription());
+        descriptionBox.append(description);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

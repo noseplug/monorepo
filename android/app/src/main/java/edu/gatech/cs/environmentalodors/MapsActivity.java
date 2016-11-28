@@ -1,7 +1,6 @@
 package edu.gatech.cs.environmentalodors;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.support.design.widget.FloatingActionButton;
@@ -9,7 +8,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,17 +22,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import edu.gatech.cs.environmentalodors.events.CreateOdorReportEvent;
 import edu.gatech.cs.environmentalodors.events.LocationEvent;
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
 import edu.gatech.cs.environmentalodors.models.OdorEvent;
-import edu.gatech.cs.environmentalodors.models.OdorReport;
 
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.SELECTED_LOCATION;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_ID;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_EVENT_ID;
 
 /**
  * MapsActivity is the home page of the environmental odor app.
@@ -152,7 +148,7 @@ public class MapsActivity extends FragmentActivity implements
     public void onInfoWindowClick(Marker marker) {
         Log.v(TAG, "Info Window clicked, starting odor event details activity");
         Intent detailsIntent = new Intent(this, OdorEventDetailsActivity.class);
-        detailsIntent.putExtra(REPORT_ID, new ParcelUuid((UUID) marker.getTag()));
+        detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) marker.getTag()));
         this.startActivity(detailsIntent);
     }
 
