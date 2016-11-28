@@ -13,6 +13,12 @@
     tools:context="edu.gatech.cs.environmentalodors.OdorEventDetailsActivity"
     tools:showIn="@layout/activity_odor_event_details">
 
+    <ListView
+        android:id="@+id/odor_report_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></ListView>
+
     <TextView
         android:text="Odor Event Description: "
         android:layout_width="wrap_content"

@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import java.util.UUID;
@@ -35,8 +35,9 @@ public class OdorEventDetailsActivity extends AppCompatActivity {
         Log.v(TAG, String.format("Starting activity with odor event %s (%s)",
                 reportID, description));
 
-        // ListView listView = (ListView) this.findViewById(R.id.odor_report_list);
-        // listView.setAdapter(new SimpleAdapter())
+        ListView listView = (ListView) this.findViewById(R.id.odor_report_list);
+        listView.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, odorEvent.getOdorReports()));
 
         TextView descriptionBox = (TextView) findViewById(R.id.description);
         descriptionBox.append(description);
