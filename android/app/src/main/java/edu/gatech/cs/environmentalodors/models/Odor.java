@@ -49,4 +49,9 @@ public class Odor {
         SULFUR,
         OTHER
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s odor: %s", strength, type, description);
+    }
 }

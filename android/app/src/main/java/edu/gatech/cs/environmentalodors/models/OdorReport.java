@@ -45,4 +45,9 @@ public class OdorReport {
     public Odor getOdor() {
         return odor;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s: %s", reportDate, odor);
+    }
 }
