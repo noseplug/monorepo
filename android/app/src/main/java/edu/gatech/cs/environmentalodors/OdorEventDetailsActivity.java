@@ -38,18 +38,5 @@ public class OdorEventDetailsActivity extends AppCompatActivity {
         ListView listView = (ListView) this.findViewById(R.id.odor_report_list);
         listView.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, odorEvent.getOdorReports()));
-
-        TextView descriptionBox = (TextView) findViewById(R.id.description);
-        descriptionBox.append(description);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
-
 }
