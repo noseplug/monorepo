@@ -42,8 +42,7 @@ public class ReportFormDescriptionActivity extends AppCompatActivity {
         typeSpinner = (Spinner) findViewById(R.id.type_spinner);
 
         location = getIntent().getParcelableExtra(LOCATION);
-        reportDate = getIntent().getParcelableExtra(REPORT_DATE);
-
+        reportDate = (Date)getIntent().getSerializableExtra(REPORT_DATE);
         Button next = (Button) findViewById(R.id.submit_btn);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
