@@ -1,6 +1,8 @@
 package edu.gatech.cs.environmentalodors;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,6 +13,7 @@ import edu.gatech.cs.environmentalodors.models.OdorEvent;
  */
 public class ApplicationState {
     private Map<UUID, OdorEvent> odorEvents = new HashMap<>();
+    public Map<String, OdorEvent> polygonEventMap = new HashMap<>();
 
     public OdorEvent getOdorEvent(UUID uuid) {
         return odorEvents.get(uuid);
@@ -19,6 +22,10 @@ public class ApplicationState {
     public UUID addOdorEvent(OdorEvent event) {
         odorEvents.put(event.uuid, event);
         return event.uuid;
+    }
+
+    public Iterable<OdorEvent> getOdorEvents() {
+        return odorEvents.values();
     }
 
     // Singleton stuff

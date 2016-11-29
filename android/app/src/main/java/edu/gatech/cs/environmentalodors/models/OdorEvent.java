@@ -23,13 +23,17 @@ import java.util.UUID;
  */
 public class OdorEvent {
     public final UUID uuid = UUID.randomUUID();
-    private List<OdorReport> odorReports = new ArrayList<>(1);
+    private List<OdorReport> odorReports = new ArrayList<>();
 
     public OdorEvent(OdorReport odorReport) {
         odorReports.add(odorReport);
     }
+    public OdorEvent() {}
 
     public List<OdorReport> getOdorReports() {
         return odorReports;
+    }
+    public void addOdorReport(OdorReport report) {
+        odorReports.add(report);
     }
 }
