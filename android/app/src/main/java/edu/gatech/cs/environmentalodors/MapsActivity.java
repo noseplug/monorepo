@@ -38,6 +38,7 @@ import edu.gatech.cs.environmentalodors.models.User;
 
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_EVENT_ID;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
 
 /**
  * MapsActivity is the home page of the environmental odor app.
@@ -50,6 +51,8 @@ public class MapsActivity extends FragmentActivity implements
     private static final String TAG = MapsActivity.class.getSimpleName();
 
     private static final float INITIAL_LOCATION_ZOOM_FACTOR = (float) 10.0;
+
+    private static final LatLng DEFAULT_LOCATION = new LatLng(32, -84);
 
     private GoogleApiClientWrapper googleApi;
     private GoogleMap map;
@@ -72,7 +75,6 @@ public class MapsActivity extends FragmentActivity implements
     protected void onStart() {
         super.onStart();
         googleApi.onStart();
-
     }
 
     @Override
@@ -115,8 +117,7 @@ public class MapsActivity extends FragmentActivity implements
         map.addMarker(new MarkerOptions()
                 .position(odorReportEvent.odorReport.location)
                 .title("Odor Report"))
-            .setTag(eventID);
-
+            .setTag(odorReportEvent.odorReport.uuid);
 
         updateMap();
     }
@@ -149,9 +150,17 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
 
+        EventBus.getDefault().post(new LocationEvent(DEFAULT_LOCATION));
+
+        CameraPosition pos = new CameraPosition.Builder()
+                .target(selectedLocation)
+                .zoom(INITIAL_LOCATION_ZOOM_FACTOR)
+                .build();
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
         map.setOnInfoWindowClickListener(this);
         map.setOnPolygonClickListener(this);
         generateFakeData();
+        updateMap();
     }
 
     private void initOnClickListeners() {
@@ -161,10 +170,13 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Log.v(TAG, "Info Window clicked, starting odor event details activity");
-        Intent detailsIntent = new Intent(this, OdorEventDetailsActivity.class);
-        detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) marker.getTag()));
-        this.startActivity(detailsIntent);
+        if(!marker.equals(userMarker)) {
+
+            Log.v(TAG, "Info Window clicked, starting odor event details activity");
+            Intent reportDetailsIntent = new Intent(this, OdorReportDetailsActivity.class);
+            reportDetailsIntent.putExtra(ODOR_REPORT_ID, new ParcelUuid((UUID) marker.getTag()));
+            this.startActivity(reportDetailsIntent);
+        }
     }
 
     @Override
@@ -193,6 +205,14 @@ public class MapsActivity extends FragmentActivity implements
 
     public void updateMap() {
         map.clear();
+
+        if (userMarker != null) {
+            userMarker.remove();
+        }
+        BitmapDescriptor userIcon = BitmapDescriptorFactory.fromAsset("user_icon.png");
+        userMarker = map.addMarker(new MarkerOptions().position(selectedLocation).title("You are Here").zIndex(-1.0f).icon(userIcon));
+        userMarker.showInfoWindow();
+
         ApplicationState.getInstance().polygonEventMap.clear();
 
         for(OdorEvent o : ApplicationState.getInstance().getOdorEvents())
@@ -204,7 +224,7 @@ public class MapsActivity extends FragmentActivity implements
                 map.addMarker(new MarkerOptions()
                         .position(r.location)
                         .title("Odor Report"))
-                        .setTag(o.uuid);
+                        .setTag(r.uuid);
             }
             polyOptions.fillColor(Color.argb(50, 250, 250, 0));
             polyOptions.strokeColor(Color.argb(80, 250, 250, 0));
@@ -224,8 +244,8 @@ public class MapsActivity extends FragmentActivity implements
         this.startActivity(detailsIntent);
     }
     public void generateFakeData() {
-        LatLng center = new LatLng(32, -84); // approximately atlanta
-        float radius = 4;
+        LatLng center = DEFAULT_LOCATION; // approximately atlanta
+        float radius = 0.2f;
         int reportCount = 5;
         Odor.Type type = Odor.Type.CHEMICAL;
 
