@@ -4,29 +4,14 @@ package edu.gatech.cs.environmentalodors.models;
  * Odor describes an environmental odor as experienced by an individual.
  */
 public class Odor {
-    private final Strength strength;
-    private final Type type;
-    private final String description;
+    public final Strength strength;
+    public final Type type;
+    public final String description;
 
     public Odor(Strength strength, Type type, String description) {
         this.strength = strength;
         this.type = type;
         this.description = description;
-    }
-
-    public Strength getStrength()
-    {
-        return strength;
-    }
-
-    public Type getType()
-    {
-        return type;
-    }
-
-    public String getDescription()
-    {
-        return description;
     }
 
     public enum Strength {

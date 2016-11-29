@@ -5,16 +5,19 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * OdorReport is a individual report of an environmental odor at a specific time and place.
  */
 public class OdorReport {
-    private final User user;
-    private final Date creationDate; // When the report was created.
-    private final Date reportDate;   // When the odor was smelled.
-    private final LatLng location;
-    private final Odor odor;
+    public final UUID uuid = UUID.randomUUID();
+
+    public final User user;
+    public final Date creationDate; // When the report was created.
+    public final Date reportDate;   // When the odor was smelled.
+    public final LatLng location;
+    public final Odor odor;
 
     // TODO: how do we represent duration?
 
@@ -24,26 +27,6 @@ public class OdorReport {
         this.reportDate = reportDate;
         this.location = location;
         this.odor = odor;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public Date getReportDate() {
-        return reportDate;
-    }
-
-    public LatLng getLocation() {
-        return location;
-    }
-
-    public Odor getOdor() {
-        return odor;
     }
 
     @Override

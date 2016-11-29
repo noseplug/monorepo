@@ -40,7 +40,7 @@
         <activity
             android:name=".ReportFormDateTimeActivity"
             android:label="@string/title_activity_report_form"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ReportFormDescriptionActivity"
             android:label="@string/title_activity_report_form_description"
@@ -48,7 +48,8 @@
         <activity
             android:name=".OdorEventDetailsActivity"
             android:label="@string/title_activity_odor_event_details"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".OdorReportDetailsActivity"></activity>
     </application>
 
 </manifest>

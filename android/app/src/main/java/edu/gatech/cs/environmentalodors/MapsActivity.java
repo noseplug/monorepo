@@ -104,9 +104,9 @@ public class MapsActivity extends FragmentActivity implements
         UUID eventID = ApplicationState.getInstance().addOdorEvent(odorEvent);
 
         map.addMarker(new MarkerOptions()
-                .position(odorReportEvent.odorReport.getLocation())
-                .title("Odor Report")
-                ).setTag(eventID);
+                .position(odorReportEvent.odorReport.location)
+                .title("Odor Report"))
+            .setTag(eventID);
     }
 
 
