@@ -14,9 +14,10 @@ import android.widget.ListView;
 import java.util.UUID;
 
 import edu.gatech.cs.environmentalodors.models.OdorEvent;
+import edu.gatech.cs.environmentalodors.models.OdorReport;
 
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_EVENT_ID;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_INDEX;
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
 
 public class OdorEventDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemClickListener {
@@ -48,8 +49,8 @@ public class OdorEventDetailsActivity extends AppCompatActivity
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.v(TAG, "Received click for odor report at index " + position);
         Intent intent = new Intent(this, OdorReportDetailsActivity.class);
-        intent.putExtra(ODOR_EVENT_ID, new ParcelUuid(odorEvent.uuid));
-        intent.putExtra(ODOR_REPORT_INDEX, position);
+        OdorReport report = odorEvent.getOdorReports().get(position);
+        intent.putExtra(ODOR_REPORT_ID, new ParcelUuid(report.uuid));
         startActivity(intent);
     }
 }

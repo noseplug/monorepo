@@ -1,19 +1,16 @@
 package edu.gatech.cs.environmentalodors;
 
+import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
 import java.util.UUID;
 
-import edu.gatech.cs.environmentalodors.models.OdorEvent;
 import edu.gatech.cs.environmentalodors.models.OdorReport;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_EVENT_ID;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_INDEX;
 
 public class OdorReportDetailsActivity extends AppCompatActivity {
 

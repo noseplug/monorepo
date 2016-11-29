@@ -10,6 +10,5 @@ final class IntentExtraNames {
     static final String REPORT_DATE = pkg + ".ReportDate";
     static final String ODOR_EVENT_ID = pkg + ".OdorEventID";
     static final String ODOR_REPORT_ID = pkg + ".OdorReportID";
-    static final String ODOR_REPORT_INDEX = pkg + ".ReportIndex";
 
 }
