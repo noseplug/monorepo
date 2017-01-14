@@ -28,11 +28,11 @@ import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
 
 public class ReportFormDateTimeActivity extends AppCompatActivity {
     private EditText dateEditText;
-    Calendar myCalendar = Calendar.getInstance();
+    private Calendar myCalendar = Calendar.getInstance();
 
-    boolean firstClick = true;
+    private boolean firstClick = true;
 
-    Date reportDate;
+    private Date reportDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,15 +90,16 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
         touchInterceptor.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (dateEditText.isFocused()) {
-                        Rect outRect = new Rect();
-                        dateEditText.getGlobalVisibleRect(outRect);
-                        if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
-                            dateEditText.clearFocus();
-                            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        }
+                if (event.getAction() != MotionEvent.ACTION_DOWN) {
+                    return false;
+                }
+                if (dateEditText.isFocused()) {
+                    Rect outRect = new Rect();
+                    dateEditText.getGlobalVisibleRect(outRect);
+                    if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                        dateEditText.clearFocus();
+                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     }
                 }
                 return false;

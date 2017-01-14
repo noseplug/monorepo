@@ -26,7 +26,9 @@ public class OdorEvent {
     public OdorEvent(OdorReport odorReport) {
         odorReports.add(odorReport);
     }
-    public OdorEvent() {}
+    public OdorEvent() {
+        // We're allowed to create an odor event without an odor report for debugging purposes.
+    }
 
     public List<OdorReport> getOdorReports() {
         return odorReports;

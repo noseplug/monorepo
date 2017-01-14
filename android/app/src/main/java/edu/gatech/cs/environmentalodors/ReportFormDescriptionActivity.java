@@ -26,12 +26,12 @@ import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
 
 public class ReportFormDescriptionActivity extends AppCompatActivity {
-    Spinner strengthSpinner;
-    Spinner typeSpinner;
+    private Spinner strengthSpinner;
+    private Spinner typeSpinner;
 
-    LatLng location;
-    Date reportDate;
-    Date createDate;
+    private LatLng location;
+    private Date reportDate;
+    private Date createDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

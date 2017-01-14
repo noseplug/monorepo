@@ -192,7 +192,7 @@ public class MapsActivity extends FragmentActivity implements
 
             default:
                 String name = this.getResources().getResourceEntryName(v.getId());
-                throw new RuntimeException("Clicked an unknown view: " + name);
+                throw new FatalException("Clicked an unknown view: " + name);
         }
     }
 

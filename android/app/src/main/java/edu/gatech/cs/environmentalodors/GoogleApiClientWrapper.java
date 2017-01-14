@@ -26,7 +26,7 @@ class GoogleApiClientWrapper implements GoogleApiClient.ConnectionCallbacks,
 
     private GoogleApiClient googleApiClient;
 
-    GoogleApiClientWrapper(Context ctx) {
+    public GoogleApiClientWrapper(Context ctx) {
         googleApiClient = new GoogleApiClient.Builder(ctx)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -36,10 +36,10 @@ class GoogleApiClientWrapper implements GoogleApiClient.ConnectionCallbacks,
 
     // onStart and onStop are used to keep the wrapper aware of the activity lifecycle.
 
-    void onStart() {
+    public void onStart() {
         googleApiClient.connect();
     }
-    void onStop() {
+    public void onStop() {
         googleApiClient.disconnect();
     }
 
