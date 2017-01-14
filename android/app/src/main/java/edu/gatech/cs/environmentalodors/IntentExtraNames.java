@@ -5,10 +5,12 @@ package edu.gatech.cs.environmentalodors;
  * To be honest, I've got no idea where these are supposed to go.
  */
 final class IntentExtraNames {
-    private static final String pkg = IntentExtraNames.class.getPackage().getName();
-    static final String LOCATION = pkg + ".Location";
-    static final String REPORT_DATE = pkg + ".ReportDate";
-    static final String ODOR_EVENT_ID = pkg + ".OdorEventID";
-    static final String ODOR_REPORT_ID = pkg + ".OdorReportID";
+    private IntentExtraNames(){} // Make constructor private.
+
+    private static final String PKG = IntentExtraNames.class.getPackage().getName();
+    static final String LOCATION = PKG + ".Location";
+    static final String REPORT_DATE = PKG + ".ReportDate";
+    static final String ODOR_EVENT_ID = PKG + ".OdorEventID";
+    static final String ODOR_REPORT_ID = PKG + ".OdorReportID";
 
 }

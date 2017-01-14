@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +26,7 @@ import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
 
 public class ReportFormDateTimeActivity extends AppCompatActivity {
-    private EditText date_et;
+    private EditText dateEditText;
     Calendar myCalendar = Calendar.getInstance();
 
     boolean firstClick = true;
@@ -44,7 +43,7 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
         setTitle("Report Form - Select Date and Time");
 
         Button next = (Button) findViewById(R.id.right_arrow);
-        date_et = (EditText) findViewById(R.id.select_date);
+        dateEditText = (EditText) findViewById(R.id.select_date);
 
         location = getIntent().getParcelableExtra(LOCATION);
 
@@ -60,21 +59,17 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
         });
 
         final DatePickerDialog.OnDateSetListener dateDialog = new DatePickerDialog.OnDateSetListener() {
-
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                // TODO Auto-generated method stub
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateLabel();
             }
-
         };
 
 
-        date_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        dateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b&firstClick) {
@@ -95,11 +90,11 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (date_et.isFocused()) {
+                    if (dateEditText.isFocused()) {
                         Rect outRect = new Rect();
-                        date_et.getGlobalVisibleRect(outRect);
+                        dateEditText.getGlobalVisibleRect(outRect);
                         if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
-                            date_et.clearFocus();
+                            dateEditText.clearFocus();
                             InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                         }
@@ -114,7 +109,7 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         reportDate = myCalendar.getTime();
-        date_et.setText(sdf.format(myCalendar.getTime()));
+        dateEditText.setText(sdf.format(myCalendar.getTime()));
     }
 
 }
