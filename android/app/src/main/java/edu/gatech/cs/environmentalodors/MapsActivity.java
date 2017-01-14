@@ -112,7 +112,7 @@ public class MapsActivity extends FragmentActivity implements
     public void onOdorReportEvent(OdorReportEvent odorReportEvent) {
         Log.v(TAG, "Received an odor report event");
         OdorEvent odorEvent = new OdorEvent(odorReportEvent.odorReport);
-        UUID eventID = ApplicationState.getInstance().addOdorEvent(odorEvent);
+        ApplicationState.getInstance().addOdorEvent(odorEvent);
 
         map.addMarker(new MarkerOptions()
                 .position(odorReportEvent.odorReport.location)

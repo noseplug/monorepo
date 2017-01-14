@@ -21,8 +21,8 @@ public class OdorReport {
 
     public OdorReport(User user, Date creationDate, Date reportDate, LatLng location, Odor odor) {
         this.user = user;
-        this.creationDate = creationDate;
-        this.reportDate = reportDate;
+        this.creationDate = (Date)creationDate.clone();
+        this.reportDate = (Date)reportDate.clone();
         this.location = location;
         this.odor = odor;
     }

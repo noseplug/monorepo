@@ -12,14 +12,16 @@ import android.widget.Spinner;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Date;
 
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
 import edu.gatech.cs.environmentalodors.models.Odor;
 import edu.gatech.cs.environmentalodors.models.OdorReport;
+import edu.gatech.cs.environmentalodors.models.User;
 
-import org.greenrobot.eventbus.EventBus;
-
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.CREATE_DATE;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
 
@@ -29,6 +31,7 @@ public class ReportFormDescriptionActivity extends AppCompatActivity {
 
     LatLng location;
     Date reportDate;
+    Date createDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class ReportFormDescriptionActivity extends AppCompatActivity {
 
         location = getIntent().getParcelableExtra(LOCATION);
         reportDate = (Date)getIntent().getSerializableExtra(REPORT_DATE);
+        createDate = (Date)getIntent().getSerializableExtra(CREATE_DATE);
         Button next = (Button) findViewById(R.id.submit_btn);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,8 +61,8 @@ public class ReportFormDescriptionActivity extends AppCompatActivity {
                         Odor.Type.values()[(int) typeSpinner.getSelectedItemId()],
                         ((EditText) findViewById(R.id.affect)).getText().toString());
 
-                // TODO: get the data for the report params below that are null
-                OdorReport report = new OdorReport(null, null, reportDate, location, odor);
+                // TODO: Fetch the user object from the API, don't just make a new one.
+                OdorReport report = new OdorReport(new User(), createDate, reportDate, location, odor);
                 EventBus.getDefault().post(new OdorReportEvent(report));
                 // end HACK
                 finish();

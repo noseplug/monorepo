@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import static edu.gatech.cs.environmentalodors.IntentExtraNames.CREATE_DATE;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
 
@@ -31,9 +32,7 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
 
     boolean firstClick = true;
 
-    private LatLng location;
-
-    private Date reportDate;
+    Date reportDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +44,8 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
         Button next = (Button) findViewById(R.id.right_arrow);
         dateEditText = (EditText) findViewById(R.id.select_date);
 
-        location = getIntent().getParcelableExtra(LOCATION);
+        final LatLng location = getIntent().getParcelableExtra(LOCATION);
+        final Date createDate = new Date(System.currentTimeMillis());
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +53,7 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
                 Intent intent = new Intent(ReportFormDateTimeActivity.this, ReportFormDescriptionActivity.class);
                 intent.putExtra(LOCATION, location);
                 intent.putExtra(REPORT_DATE, reportDate);
+                intent.putExtra(CREATE_DATE, createDate);
                 startActivityForResult(intent, 0);
                 finish();
             }
