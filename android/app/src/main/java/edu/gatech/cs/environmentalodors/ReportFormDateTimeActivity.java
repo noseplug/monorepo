@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TimePicker;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -28,8 +27,6 @@ import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
 
 public class ReportFormDateTimeActivity extends AppCompatActivity {
-    private TimePicker startTimePicker;
-    private TimePicker endTimePicker;
     private EditText date_et;
     Calendar myCalendar = Calendar.getInstance();
 
@@ -47,8 +44,6 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
         setTitle("Report Form - Select Date and Time");
 
         Button next = (Button) findViewById(R.id.right_arrow);
-        startTimePicker = (TimePicker) findViewById(R.id.timePicker);
-        endTimePicker = (TimePicker) findViewById(R.id.timePicker2);
         date_et = (EditText) findViewById(R.id.select_date);
 
         location = getIntent().getParcelableExtra(LOCATION);
@@ -56,25 +51,6 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String dateString = date_et.getText().toString();
-                int startTimeHour, startTimeMinute;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    startTimeHour= startTimePicker.getHour();
-                    startTimeMinute = startTimePicker.getMinute();
-                } else {
-                    startTimeHour = startTimePicker.getCurrentHour();
-                    startTimeMinute = startTimePicker.getCurrentMinute();
-                }
-                int endTimeHour, endTimeMinute;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    endTimeHour= startTimePicker.getHour();
-                    endTimeMinute = startTimePicker.getMinute();
-                } else {
-                    endTimeHour = startTimePicker.getCurrentHour();
-                    endTimeMinute = startTimePicker.getCurrentMinute();
-                }
-                //report.setLocation(location);
-                //report.setReportDate(reportDate);
                 Intent intent = new Intent(ReportFormDateTimeActivity.this, ReportFormDescriptionActivity.class);
                 intent.putExtra(LOCATION, location);
                 intent.putExtra(REPORT_DATE, reportDate);
