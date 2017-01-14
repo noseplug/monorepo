@@ -245,3 +245,6 @@ hs_err_pid*
 
 # fix for gradlew
 !gradle-wrapper.jar
+
+# manual ignore for annoying IntelliJ files
+*/.idea/misc.xml
