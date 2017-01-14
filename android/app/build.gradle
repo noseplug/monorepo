@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'checkstyle'
+apply plugin: 'com.noveogroup.android.check'
 
 android {
     compileSdkVersion 24
