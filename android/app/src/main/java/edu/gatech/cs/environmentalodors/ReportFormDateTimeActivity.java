@@ -100,6 +100,7 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
                         dateEditText.clearFocus();
                         InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        v.performClick();
                     }
                 }
                 return false;

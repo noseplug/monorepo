@@ -14,7 +14,6 @@
         tools:context="edu.gatech.cs.environmentalodors.MapsActivity"
         />
 
-    <!-- TODO: the icon needs to be changed to something more appropiate -->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/report_fab"
         android:layout_width="wrap_content"

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- TODO: Get a domain name / site for the project. Maybe under ATSDR? -->
+    <issue id="GoogleAppIndexingWarning" severity="ignore"/>
+    <!-- Needed for older GMS version. Unfortunately, it also disables lint for all dependencies. -->
+    <issue id="GradleDependency" severity="ignore"/>
+</lint>
+

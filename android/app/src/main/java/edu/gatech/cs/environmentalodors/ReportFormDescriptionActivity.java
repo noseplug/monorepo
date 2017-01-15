@@ -73,10 +73,9 @@ public class ReportFormDescriptionActivity extends AppCompatActivity {
         for (int i = 0; i < Odor.Type.values().length; i++) {
             strTypeSpinner[i] = Odor.Type.values()[i].toString();
         }
-        Spinner s = (Spinner) findViewById(R.id.type_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, strTypeSpinner);
-        s.setAdapter(adapter);
+        typeSpinner.setAdapter(adapter);
 
 
         String[] strStrengthSpinner = new String[Odor.Strength.values().length];
