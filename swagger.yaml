@@ -1,0 +1,73 @@
+# Note: This is a swagger file describing an API endpoint.
+# The easiest way to edit this is to use the online editor at
+#   http://editon.swagger.io/
+---
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: Noseplug API
+paths:
+  /events:
+    get:
+      responses:
+        200:
+          description: An array of odor events.
+              
+  /events/{id}/reports:
+    get:
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Returns an array of all reports associated with this odor event.
+          
+  /reports/{id}:
+    get:
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Returns the report with the given ID.
+          
+  /events/{id}/posts:
+    get:
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Returns an array of all posts submitted to the odor event's wall.
+  
+  /posts/{id}:
+    get:
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: OK # TODO
+          
+  /posts/{id}/comments:
+    get:
+      parameters:
+        - $ref: "#/parameters/id"
+
+      responses:
+        200:
+          description: Returns an array containing the comments.  #TODO
+          
+  /comments/{id}:
+    get:
+      parameters:
+        - $ref: "#/parameters/id"
+        
+      responses:
+        200:
+          description: Returns the comment with the given ID.
+          
+parameters:
+  id:
+    name: id
+    in: path
+    description: An ID that can identify a Noseplug object within it's class, such as users and odor events.
+    required: true
+    type: string
+    format: uuid
