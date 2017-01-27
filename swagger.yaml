@@ -12,7 +12,7 @@ paths:
       responses:
         200:
           description: An array of odor events.
-              
+
   /events/{id}/reports:
     get:
       parameters:
@@ -20,7 +20,7 @@ paths:
       responses:
         200:
           description: Returns an array of all reports associated with this odor event.
-          
+
   /reports/{id}:
     get:
       parameters:
@@ -28,7 +28,9 @@ paths:
       responses:
         200:
           description: Returns the report with the given ID.
-          
+          schema:
+            $ref: "#/definitions/Report"
+
   /events/{id}/posts:
     get:
       parameters:
@@ -36,7 +38,7 @@ paths:
       responses:
         200:
           description: Returns an array of all posts submitted to the odor event's wall.
-  
+
   /posts/{id}:
     get:
       parameters:
@@ -44,7 +46,7 @@ paths:
       responses:
         200:
           description: OK # TODO
-          
+
   /posts/{id}/comments:
     get:
       parameters:
@@ -53,21 +55,69 @@ paths:
       responses:
         200:
           description: Returns an array containing the comments.  #TODO
-          
+
   /comments/{id}:
     get:
       parameters:
         - $ref: "#/parameters/id"
-        
+
       responses:
         200:
           description: Returns the comment with the given ID.
-          
+
 parameters:
   id:
     name: id
     in: path
-    description: An ID that can identify a Noseplug object within it's class, such as users and odor events.
+    description: An ID that can identify a Noseplug object within its class, such as users and odor events.
     required: true
     type: string
     format: uuid
+
+definitions:
+  Id:
+    type: string
+    format: uuid
+    description: A UUID for identifying a Noseplug resource, such as posts, messages, users, and odor eevents.
+
+  Odor:
+    type: object
+    properties:
+      strength:
+        type: string
+        description: |
+          The strength of an odor. Must be one of the following:
+            - `LIGHT`: Barely noticeable.
+            - `MODERATE`: You can smell it, but it doesn't affect normal life.
+            - `STRONG`: Can't go outside.
+            - `VERY_STRONG`: Makes you feel sick.
+
+  Location:
+    type: object
+    properties:
+      Lat:
+        type: number
+        format: double
+        description: The latitude component of the location. North is positive and south is negative.
+      Lng:
+        type: number
+        format: double
+        description: The longitude component of the location. East is positive and west is negative.
+
+  Report:
+    type: object
+    properties:
+      Id:
+        $ref: "#/definitions/Id"
+      UserId:
+        $ref: "#/definitions/Id"
+      EventId:
+        $ref: "#/definitions/Id"
+      Location:
+        $ref: "#/definitions/Location"
+      Odor:
+        $ref: "#/definitions/Odor"
+      FilingTime:
+        type: string
+        format: date-time
+        description: When the report was created.
