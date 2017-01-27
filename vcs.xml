@@ -6,6 +6,10 @@
           <option name="url" value="https://github.com/noseplug/monorepo.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="http://github.com" />
+          <option name="userName" value="estebanlau7@gmail.com" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="$USER_HOME$/Documents/JuniorDesign2/monorepo-master" />
