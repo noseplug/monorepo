@@ -21,6 +21,30 @@ paths:
         200:
           description: Returns an array of all reports associated with this odor event.
 
+  /events/{id}/wallposts:
+    get:
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Returns an array of all posts submitted to the odor event's wall.
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/WallPost"
+
+  /events/{id}/subscribers:
+    get:
+      parameters:
+        - $ref: "#/parameters/id"
+      responses:
+        200:
+          description: Returns an array of user IDs of users subscribed to the odor event.
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Id"
+
   /reports/{id}:
     get:
       parameters:
@@ -31,45 +55,11 @@ paths:
           schema:
             $ref: "#/definitions/Report"
 
-  /events/{id}/posts:
-    get:
-      parameters:
-        - $ref: "#/parameters/id"
-      responses:
-        200:
-          description: Returns an array of all posts submitted to the odor event's wall.
-
-  /posts/{id}:
-    get:
-      parameters:
-        - $ref: "#/parameters/id"
-      responses:
-        200:
-          description: OK # TODO
-
-  /posts/{id}/comments:
-    get:
-      parameters:
-        - $ref: "#/parameters/id"
-
-      responses:
-        200:
-          description: Returns an array containing the comments.  #TODO
-
-  /comments/{id}:
-    get:
-      parameters:
-        - $ref: "#/parameters/id"
-
-      responses:
-        200:
-          description: Returns the comment with the given ID.
-
 parameters:
   id:
     name: id
     in: path
-    description: An ID that can identify a Noseplug object within its class, such as users and odor events.
+    description: A UUID for identifying a Noseplug resource, such as posts, messages, users, and odor events.
     required: true
     type: string
     format: uuid
@@ -78,28 +68,27 @@ definitions:
   Id:
     type: string
     format: uuid
-    description: A UUID for identifying a Noseplug resource, such as posts, messages, users, and odor eevents.
+    description: A UUID for identifying a Noseplug resource, such as posts, messages, users, and odor events.
 
   Odor:
     type: object
     properties:
-      strength:
+      Strength:
         type: string
-        description: |
-          The strength of an odor. Must be one of the following:
-            - `LIGHT`: Barely noticeable.
-            - `MODERATE`: You can smell it, but it doesn't affect normal life.
-            - `STRONG`: Can't go outside.
-            - `VERY_STRONG`: Makes you feel sick.
+        description: "The strength of an odor. Must be one of the following: LIGHT, MODERATE, STRONG, VERY_STRONG"
+
+      Type:
+        type: string
+        description: "The type of an odor. Must be one of the following: FRAGRANT, PUNGENT, PUTRID, FECAL, FISHY, EARTHY, PINE, CHEMICAL, MEDICINAL, SULFUR, OTHER"
 
   Location:
     type: object
     properties:
-      Lat:
+      Latitude:
         type: number
         format: double
         description: The latitude component of the location. North is positive and south is negative.
-      Lng:
+      Longitude:
         type: number
         format: double
         description: The longitude component of the location. East is positive and west is negative.
@@ -120,4 +109,37 @@ definitions:
       FilingTime:
         type: string
         format: date-time
-        description: When the report was created.
+        description: The UTC time when the report was created.
+
+  Event:
+    type: object
+    properties:
+      Id:
+        $ref: "#/definitions/Id"
+      Name:
+        type: string
+        description: The user-submitted title for an odor event.
+      OwnerId:
+        $ref: "#/definitions/Id"
+      AdminIds:
+        type: array
+        description: An array of the user IDs of the administrators of an odor event.
+        items:
+          $ref: "#/definitions/Id"
+
+  WallPost:
+    type: object
+    properties:
+      Id:
+        $ref: "#/definitions/Id"
+      UserId:
+        $ref: "#/definitions/Id"
+      EventId:
+        $ref: "#/definitions/Id"
+      SubmitTime:
+        type: string
+        format: date-time
+        description: The UTC time when the message was submitted.
+      Content:
+        type: string
+        description: The content of a message posted by a user.
