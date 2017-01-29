@@ -11,32 +11,36 @@ paths:
     get:
       responses:
         200:
-          description: An array of odor events.
+          description: Returns an array of all odor events.
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Event"
 
-  /events/{id}/reports:
+  /events/{EventId}/reports:
     get:
       parameters:
-        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/EventId"
       responses:
         200:
           description: Returns an array of all reports associated with this odor event.
 
-  /events/{id}/wallposts:
+  /events/{EventId}/wallposts:
     get:
       parameters:
-        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/EventId"
       responses:
         200:
           description: Returns an array of all posts submitted to the odor event's wall.
           schema:
             type: array
             items:
-              $ref: "#/definitions/WallPost"
+              $ref: "#/definitions/Wallpost"
 
-  /events/{id}/subscribers:
+  /events/{EventId}/subscribers:
     get:
       parameters:
-        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/EventId"
       responses:
         200:
           description: Returns an array of user IDs of users subscribed to the odor event.
@@ -45,21 +49,110 @@ paths:
             items:
               $ref: "#/definitions/Id"
 
-  /reports/{id}:
+  /reports/{ReportId}:
+    parameters:
+      - $ref: "#/parameters/ReportId"
     get:
-      parameters:
-        - $ref: "#/parameters/id"
       responses:
         200:
           description: Returns the report with the given ID.
           schema:
             $ref: "#/definitions/Report"
 
+  /users/{UserId}:
+    parameters:
+      - $ref: "#/parameters/UserId"
+    get:
+      responses:
+        200:
+          description: Returns the profile of the user with the given ID.
+          schema:
+            $ref: "#/definitions/User"
+
+  /users/{UserId}/subscriptions:
+    parameters:
+      - $ref: "#/parameters/UserId"
+    get:
+      responses:
+        200:
+          description: Returns an array of event IDs that the user is subscribed to.
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Id"
+    post:
+      parameters:
+        - name: EventId
+          in: body
+          description: The ID of the odor event to subscribe to.
+          required: true
+          schema:
+            $ref: "#/definitions/Id"
+      responses:
+        201:
+          description: Added the odor event to the user's list of subscriptions.
+
+  /users/{UserId}/subscriptions/{EventId}:
+    parameters:
+      - $ref: "#/parameters/UserId"
+      - $ref: "#/parameters/EventId"
+    delete:
+      responses:
+        200:
+          description: The user successfully unsubscribed from the odor event with the given ID.
+
+  /wallposts/{WallpostId}:
+    parameters:
+      - $ref: "#/parameters/WallpostId"
+    get:
+      responses:
+        200:
+          description: Returns the wallpost with the given ID.
+          schema:
+            $ref: "#/definitions/Wallpost"
+    put:
+      parameters:
+        - name: Wallpost
+          in: body
+          description: Create a new wallpost or replace an existing one with the given ID.
+          required: true
+          schema:
+            $ref: "#/definitions/Wallpost"
+      responses:
+        201:
+          description: The wallpost was created.
+
+
+
 parameters:
-  id:
-    name: id
+  UserId:
+    name: UserId
     in: path
-    description: A UUID for identifying a Noseplug resource, such as posts, messages, users, and odor events.
+    description: A UUID identifying a Noseplug user.
+    required: true
+    type: string
+    format: uuid
+
+  EventId:
+    name: EventId
+    in: path
+    description: A UUID identifying a Noseplug odor event.
+    required: true
+    type: string
+    format: uuid
+
+  ReportId:
+    name: ReportId
+    in: path
+    description: A UUID identifying a Noseplug odor report.
+    required: true
+    type: string
+    format: uuid
+
+  WallpostId:
+    name: WallpostId
+    in: path
+    description: A UUID identifying a Noseplug wallpost.
     required: true
     type: string
     format: uuid
@@ -96,7 +189,7 @@ definitions:
   Report:
     type: object
     properties:
-      Id:
+      ReportId:
         $ref: "#/definitions/Id"
       UserId:
         $ref: "#/definitions/Id"
@@ -114,7 +207,7 @@ definitions:
   Event:
     type: object
     properties:
-      Id:
+      EventId:
         $ref: "#/definitions/Id"
       Name:
         type: string
@@ -127,10 +220,10 @@ definitions:
         items:
           $ref: "#/definitions/Id"
 
-  WallPost:
+  Wallpost:
     type: object
     properties:
-      Id:
+      WallpostId:
         $ref: "#/definitions/Id"
       UserId:
         $ref: "#/definitions/Id"
@@ -143,3 +236,23 @@ definitions:
       Content:
         type: string
         description: The content of a message posted by a user.
+
+  User:
+    type: object
+    properties:
+      UserId:
+        $ref: "#/definitions/Id"
+      # TODO: where do we put passwords to update passwords? The API should never return a hashed password, but we need a way to send plain passwords to the API to create user accounts.
+      Name:
+        type: string
+      Email:
+        type: string
+        format: email
+      PhoneNo:
+        type: string
+        format: tel
+      Gender:
+        type: string
+        description: This can be MALE, FEMALE, or any other alphabetic string entered by the user. It must be normalized to upper case.
+
+
