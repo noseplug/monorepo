@@ -16,6 +16,39 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Event"
+    post:
+      parameters:
+        - name: Event
+          in: body
+          description: A JSON Event object. EventID should be omitted.
+          required: true
+          schema:
+            $ref: "#/definitions/Event"
+      responses:
+        201:
+          description: The odor event was successfully created.
+          # TODO return URL of the newly created resource
+
+  /events/{EventId}:
+    parameters:
+      - $ref: "#/parameters/EventId"
+    get:
+      responses:
+        200:
+          description: Return the odor event with the given ID.
+          schema:
+            $ref: "#/definitions/Event"
+    put:
+      parameters:
+        - name: Event
+          in: body
+          description: A JSON Event object. EventID must match the existing ID.
+          required: true
+          schema:
+            $ref: "#/definitions/Event"
+      responses:
+        200:
+          description: The odor event was successfully updated with the given information.
 
   /events/{EventId}/reports:
     parameters:
@@ -200,7 +233,7 @@ definitions:
   Id:
     type: string
     format: uuid
-    description: A UUID for identifying a noseplug user or odor event. These are chosen at random by the client.
+    description: A UUID for identifying a noseplug user or odor event.
 
   Num:
     type: integer
