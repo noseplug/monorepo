@@ -1,6 +1,6 @@
 # Note: This is a swagger file describing an API endpoint.
 # The easiest way to edit this is to use the online editor at
-#   http://editon.swagger.io/
+#   http://editor.swagger.io/
 ---
 swagger: '2.0'
 info:
@@ -18,17 +18,55 @@ paths:
               $ref: "#/definitions/Event"
 
   /events/{EventId}/reports:
+    parameters:
+      - $ref: "#/parameters/EventId"
     get:
-      parameters:
-        - $ref: "#/parameters/EventId"
       responses:
         200:
           description: Returns an array of all reports associated with this odor event.
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Report"
+    post:
+      parameters:
+        - name: Report
+          in: body
+          description: A Report JSON object. ReportNum must be omitted.
+          required: true
+          schema:
+            $ref: "#/definitions/Report"
+      responses:
+        201:
+          description: The report was successfully added to the odor event.
+          # TODO: Should get back the URL of the new odor report through a Location HTTP header. That can be used to properly complete the Report object with ReportNum.
+
+  /events/{EventId}/reports/{ReportNum}:
+    parameters:
+      - $ref: "#/parameters/EventId"
+      - $ref: "#/parameters/ReportNum"
+    get:
+      responses:
+        200:
+          description: Return the report wih the given number.
+          schema:
+            $ref: "#/definitions/Report"
+    put:
+      parameters:
+        - name: Report
+          in: body
+          description: A Report JSON object.
+          required: true
+          schema:
+            $ref: "#/definitions/Report"
+      responses:
+        200:
+          description: The report was successfully updated.
 
   /events/{EventId}/wallposts:
+    parameters:
+      - $ref: "#/parameters/EventId"
     get:
-      parameters:
-        - $ref: "#/parameters/EventId"
       responses:
         200:
           description: Returns an array of all posts submitted to the odor event's wall.
@@ -36,11 +74,45 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Wallpost"
+    post:
+      parameters:
+        - name: Wallpost
+          in: body
+          description: A Wallpost JSON object. WallpostNum must be omitted.
+          required: true
+          schema:
+            $ref: "#/definitions/Wallpost"
+      responses:
+        201:
+          description: The wallpost was successfully posted to the odor event's wall.
+          # TODO: same as POST /events/{EventId}/reports
+
+  /events/{EventId}/wallposts/{WallpostNum}:
+    parameters:
+      - $ref: "#/parameters/EventId"
+      - $ref: "#/parameters/WallpostNum"
+    get:
+      responses:
+        200:
+          description: Returns the wallpost with the given number.
+          schema:
+            $ref: "#/definitions/Wallpost"
+    put:
+      parameters:
+        - name: Wallpost
+          in: body
+          description: Replace an existing wallpost with a new version.
+          required: true
+          schema:
+            $ref: "#/definitions/Wallpost"
+      responses:
+        200:
+          description: The wallpost was updated.
 
   /events/{EventId}/subscribers:
+    parameters:
+      - $ref: "#/parameters/EventId"
     get:
-      parameters:
-        - $ref: "#/parameters/EventId"
       responses:
         200:
           description: Returns an array of user IDs of users subscribed to the odor event.
@@ -48,16 +120,6 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Id"
-
-  /reports/{ReportId}:
-    parameters:
-      - $ref: "#/parameters/ReportId"
-    get:
-      responses:
-        200:
-          description: Returns the report with the given ID.
-          schema:
-            $ref: "#/definitions/Report"
 
   /users/{UserId}:
     parameters:
@@ -101,29 +163,6 @@ paths:
         200:
           description: The user successfully unsubscribed from the odor event with the given ID.
 
-  /wallposts/{WallpostId}:
-    parameters:
-      - $ref: "#/parameters/WallpostId"
-    get:
-      responses:
-        200:
-          description: Returns the wallpost with the given ID.
-          schema:
-            $ref: "#/definitions/Wallpost"
-    put:
-      parameters:
-        - name: Wallpost
-          in: body
-          description: Create a new wallpost or replace an existing one with the given ID.
-          required: true
-          schema:
-            $ref: "#/definitions/Wallpost"
-      responses:
-        201:
-          description: The wallpost was created.
-
-
-
 parameters:
   UserId:
     name: UserId
@@ -141,27 +180,32 @@ parameters:
     type: string
     format: uuid
 
-  ReportId:
-    name: ReportId
+  ReportNum:
+    name: ReportNum
     in: path
-    description: A UUID identifying a Noseplug odor report.
+    description: A number identifying a Noseplug odor report of an odor event. Starts at 1 and increases monotonically.
     required: true
-    type: string
-    format: uuid
+    type: integer
+    format: int64
 
-  WallpostId:
-    name: WallpostId
+  WallpostNum:
+    name: WallpostNum
     in: path
-    description: A UUID identifying a Noseplug wallpost.
+    description: A number identifying a Noseplug wallpost on an odor event. Starts at 1 and increases monotonically.
     required: true
-    type: string
-    format: uuid
+    type: integer
+    format: int64
 
 definitions:
   Id:
     type: string
     format: uuid
-    description: A UUID for identifying a Noseplug resource, such as posts, messages, users, and odor events.
+    description: A UUID for identifying a noseplug user or odor event. These are chosen at random by the client.
+
+  Num:
+    type: integer
+    format: int64
+    description: A 64-bit integer number for identifying a Noseplug report or wallpost within an odor event. These are generally monotonically increasing, starting from 1, and should not be chosen by the client.
 
   Odor:
     type: object
@@ -189,8 +233,8 @@ definitions:
   Report:
     type: object
     properties:
-      ReportId:
-        $ref: "#/definitions/Id"
+      ReportNum:
+        $ref: "#/definitions/Num"
       UserId:
         $ref: "#/definitions/Id"
       EventId:
@@ -223,8 +267,8 @@ definitions:
   Wallpost:
     type: object
     properties:
-      WallpostId:
-        $ref: "#/definitions/Id"
+      WallpostNum:
+        $ref: "#/definitions/Num"
       UserId:
         $ref: "#/definitions/Id"
       EventId:
@@ -254,5 +298,3 @@ definitions:
       Gender:
         type: string
         description: This can be MALE, FEMALE, or any other alphabetic string entered by the user. It must be normalized to upper case.
-
-
