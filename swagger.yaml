@@ -1,6 +1,8 @@
 # Note: This is a swagger file describing an API endpoint.
 # The easiest way to edit this is to use the online editor at
 #   http://editor.swagger.io/
+#
+# TODO: All POST targets need to return the location of the newly created resource so that their Ids or Nums can be known by the client.
 ---
 swagger: '2.0'
 info:
@@ -27,7 +29,6 @@ paths:
       responses:
         201:
           description: The odor event was successfully created.
-          # TODO return URL of the newly created resource
 
   /events/{EventId}:
     parameters:
@@ -72,7 +73,6 @@ paths:
       responses:
         201:
           description: The report was successfully added to the odor event.
-          # TODO: Should get back the URL of the new odor report through a Location HTTP header. That can be used to properly complete the Report object with ReportNum.
 
   /events/{EventId}/reports/{ReportNum}:
     parameters:
@@ -118,7 +118,6 @@ paths:
       responses:
         201:
           description: The wallpost was successfully posted to the odor event's wall.
-          # TODO: same as POST /events/{EventId}/reports
 
   /events/{EventId}/wallposts/{WallpostNum}:
     parameters:
@@ -154,6 +153,19 @@ paths:
             items:
               $ref: "#/definitions/Id"
 
+  /users:
+    post:
+      parameters:
+        - name: User
+          in: body
+          description: A JSON User object. UserID must be omitted.
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        201:
+          description: The user (account) was successfully created.
+
   /users/{UserId}:
     parameters:
       - $ref: "#/parameters/UserId"
@@ -163,6 +175,17 @@ paths:
           description: Returns the profile of the user with the given ID.
           schema:
             $ref: "#/definitions/User"
+    put:
+      parameters:
+        - name: User
+          in: body
+          description: A JSON User object. UserID must not be changed.
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        200:
+          description: The user (account) was successfully updated.
 
   /users/{UserId}/subscriptions:
     parameters:
