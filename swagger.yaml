@@ -8,7 +8,29 @@ swagger: '2.0'
 info:
   version: 0.0.0
   title: Noseplug API
+schemes:
+  - https
+securityDefinitions:
+  basicAuth:
+    type: basic
+    description: HTTP Basic Authentication with username (UserID) and password.
+security:
+  - basicAuth: []
+
 paths:
+  /auth:
+    post:
+      parameters:
+        - name: Password
+          in: body
+          description: A plaintext password for a new user account.
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: A new user account with the given ID and password was created.
+
   /events:
     get:
       responses:
@@ -152,19 +174,6 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Id"
-
-  /users:
-    post:
-      parameters:
-        - name: User
-          in: body
-          description: A JSON User object. UserID must be omitted.
-          required: true
-          schema:
-            $ref: "#/definitions/User"
-      responses:
-        201:
-          description: The user (account) was successfully created.
 
   /users/{UserId}:
     parameters:
@@ -342,7 +351,6 @@ definitions:
     properties:
       UserId:
         $ref: "#/definitions/Id"
-      # TODO: where do we put passwords to update passwords? The API should never return a hashed password, but we need a way to send plain passwords to the API to create user accounts.
       Name:
         type: string
       Email:
