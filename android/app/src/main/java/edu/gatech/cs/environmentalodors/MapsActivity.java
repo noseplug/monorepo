@@ -1,12 +1,19 @@
 package edu.gatech.cs.environmentalodors;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,12 +50,14 @@ import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
 /**
  * MapsActivity is the home page of the environmental odor app.
  */
-public class MapsActivity extends FragmentActivity implements
+public class MapsActivity extends AppCompatActivity implements
         View.OnClickListener,
         GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnPolygonClickListener,
         OnMapReadyCallback {
     private static final String TAG = MapsActivity.class.getSimpleName();
+
+    private static final String MAP_FRAGMENT_TAG = "map_fragment";
 
     private static final float INITIAL_LOCATION_ZOOM_FACTOR = (float) 10.0;
 
@@ -60,15 +69,72 @@ public class MapsActivity extends FragmentActivity implements
     private LatLng selectedLocation; // Starts at the user's last known location.
     private Marker userMarker;
 
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+
+        initMap();
+
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         googleApi = new GoogleApiClientWrapper(this);
-        initMaps();
         initOnClickListeners();
         EventBus.getDefault().register(this);
 
+    }
+
+    private void initMap() {
+        FragmentManager manager = getSupportFragmentManager();
+        SupportMapFragment mapFragment = (SupportMapFragment) manager.findFragmentByTag(
+                MAP_FRAGMENT_TAG);
+
+        if (mapFragment == null) {
+            mapFragment = new SupportMapFragment();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.add(R.id.map_fragment_container, mapFragment, "mapFragment");
+            transaction.commit();
+            manager.executePendingTransactions();
+        }
+
+        mapFragment.getMapAsync(this);
+    }
+
+    private void initOnClickListeners() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.report_fab);
+        fab.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        drawerToggle.onConfigurationChanged(configuration);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -123,14 +189,6 @@ public class MapsActivity extends FragmentActivity implements
     }
 
 
-    private void initMaps() {
-        setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
@@ -161,11 +219,6 @@ public class MapsActivity extends FragmentActivity implements
         map.setOnPolygonClickListener(this);
         generateFakeData();
         updateMap();
-    }
-
-    private void initOnClickListeners() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.report_fab);
-        fab.setOnClickListener(this);
     }
 
     @Override
