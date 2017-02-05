@@ -1,5 +1,6 @@
 package edu.gatech.cs.environmentalodors;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -51,17 +52,13 @@ import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
  * MapsActivity is the home page of the environmental odor app.
  */
 public class MapsActivity extends AppCompatActivity implements
-        View.OnClickListener,
-        GoogleMap.OnInfoWindowClickListener,
-        GoogleMap.OnPolygonClickListener,
         OnMapReadyCallback {
     private static final String TAG = MapsActivity.class.getSimpleName();
-
     private static final String MAP_FRAGMENT_TAG = "map_fragment";
-
     private static final float INITIAL_LOCATION_ZOOM_FACTOR = (float) 10.0;
-
     private static final LatLng DEFAULT_LOCATION = new LatLng(32, -84);
+
+    private final Context ctx = this;
 
     private GoogleApiClientWrapper googleApi;
     private GoogleMap map;
@@ -114,7 +111,13 @@ public class MapsActivity extends AppCompatActivity implements
 
     private void initOnClickListeners() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.report_fab);
-        fab.setOnClickListener(this);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.v(TAG, "Clicked FAB, launching odor report activity");
+                EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
+            }
+        });
     }
 
     @Override
@@ -188,12 +191,17 @@ public class MapsActivity extends AppCompatActivity implements
         updateMap();
     }
 
+    @Subscribe
+    public void onCreateOdorReportEvent(CreateOdorReportEvent e) {
+        Intent reportIntent = new Intent(this, ReportFormDateTimeActivity.class);
+        reportIntent.putExtra(LOCATION, e.location);
+        this.startActivity(reportIntent);
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
             @Override
             public void onMapClick(LatLng latLng) {
                 EventBus.getDefault().post(new LocationEvent(latLng));
@@ -201,7 +209,6 @@ public class MapsActivity extends AppCompatActivity implements
         });
 
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-
             @Override
             public void onMapLongClick(LatLng latLng) {
                 EventBus.getDefault().post(new CreateOdorReportEvent(latLng));
@@ -215,45 +222,32 @@ public class MapsActivity extends AppCompatActivity implements
                 .zoom(INITIAL_LOCATION_ZOOM_FACTOR)
                 .build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
-        map.setOnInfoWindowClickListener(this);
-        map.setOnPolygonClickListener(this);
+
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                if(!marker.equals(userMarker)) {
+                    Log.v(TAG, "Info Window clicked, starting odor event details activity");
+                    Intent reportDetailsIntent = new Intent(ctx, OdorReportDetailsActivity.class);
+                    reportDetailsIntent.putExtra(ODOR_REPORT_ID, new ParcelUuid((UUID) marker.getTag()));
+                    ctx.startActivity(reportDetailsIntent);
+                }
+            }
+        });
+
+        map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+            @Override
+            public void onPolygonClick(Polygon polygon) {
+                Log.v(TAG, "Polygon clicked, starting odor event details activity");
+                OdorEvent event = ApplicationState.getInstance().polygonEventMap.get(polygon.getId());
+                Intent detailsIntent = new Intent(ctx, OdorEventDetailsActivity.class);
+                detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) event.uuid));
+                ctx.startActivity(detailsIntent);
+            }
+        });
+
         generateFakeData();
         updateMap();
-    }
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        if(!marker.equals(userMarker)) {
-
-            Log.v(TAG, "Info Window clicked, starting odor event details activity");
-            Intent reportDetailsIntent = new Intent(this, OdorReportDetailsActivity.class);
-            reportDetailsIntent.putExtra(ODOR_REPORT_ID, new ParcelUuid((UUID) marker.getTag()));
-            this.startActivity(reportDetailsIntent);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-
-
-
-        switch (v.getId()) {
-            case R.id.report_fab:
-                Log.v(TAG, "Clicked FAB, launching odor report activity");
-                EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
-                break;
-
-            default:
-                String name = this.getResources().getResourceEntryName(v.getId());
-                throw new FatalException("Clicked an unknown view: " + name);
-        }
-    }
-
-    @Subscribe
-    public void onCreateOdorReportEvent(CreateOdorReportEvent e) {
-        Intent reportIntent = new Intent(this, ReportFormDateTimeActivity.class);
-        reportIntent.putExtra(LOCATION, e.location);
-        this.startActivity(reportIntent);
     }
 
     public void updateMap() {
@@ -287,15 +281,6 @@ public class MapsActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public void onPolygonClick(Polygon polygon)
-    {
-        Log.v(TAG, "Polygon clicked, starting odor event details activity");
-        OdorEvent event = ApplicationState.getInstance().polygonEventMap.get(polygon.getId());
-        Intent detailsIntent = new Intent(this, OdorEventDetailsActivity.class);
-        detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) event.uuid));
-        this.startActivity(detailsIntent);
-    }
     public void generateFakeData() {
         LatLng center = DEFAULT_LOCATION; // approximately atlanta
         float radius = 0.2f;
