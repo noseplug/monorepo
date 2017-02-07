@@ -14,5 +14,6 @@
     <string name="report_effect">This affects me in that…</string>
     <string name="odor_strength">Strength</string>
     <string name="odor_type">Odor Type</string>
+    <string name="title_activity_registration">RegistrationActivity</string>
 
 </resources>
