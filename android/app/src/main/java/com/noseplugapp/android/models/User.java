@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors.models;
+package com.noseplugapp.android.models;
 
 public class User {
     /* // Things that may or may not be useful to us.

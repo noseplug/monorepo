@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors.events;
+package com.noseplugapp.android.events;
 
 import com.google.android.gms.maps.model.LatLng;
 

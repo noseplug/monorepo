@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -22,9 +22,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.CREATE_DATE;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
+import static com.noseplugapp.android.IntentExtraNames.CREATE_DATE;
+import static com.noseplugapp.android.IntentExtraNames.LOCATION;
+import static com.noseplugapp.android.IntentExtraNames.REPORT_DATE;
 
 public class ReportFormDateTimeActivity extends AppCompatActivity {
     private EditText dateEditText;

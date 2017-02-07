@@ -1,6 +1,6 @@
-package edu.gatech.cs.environmentalodors.events;
+package com.noseplugapp.android.events;
 
-import edu.gatech.cs.environmentalodors.models.OdorReport;
+import com.noseplugapp.android.models.OdorReport;
 
 public class OdorReportEvent {
     public final OdorReport odorReport;

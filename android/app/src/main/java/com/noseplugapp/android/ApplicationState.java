@@ -1,11 +1,12 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
+
+import com.noseplugapp.android.models.OdorEvent;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import edu.gatech.cs.environmentalodors.models.OdorEvent;
-import edu.gatech.cs.environmentalodors.models.OdorReport;
+import com.noseplugapp.android.models.OdorReport;
 
 /**
  * Global singleton for application state. See: http://stackoverflow.com/a/19457168
