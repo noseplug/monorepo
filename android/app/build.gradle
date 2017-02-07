@@ -29,12 +29,15 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.0'
     // Using an old version of gms because otherwise the emulators will not work:
     // http://stackoverflow.com/a/19883764
+    compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.google.android.gms:play-services-location:9.8.0'
     compile 'com.google.android.gms:play-services-maps:9.8.0'
-    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:design:25.1.1'
     compile 'org.greenrobot:eventbus:3.0.0'
     testCompile 'junit:junit:4.12'
 }
+
+// This needs to be at the bottom or it will not compile. see: http://stackoverflow.com/a/34927454
+apply plugin: 'com.google.gms.google-services'

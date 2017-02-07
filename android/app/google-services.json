@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "399536100846",
+    "firebase_url": "https://noseplug-af01c.firebaseio.com",
+    "project_id": "noseplug-af01c",
+    "storage_bucket": "noseplug-af01c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399536100846:android:d5a122c4be00c4e9",
+        "android_client_info": {
+          "package_name": "com.noseplugapp.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399536100846-96357l7nl09a7oap0239uksj3qs53gcv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwZGN8o6mjIHgHbeNfQOomO6nz9l69OME"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399536100846-96357l7nl09a7oap0239uksj3qs53gcv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
