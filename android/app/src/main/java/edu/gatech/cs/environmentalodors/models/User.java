@@ -1,6 +1,11 @@
 package edu.gatech.cs.environmentalodors.models;
 
+import java.util.UUID;
+
 public class User {
+
+    public final UUID uuid = UUID.randomUUID();
+
     /* // Things that may or may not be useful to us.
     public enum Sex {MALE, FEMALE, NOT_AVAILABLE}
 
