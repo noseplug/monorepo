@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Environmental Odors</string>
+    <string name="app_name">Noseplug</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_report_form">Report Form</string>
     <string name="title_activity_report_form_description">Report Form (Description)</string>
