@@ -8,7 +8,6 @@
     <string name="date_format">Date(MM/DD/YY)</string>
     <string name="time_start">Time Start</string>
     <string name="time_end">Time End</string>
-    <string name="location">Location</string>
     <string name="report_comments">Any additional comments…</string>
     <string name="report_effect">This affects me in that…</string>
     <string name="odor_strength">Strength</string>
