@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
@@ -39,9 +40,8 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_report_form);
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Report Form - Select Date and Time");
 
-        Button next = (Button) findViewById(R.id.right_arrow);
+        FloatingActionButton next = (FloatingActionButton) findViewById(R.id.right_arrow);
         dateEditText = (EditText) findViewById(R.id.select_date);
 
         final LatLng location = getIntent().getParcelableExtra(LOCATION);
@@ -69,7 +69,6 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
             }
         };
 
-
         dateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -86,33 +85,12 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
                 }
             }
         });
-        FrameLayout touchInterceptor = (FrameLayout)findViewById(R.id.touchInterceptor);
-        touchInterceptor.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() != MotionEvent.ACTION_DOWN) {
-                    return false;
-                }
-                if (dateEditText.isFocused()) {
-                    Rect outRect = new Rect();
-                    dateEditText.getGlobalVisibleRect(outRect);
-                    if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
-                        dateEditText.clearFocus();
-                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        v.performClick();
-                    }
-                }
-                return false;
-            }
-        });
     }
-    private void updateLabel() {
 
+    private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         reportDate = myCalendar.getTime();
         dateEditText.setText(sdf.format(myCalendar.getTime()));
     }
-
 }
