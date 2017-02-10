@@ -7,74 +7,126 @@
     android:layout_height="match_parent"
     >
 
-    <LinearLayout
-        android:id="@+id/main_view"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         >
-
-        <include layout="@layout/toolbar" />
-
-        <TableLayout
-            android:id="@+id/content_report_form"
+        <LinearLayout
+            android:id="@+id/main_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/activity_margin"
+            android:orientation="vertical"
             >
 
-            <TableRow>
+            <include layout="@layout/toolbar" />
+
+            <TableLayout
+                android:id="@+id/content_report_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_margin"
+                >
+
+                <TableRow>
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/date_format"
+                        />
+                    <EditText
+                        android:id="@+id/select_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="date"
+                        android:ems="10"
+                        />
+                </TableRow>
+
                 <TextView
-                    android:id="@+id/date"
+                    android:id="@+id/time_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/date_format"
+                    android:text="@string/time_start"
                     />
+
+                <!--
+                timePickerMode isn't present on API min 14 or 15, not until 23. Since the fixes add too
+                much complexity and the report form must be reworked anyway, the lint warning about this is
+                being suppressed for both TimePickers.
+                -->
+                <TimePicker
+                    android:id="@+id/timePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="UnusedAttribute"
+                    android:timePickerMode="spinner"
+                    />
+
+                <TextView
+                    android:id="@+id/time_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time_end"
+                    />
+
+                <TimePicker
+                    android:id="@+id/timePicker2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="UnusedAttribute"
+                    android:timePickerMode="spinner"
+                    />
+
+                <Spinner
+                    android:id="@+id/type_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:prompt="@string/odor_type_prompt"
+                    />
+
                 <EditText
-                    android:id="@+id/select_date"
+                    android:id="@+id/comments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
                     android:ems="10"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/report_comments"
                     />
-            </TableRow>
 
-            <TextView
-                android:id="@+id/time_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/time_start"
-                />
+                <EditText
+                    android:id="@+id/affect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:hint="@string/report_effect"
+                    android:layout_centerVertical="true"
+                    />
 
-            <!--
-            timePickerMode isn't present on API min 14 or 15, not until 23. Since the fixes add too
-            much complexity and the report form must be reworked anyway, the lint warning about this is
-            being suppressed for both TimePickers.
-            -->
-            <TimePicker
-                android:id="@+id/timePicker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="UnusedAttribute"
-                android:timePickerMode="spinner"
-                />
+                <TextView
+                    android:id="@+id/strength"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/odor_strength"
+                    />
 
-            <TextView
-                android:id="@+id/time_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/time_end"
-                />
+                <TextView
+                    android:id="@+id/type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/odor_type"
+                    />
 
-            <TimePicker
-                android:id="@+id/timePicker2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:ignore="UnusedAttribute"
-                android:timePickerMode="spinner"
-                />
-        </TableLayout>
-    </LinearLayout>
+                <Spinner
+                    android:id="@+id/strength_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/right_arrow"
