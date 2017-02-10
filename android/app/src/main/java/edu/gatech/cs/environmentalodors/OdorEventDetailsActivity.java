@@ -39,10 +39,14 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         Log.v(TAG, String.format("Starting activity with odor event %s (%s)",
                 odorEventId, description));
 
-        ListView listView = (ListView) this.findViewById(R.id.odor_report_list);
-        listView.setAdapter(new ArrayAdapter<>(this,
+        ListView reportList = (ListView) this.findViewById(R.id.odor_report_list);
+        reportList.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, odorEvent.getOdorReports()));
-        listView.setOnItemClickListener(this);
+        reportList.setOnItemClickListener(this);
+
+        ListView commentList = (ListView) this.findViewById(R.id.comment_list);
+        commentList.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, odorEvent.getComments()));
     }
 
     @Override

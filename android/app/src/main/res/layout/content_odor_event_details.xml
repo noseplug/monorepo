@@ -20,4 +20,12 @@
         android:clickable="true"
         ></ListView>
 
+    <ListView
+        android:id="@+id/comment_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:layout_below="@id/odor_report_list"
+        ></ListView>
+
 </RelativeLayout>

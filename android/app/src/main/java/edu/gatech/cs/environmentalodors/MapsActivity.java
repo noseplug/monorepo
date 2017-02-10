@@ -31,6 +31,7 @@ import java.util.UUID;
 import edu.gatech.cs.environmentalodors.events.CreateOdorReportEvent;
 import edu.gatech.cs.environmentalodors.events.LocationEvent;
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
+import edu.gatech.cs.environmentalodors.models.Comment;
 import edu.gatech.cs.environmentalodors.models.Odor;
 import edu.gatech.cs.environmentalodors.models.OdorEvent;
 import edu.gatech.cs.environmentalodors.models.OdorReport;
@@ -247,6 +248,7 @@ public class MapsActivity extends FragmentActivity implements
         LatLng center = DEFAULT_LOCATION; // approximately atlanta
         float radius = 0.2f;
         int reportCount = 5;
+        int commentCount = 5;
         Odor.Type type = Odor.Type.CHEMICAL;
 
         OdorEvent event = new OdorEvent();
@@ -261,6 +263,13 @@ public class MapsActivity extends FragmentActivity implements
             event.addOdorReport(tempOdorReport);
             EventBus.getDefault().post(new OdorReportEvent(tempOdorReport));
         }
+
+        for(int i = 0; i < commentCount; i++)
+        {
+            Comment tempComment = new Comment();
+            event.addComment(tempComment);
+        }
+
         ApplicationState.getInstance().addOdorEvent(event);
         //EventBus.getDefault().post(new OdorEvent(tempOdorReport));
     }
