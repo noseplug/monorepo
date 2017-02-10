@@ -96,6 +96,6 @@
         android:layout_height="60dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@mipmap/right_arrow" />
+        android:background="@drawable/right_arrow" />
 
 </android.support.design.widget.CoordinatorLayout>
