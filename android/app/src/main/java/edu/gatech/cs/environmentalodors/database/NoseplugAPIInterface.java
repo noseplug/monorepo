@@ -10,7 +10,7 @@ import edu.gatech.cs.environmentalodors.models.User;
  * Created by Esteban on 2/8/17.
  */
 
-public interface NoseplugAPIInterface {
+public interface NoseplugApiInterface {
 
     public OdorEvent getOdorEvent(UUID uuid);
     public OdorReport getOdorReport(UUID uuid);
