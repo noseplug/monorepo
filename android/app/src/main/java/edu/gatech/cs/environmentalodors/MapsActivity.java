@@ -170,6 +170,9 @@ public class MapsActivity extends FragmentActivity implements
 
         Button register = (Button) findViewById(R.id.register_btn);
         register.setOnClickListener(this);
+
+        Button login = (Button) findViewById(R.id.login_btn);
+        login.setOnClickListener(this);
     }
 
     @Override
@@ -185,9 +188,6 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onClick(View v) {
-
-
-
         switch (v.getId()) {
             case R.id.report_fab:
                 Log.v(TAG, "Clicked FAB, launching odor report activity");
@@ -196,6 +196,10 @@ public class MapsActivity extends FragmentActivity implements
             case R.id.register_btn:
                 Intent intent = new Intent(this, RegistrationActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.login_btn:
+                Intent intentLogin = new Intent(this, LoginActivity.class);
+                startActivity(intentLogin);
                 break;
             default:
                 String name = this.getResources().getResourceEntryName(v.getId());
