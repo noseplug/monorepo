@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android.environmentalodors;
 
 import org.junit.Test;
 

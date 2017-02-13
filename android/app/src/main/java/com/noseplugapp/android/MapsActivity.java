@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.noseplugapp.android.models.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,17 +29,16 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.Date;
 import java.util.UUID;
 
-import edu.gatech.cs.environmentalodors.events.CreateOdorReportEvent;
-import edu.gatech.cs.environmentalodors.events.LocationEvent;
-import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
-import edu.gatech.cs.environmentalodors.models.Odor;
-import edu.gatech.cs.environmentalodors.models.OdorEvent;
-import edu.gatech.cs.environmentalodors.models.OdorReport;
-import edu.gatech.cs.environmentalodors.models.User;
+import com.noseplugapp.android.events.CreateOdorReportEvent;
+import com.noseplugapp.android.events.LocationEvent;
+import com.noseplugapp.android.events.OdorReportEvent;
+import com.noseplugapp.android.models.Odor;
+import com.noseplugapp.android.models.OdorEvent;
+import com.noseplugapp.android.models.OdorReport;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_EVENT_ID;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
+import static com.noseplugapp.android.IntentExtraNames.LOCATION;
+import static com.noseplugapp.android.IntentExtraNames.ODOR_EVENT_ID;
+import static com.noseplugapp.android.IntentExtraNames.ODOR_REPORT_ID;
 
 /**
  * MapsActivity is the home page of the environmental odor app.

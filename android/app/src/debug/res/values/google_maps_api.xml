@@ -4,10 +4,10 @@
 
     To get one, follow this link, follow the directions and press "Create" at the end:
 
-    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=89:DF:5F:4A:AF:1E:4D:05:20:48:FC:7A:00:73:58:71:8F:CE:16:51%3Bedu.gatech.cs.environmentalodors
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=89:DF:5F:4A:AF:1E:4D:05:20:48:FC:7A:00:73:58:71:8F:CE:16:51%3Bcom.noseplugapp.android
 
     You can also add your credentials to an existing key, using this line:
-    89:DF:5F:4A:AF:1E:4D:05:20:48:FC:7A:00:73:58:71:8F:CE:16:51;edu.gatech.cs.environmentalodors
+    89:DF:5F:4A:AF:1E:4D:05:20:48:FC:7A:00:73:58:71:8F:CE:16:51;com.noseplugapp.android
 
     Alternatively, follow the directions here:
     https://developers.google.com/maps/documentation/android/start#get-key

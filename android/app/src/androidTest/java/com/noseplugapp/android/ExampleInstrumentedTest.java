@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("Package name should be equal", "edu.gatech.cs.environmentalodors", appContext.getPackageName());
+        assertEquals("Package name should be equal", "com.noseplugapp.android", appContext.getPackageName());
     }
 }

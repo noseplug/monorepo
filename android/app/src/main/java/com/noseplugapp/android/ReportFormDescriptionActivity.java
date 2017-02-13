@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -10,20 +10,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.noseplugapp.android.models.User;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Date;
 
-import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
-import edu.gatech.cs.environmentalodors.models.Odor;
-import edu.gatech.cs.environmentalodors.models.OdorReport;
-import edu.gatech.cs.environmentalodors.models.User;
+import com.noseplugapp.android.events.OdorReportEvent;
+import com.noseplugapp.android.models.Odor;
+import com.noseplugapp.android.models.OdorReport;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.CREATE_DATE;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
+import static com.noseplugapp.android.IntentExtraNames.CREATE_DATE;
+import static com.noseplugapp.android.IntentExtraNames.LOCATION;
+import static com.noseplugapp.android.IntentExtraNames.REPORT_DATE;
 
 public class ReportFormDescriptionActivity extends AppCompatActivity {
     private Spinner strengthSpinner;

@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
 
 /**
  * FatalException is an exception thrown when we cannot recover and the app must crash.

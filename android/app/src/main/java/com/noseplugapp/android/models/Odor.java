@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors.models;
+package com.noseplugapp.android.models;
 
 /**
  * Odor describes an environmental odor as experienced by an individual.

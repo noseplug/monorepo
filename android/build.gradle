@@ -9,6 +9,8 @@ buildscript {
         // in the individual module build.gradle files
 
         classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.google.gms:google-services:3.0.0'
+
 
         // These are needed for static analysis of the code. See
         // the "check" command.

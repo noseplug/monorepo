@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
 
 /**
  * IntentExtraNames are used to get "extra" data from intents.
