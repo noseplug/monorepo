@@ -38,3 +38,9 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     testCompile 'junit:junit:4.12'
 }
+
+check {
+    checkstyle {
+        config project.file('../config/checkstyle/checkstyle.xml')
+    }
+}
