@@ -28,7 +28,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.Date;
 import java.util.UUID;
 
-import edu.gatech.cs.environmentalodors.database.OfflineApi;
 import edu.gatech.cs.environmentalodors.events.CreateOdorReportEvent;
 import edu.gatech.cs.environmentalodors.events.LocationEvent;
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
@@ -113,7 +112,7 @@ public class MapsActivity extends FragmentActivity implements
     public void onOdorReportEvent(OdorReportEvent odorReportEvent) {
         Log.v(TAG, "Received an odor report event");
         OdorEvent odorEvent = new OdorEvent(odorReportEvent.odorReport);
-        OfflineApi.noseplug.addOdorEvent(odorEvent);
+        ApplicationState.getInstance().addOdorEvent(odorEvent);
 
         map.addMarker(new MarkerOptions()
                 .position(odorReportEvent.odorReport.location)
@@ -214,9 +213,9 @@ public class MapsActivity extends FragmentActivity implements
         userMarker = map.addMarker(new MarkerOptions().position(selectedLocation).title("You are Here").zIndex(-1.0f).icon(userIcon));
         userMarker.showInfoWindow();
 
-        OfflineApi.polygonEventMap.clear();
+        ApplicationState.getInstance().polygonEventMap.clear();
 
-        for(OdorEvent o : OfflineApi.noseplug.getOdorEvents())
+        for(OdorEvent o : ApplicationState.getInstance().getOdorEvents())
         {
             PolygonOptions polyOptions = new PolygonOptions();
             for(OdorReport r : o.getOdorReports()) {
@@ -231,7 +230,7 @@ public class MapsActivity extends FragmentActivity implements
             polyOptions.strokeColor(Color.argb(80, 250, 250, 0));
             polyOptions.clickable(true);
             Polygon polygon = map.addPolygon(polyOptions);
-            OfflineApi.polygonEventMap.put(polygon.getId(), o);
+            ApplicationState.getInstance().polygonEventMap.put(polygon.getId(), o);
         }
     }
 
@@ -239,7 +238,7 @@ public class MapsActivity extends FragmentActivity implements
     public void onPolygonClick(Polygon polygon)
     {
         Log.v(TAG, "Polygon clicked, starting odor event details activity");
-        OdorEvent event = OfflineApi.polygonEventMap.get(polygon.getId());
+        OdorEvent event = ApplicationState.getInstance().polygonEventMap.get(polygon.getId());
         Intent detailsIntent = new Intent(this, OdorEventDetailsActivity.class);
         detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) event.uuid));
         this.startActivity(detailsIntent);
@@ -262,7 +261,7 @@ public class MapsActivity extends FragmentActivity implements
             event.addOdorReport(tempOdorReport);
             EventBus.getDefault().post(new OdorReportEvent(tempOdorReport));
         }
-        OfflineApi.noseplug.addOdorEvent(event);
+        ApplicationState.getInstance().addOdorEvent(event);
         //EventBus.getDefault().post(new OdorEvent(tempOdorReport));
     }
 }
