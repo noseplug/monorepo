@@ -50,7 +50,13 @@
             android:name=".OdorEventDetailsActivity"
             android:label="@string/title_activity_odor_event_details"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".OdorReportDetailsActivity"></activity>
+        <activity android:name=".OdorReportDetailsActivity" />
+        <activity
+            android:name=".RegistrationActivity"
+            android:label="@string/title_activity_registration"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>
