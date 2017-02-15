@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-//import edu.gatech.cs.environmentalodors.database.NoseplugApiInterface;
 import edu.gatech.cs.environmentalodors.models.OdorReport;
 import edu.gatech.cs.environmentalodors.models.Odor;
 import edu.gatech.cs.environmentalodors.models.OdorEvent;
