@@ -166,6 +166,8 @@ public class MapsActivity extends FragmentActivity implements
     private void initOnClickListeners() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.report_fab);
         fab.setOnClickListener(this);
+        FloatingActionButton odors = (FloatingActionButton) findViewById(R.id.odorsButton);
+        odors.setOnClickListener(this);
     }
 
     @Override
@@ -188,6 +190,10 @@ public class MapsActivity extends FragmentActivity implements
             case R.id.report_fab:
                 Log.v(TAG, "Clicked FAB, launching odor report activity");
                 EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
+                break;
+            case R.id.odorsButton:
+                Log.v(TAG, "Clicked Odors Button");
+                new OdorsDialogFragment().show(getFragmentManager(), "dialog");
                 break;
 
             default:
