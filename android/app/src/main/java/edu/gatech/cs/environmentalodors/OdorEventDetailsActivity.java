@@ -30,7 +30,7 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_odor_event_details);
-        setSupportActionBar((Toolbar) this.findViewById(R.id.toolbar));
+        setSupportActionBar((Toolbar) this.findViewById(R.id.my_toolbar));
 
         UUID odorEventId = ((ParcelUuid) getIntent().getParcelableExtra(ODOR_EVENT_ID)).getUuid();
         odorEvent = ApplicationState.getInstance().getOdorEvent(odorEventId);

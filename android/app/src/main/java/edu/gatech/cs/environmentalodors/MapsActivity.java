@@ -1,12 +1,20 @@
 package edu.gatech.cs.environmentalodors;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,7 +36,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.Date;
 import java.util.UUID;
 
-import edu.gatech.cs.environmentalodors.database.OfflineApi;
 import edu.gatech.cs.environmentalodors.events.CreateOdorReportEvent;
 import edu.gatech.cs.environmentalodors.events.LocationEvent;
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
@@ -44,16 +51,14 @@ import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
 /**
  * MapsActivity is the home page of the environmental odor app.
  */
-public class MapsActivity extends FragmentActivity implements
-        View.OnClickListener,
-        GoogleMap.OnInfoWindowClickListener,
-        GoogleMap.OnPolygonClickListener,
+public class MapsActivity extends AppCompatActivity implements
         OnMapReadyCallback {
     private static final String TAG = MapsActivity.class.getSimpleName();
-
+    private static final String MAP_FRAGMENT_TAG = "map_fragment";
     private static final float INITIAL_LOCATION_ZOOM_FACTOR = (float) 10.0;
-
     private static final LatLng DEFAULT_LOCATION = new LatLng(32, -84);
+
+    private final Context ctx = this;
 
     private GoogleApiClientWrapper googleApi;
     private GoogleMap map;
@@ -61,15 +66,78 @@ public class MapsActivity extends FragmentActivity implements
     private LatLng selectedLocation; // Starts at the user's last known location.
     private Marker userMarker;
 
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+
+        initMap();
+
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         googleApi = new GoogleApiClientWrapper(this);
-        initMaps();
         initOnClickListeners();
         EventBus.getDefault().register(this);
 
+    }
+
+    private void initMap() {
+        FragmentManager manager = getSupportFragmentManager();
+        SupportMapFragment mapFragment = (SupportMapFragment) manager.findFragmentByTag(
+                MAP_FRAGMENT_TAG);
+
+        if (mapFragment == null) {
+            mapFragment = new SupportMapFragment();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.add(R.id.map_fragment_container, mapFragment, "mapFragment");
+            transaction.commit();
+            manager.executePendingTransactions();
+        }
+
+        mapFragment.getMapAsync(this);
+    }
+
+    private void initOnClickListeners() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.report_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.v(TAG, "Clicked FAB, launching odor report activity");
+                EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
+            }
+        });
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        drawerToggle.onConfigurationChanged(configuration);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -113,7 +181,7 @@ public class MapsActivity extends FragmentActivity implements
     public void onOdorReportEvent(OdorReportEvent odorReportEvent) {
         Log.v(TAG, "Received an odor report event");
         OdorEvent odorEvent = new OdorEvent(odorReportEvent.odorReport);
-        OfflineApi.noseplug.addOdorEvent(odorEvent);
+        ApplicationState.getInstance().addOdorEvent(odorEvent);
 
         map.addMarker(new MarkerOptions()
                 .position(odorReportEvent.odorReport.location)
@@ -123,20 +191,17 @@ public class MapsActivity extends FragmentActivity implements
         updateMap();
     }
 
-
-    private void initMaps() {
-        setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+    @Subscribe
+    public void onCreateOdorReportEvent(CreateOdorReportEvent e) {
+        Intent reportIntent = new Intent(this, ReportFormDateTimeActivity.class);
+        reportIntent.putExtra(LOCATION, e.location);
+        this.startActivity(reportIntent);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
             @Override
             public void onMapClick(LatLng latLng) {
                 EventBus.getDefault().post(new LocationEvent(latLng));
@@ -144,7 +209,6 @@ public class MapsActivity extends FragmentActivity implements
         });
 
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-
             @Override
             public void onMapLongClick(LatLng latLng) {
                 EventBus.getDefault().post(new CreateOdorReportEvent(latLng));
@@ -158,50 +222,32 @@ public class MapsActivity extends FragmentActivity implements
                 .zoom(INITIAL_LOCATION_ZOOM_FACTOR)
                 .build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
-        map.setOnInfoWindowClickListener(this);
-        map.setOnPolygonClickListener(this);
+
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                if(!marker.equals(userMarker)) {
+                    Log.v(TAG, "Info Window clicked, starting odor event details activity");
+                    Intent reportDetailsIntent = new Intent(ctx, OdorReportDetailsActivity.class);
+                    reportDetailsIntent.putExtra(ODOR_REPORT_ID, new ParcelUuid((UUID) marker.getTag()));
+                    ctx.startActivity(reportDetailsIntent);
+                }
+            }
+        });
+
+        map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+            @Override
+            public void onPolygonClick(Polygon polygon) {
+                Log.v(TAG, "Polygon clicked, starting odor event details activity");
+                OdorEvent event = ApplicationState.getInstance().polygonEventMap.get(polygon.getId());
+                Intent detailsIntent = new Intent(ctx, OdorEventDetailsActivity.class);
+                detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) event.uuid));
+                ctx.startActivity(detailsIntent);
+            }
+        });
+
         generateFakeData();
         updateMap();
-    }
-
-    private void initOnClickListeners() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.report_fab);
-        fab.setOnClickListener(this);
-    }
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        if(!marker.equals(userMarker)) {
-
-            Log.v(TAG, "Info Window clicked, starting odor event details activity");
-            Intent reportDetailsIntent = new Intent(this, OdorReportDetailsActivity.class);
-            reportDetailsIntent.putExtra(ODOR_REPORT_ID, new ParcelUuid((UUID) marker.getTag()));
-            this.startActivity(reportDetailsIntent);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-
-
-
-        switch (v.getId()) {
-            case R.id.report_fab:
-                Log.v(TAG, "Clicked FAB, launching odor report activity");
-                EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
-                break;
-
-            default:
-                String name = this.getResources().getResourceEntryName(v.getId());
-                throw new FatalException("Clicked an unknown view: " + name);
-        }
-    }
-
-    @Subscribe
-    public void onCreateOdorReportEvent(CreateOdorReportEvent e) {
-        Intent reportIntent = new Intent(this, ReportFormDateTimeActivity.class);
-        reportIntent.putExtra(LOCATION, e.location);
-        this.startActivity(reportIntent);
     }
 
     public void updateMap() {
@@ -214,9 +260,9 @@ public class MapsActivity extends FragmentActivity implements
         userMarker = map.addMarker(new MarkerOptions().position(selectedLocation).title("You are Here").zIndex(-1.0f).icon(userIcon));
         userMarker.showInfoWindow();
 
-        OfflineApi.polygonEventMap.clear();
+        ApplicationState.getInstance().polygonEventMap.clear();
 
-        for(OdorEvent o : OfflineApi.noseplug.getOdorEvents())
+        for(OdorEvent o : ApplicationState.getInstance().getOdorEvents())
         {
             PolygonOptions polyOptions = new PolygonOptions();
             for(OdorReport r : o.getOdorReports()) {
@@ -231,19 +277,10 @@ public class MapsActivity extends FragmentActivity implements
             polyOptions.strokeColor(Color.argb(80, 250, 250, 0));
             polyOptions.clickable(true);
             Polygon polygon = map.addPolygon(polyOptions);
-            OfflineApi.polygonEventMap.put(polygon.getId(), o);
+            ApplicationState.getInstance().polygonEventMap.put(polygon.getId(), o);
         }
     }
 
-    @Override
-    public void onPolygonClick(Polygon polygon)
-    {
-        Log.v(TAG, "Polygon clicked, starting odor event details activity");
-        OdorEvent event = OfflineApi.polygonEventMap.get(polygon.getId());
-        Intent detailsIntent = new Intent(this, OdorEventDetailsActivity.class);
-        detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) event.uuid));
-        this.startActivity(detailsIntent);
-    }
     public void generateFakeData() {
         LatLng center = DEFAULT_LOCATION; // approximately atlanta
         float radius = 0.2f;
@@ -262,7 +299,7 @@ public class MapsActivity extends FragmentActivity implements
             event.addOdorReport(tempOdorReport);
             EventBus.getDefault().post(new OdorReportEvent(tempOdorReport));
         }
-        OfflineApi.noseplug.addOdorEvent(event);
+        ApplicationState.getInstance().addOdorEvent(event);
         //EventBus.getDefault().post(new OdorEvent(tempOdorReport));
     }
 }

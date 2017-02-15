@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import java.util.UUID;
 
-import edu.gatech.cs.environmentalodors.database.OfflineApi;
 import edu.gatech.cs.environmentalodors.models.OdorReport;
 
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
@@ -23,7 +22,7 @@ public class OdorReportDetailsActivity extends AppCompatActivity {
 
         UUID odorReportId = ((ParcelUuid) getIntent().getParcelableExtra(ODOR_REPORT_ID)).getUuid();
         Log.d("asd", odorReportId.toString());
-        OdorReport odorReport = OfflineApi.noseplug.getOdorReport(odorReportId);
+        OdorReport odorReport = ApplicationState.getInstance().getOdorReport(odorReportId);
 
         ((TextView) findViewById(R.id.odor_report_details_textview))
                 .setText(odorReport.toString());
