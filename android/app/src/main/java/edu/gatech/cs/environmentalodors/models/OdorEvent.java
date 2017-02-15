@@ -32,7 +32,9 @@ public class OdorEvent {
         // We're allowed to create an odor event without an odor report for debugging purposes.
     }
 
-    public void addComment(Comment comment) {comments.add(comment);}
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 
     public List<OdorReport> getOdorReports() {
         return odorReports;

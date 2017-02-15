@@ -21,6 +21,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_odor_event_details" />
+    <include layout="@layout/content_odor_event_details"
+        android:id="@+id/include" />
+
+
 
 </android.support.design.widget.CoordinatorLayout>
