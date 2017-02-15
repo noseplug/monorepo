@@ -16,7 +16,6 @@
 
         <!-- Registration Form -->
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,18 +24,19 @@
             <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="Username"/>
+                android:text="@string/username"/>
             <EditText android:id="@+id/login_username"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:maxLines="1"
+                android:inputType="text"
                 android:layout_marginBottom="20dip"/>
             <!-- Password Label -->
             <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="Password"/>
+                android:text="@string/password"/>
             <EditText android:id="@+id/login_password"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -49,24 +49,24 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
-                android:text="Log in"/>
+                android:text="@string/log_in"/>
             <!-- Link to Login Screen -->
             <TextView android:id="@+id/link_to_reset"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dip"
                 android:layout_marginBottom="40dip"
-                android:text="Forget your password?"
+                android:text="@string/forget_your_password"
                 android:gravity="center"
-                android:textSize="20dip"
+                android:textSize="20sp"
                 android:textColor="#025f7c"/>
             <TextView android:id="@+id/link_to_register"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="40dip"
-                android:text="No account yet?"
+                android:text="@string/no_account_yet"
                 android:gravity="center"
-                android:textSize="20dip"
+                android:textSize="20sp"
                 android:textColor="#025f7c"/>
 
         </LinearLayout>

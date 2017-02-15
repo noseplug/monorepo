@@ -15,5 +15,17 @@
     <string name="odor_strength">Strength</string>
     <string name="odor_type">Odor Type</string>
     <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log in</string>
+    <string name="forget_your_password">Forget your password?</string>
+    <string name="no_account_yet">No account yet?</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password_requirement">Password(Must be at least length of 8)</string>
+    <string name="retype_password">Retype Password</string>
+    <string name="already_user">Already has account! Login here</string>
+    <string name="register_new_account">Register New Account</string>
 
 </resources>

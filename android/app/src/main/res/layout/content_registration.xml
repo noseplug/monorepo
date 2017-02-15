@@ -16,7 +16,6 @@
 
         <!-- Registration Form -->
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,29 +24,31 @@
             <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="Username"/>
+                android:text="@string/username"/>
             <EditText android:id="@+id/reg_username"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:maxLines="1"
+                android:inputType="text"
                 android:layout_marginBottom="20dip"/>
             <!--  Email Label -->
             <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="Email"/>
+                android:text="@string/email"/>
             <EditText android:id="@+id/reg_email"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:maxLines="1"
+                android:inputType="textEmailAddress"
                 android:layout_marginBottom="20dip"/>
             <!-- Password Label -->
             <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="Password(Must be at least length of 8)"/>
+                android:text="@string/password_requirement"/>
             <EditText android:id="@+id/reg_password"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +60,7 @@
             <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="Retype Password"/>
+                android:text="@string/retype_password"/>
             <EditText android:id="@+id/retype_password"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -71,16 +72,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
-                android:text="Register New Account"/>
+                android:text="@string/register_new_account"/>
             <!-- Link to Login Screen -->
             <TextView android:id="@+id/link_to_login"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dip"
                 android:layout_marginBottom="40dip"
-                android:text="Already has account! Login here"
+                android:text="@string/already_user"
                 android:gravity="center"
-                android:textSize="20dip"
+                android:textSize="20sp"
                 android:textColor="#025f7c"/>
 
         </LinearLayout>
