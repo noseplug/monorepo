@@ -1,6 +1,15 @@
-language: java
+language: android
 # We need to configure this specifically because the gradlew is not in
 # the root of the repository.
 script: ./android/gradlew --project-dir android/ check
 jdk:
   - oraclejdk8
+
+android:
+  components:
+    - build-tools-25.0.2
+    - android-25
+    - extra-google-google_play_services
+  licenses:
+    - 'android-sdk-license-.+'
+
