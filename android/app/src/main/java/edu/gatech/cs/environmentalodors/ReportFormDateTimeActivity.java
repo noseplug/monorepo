@@ -2,59 +2,97 @@ package edu.gatech.cs.environmentalodors;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.Spinner;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.CREATE_DATE;
+import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
+import edu.gatech.cs.environmentalodors.models.Odor;
+import edu.gatech.cs.environmentalodors.models.OdorReport;
+import edu.gatech.cs.environmentalodors.models.User;
+
 import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.REPORT_DATE;
 
 public class ReportFormDateTimeActivity extends AppCompatActivity {
-    private EditText dateEditText;
     private Calendar myCalendar = Calendar.getInstance();
 
     private boolean firstClick = true;
 
     private Date reportDate;
+
+    private Date reportCreateDate = new Date(System.currentTimeMillis());
+    private LatLng odorLocation;
+
+    // BEGIN form
+    // TODO: Note how there is no place in the model for start/end time and comments.
+    //       The model object is incomplete.
+    private EditText reportDateEditText;
+    // private TimePicker startTimePicker;
+    // private TimePicker endTimePicker;
+    private Spinner odorTypeSpinner;
+    private Spinner odorStrengthSpinner;
+    // private EditText odorCommentsEditText;
+    private EditText odorEffectEditText;
+
+    // END form
+
+    private void findFormViews() {
+        reportDateEditText = (EditText) findViewById(R.id.report_date);
+        // startTimePicker = (TimePicker) findViewById(R.id.start_time);
+        // endTimePicker = (TimePicker) findViewById(R.id.end_time);
+        odorTypeSpinner = (Spinner) findViewById(R.id.odor_type);
+        odorStrengthSpinner = (Spinner) findViewById(R.id.odor_strength);
+        // odorCommentsEditText = (EditText) findViewById(R.id.odor_comments);
+        odorEffectEditText = (EditText) findViewById(R.id.odor_effect);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_form);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Report Form - Select Date and Time");
 
-        Button next = (Button) findViewById(R.id.right_arrow);
-        dateEditText = (EditText) findViewById(R.id.select_date);
+        findFormViews();
 
-        final LatLng location = getIntent().getParcelableExtra(LOCATION);
-        final Date createDate = new Date(System.currentTimeMillis());
+        odorLocation = getIntent().getParcelableExtra(LOCATION);
 
-        next.setOnClickListener(new View.OnClickListener() {
+        odorTypeSpinner.setAdapter(new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, Odor.Type.values()));
+        odorStrengthSpinner.setAdapter(new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, Odor.Strength.values()));
+
+        findViewById(R.id.submit_btn).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ReportFormDateTimeActivity.this, ReportFormDescriptionActivity.class);
-                intent.putExtra(LOCATION, location);
-                intent.putExtra(REPORT_DATE, reportDate);
-                intent.putExtra(CREATE_DATE, createDate);
-                startActivityForResult(intent, 0);
+            public void onClick(View v) {
+
+                // HACK: this should be done along the way but I need something to test the maps and show event page with
+                Odor odor = new Odor(
+                        Odor.Strength.values()[(int) odorStrengthSpinner.getSelectedItemId()],
+                        Odor.Type.values()[(int) odorTypeSpinner.getSelectedItemId()],
+                        odorEffectEditText.getText().toString());
+
+                // TODO: Fetch the user object from the API, don't just make a new one.
+                OdorReport report = new OdorReport(new User(), reportCreateDate,
+                        reportDate, odorLocation, odor);
+                EventBus.getDefault().post(new OdorReportEvent(report));
+                // end HACK
                 finish();
             }
         });
@@ -65,20 +103,22 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+
+                reportDate = myCalendar.getTime();
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy", Locale.US);
+                reportDateEditText.setText(sdf.format(reportDate));
             }
         };
 
-
-        dateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        reportDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (b&firstClick) {
+                if (b && firstClick) {
                     InputMethodManager imm =  (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     firstClick = false;
-
                 }
+
                 if (view.hasFocus()) {
                     new DatePickerDialog(ReportFormDateTimeActivity.this, dateDialog, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
@@ -86,33 +126,5 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
                 }
             }
         });
-        FrameLayout touchInterceptor = (FrameLayout)findViewById(R.id.touchInterceptor);
-        touchInterceptor.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() != MotionEvent.ACTION_DOWN) {
-                    return false;
-                }
-                if (dateEditText.isFocused()) {
-                    Rect outRect = new Rect();
-                    dateEditText.getGlobalVisibleRect(outRect);
-                    if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
-                        dateEditText.clearFocus();
-                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        v.performClick();
-                    }
-                }
-                return false;
-            }
-        });
     }
-    private void updateLabel() {
-
-        String myFormat = "MM/dd/yy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        reportDate = myCalendar.getTime();
-        dateEditText.setText(sdf.format(myCalendar.getTime()));
-    }
-
 }
