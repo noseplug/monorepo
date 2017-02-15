@@ -1,4 +1,4 @@
 language: java
 # We need to configure this specifically because the gradlew is not in
 # the root of the repository.
-script: android/gradlew check
+script: ./android/gradlew --project-dir android/ check
