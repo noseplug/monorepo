@@ -9,8 +9,23 @@
     <ListView
         android:id="@+id/odor_report_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:clickable="true"
         ></ListView>
+
+    <ListView
+        android:id="@+id/comment_list"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:clickable="false"
+        android:layout_below="@id/odor_report_list"
+        ></ListView>
+
+    <Button
+        android:text="Make Comment"
+        android:layout_below="@id/comment_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/commentButton" />
 
 </RelativeLayout>
