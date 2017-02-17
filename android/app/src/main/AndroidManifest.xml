@@ -31,7 +31,7 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,11 +41,7 @@
         <activity
             android:name=".ReportFormDateTimeActivity"
             android:label="@string/title_activity_report_form"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ReportFormDescriptionActivity"
-            android:label="@string/title_activity_report_form_description"
-            android:theme="@style/AppTheme.NoActionBar" />
+            />
         <activity
             android:name=".OdorEventDetailsActivity"
             android:label="@string/title_activity_odor_event_details"
