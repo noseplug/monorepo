@@ -119,6 +119,14 @@ public class MapsActivity extends AppCompatActivity implements
                 EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
             }
         });
+        FloatingActionButton odors = (FloatingActionButton) findViewById(R.id.odorsButton);
+        odors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.v(TAG, "Clicked Odors Button");
+                new OdorsDialogFragment().show(getFragmentManager(), "dialog");
+            }
+        });
     }
 
     @Override
@@ -223,6 +231,7 @@ public class MapsActivity extends AppCompatActivity implements
                 .zoom(INITIAL_LOCATION_ZOOM_FACTOR)
                 .build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
+
 
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
