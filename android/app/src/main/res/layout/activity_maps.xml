@@ -36,6 +36,21 @@
             app:layout_anchorGravity="bottom|right"
             />
 
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@android:drawable/presence_online"
+            android:id="@+id/odorsButton"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="26dp"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="26dp"
+            />
+
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
@@ -45,4 +60,6 @@
         android:layout_gravity="start"
         app:menu="@menu/nav"
         />
+
 </android.support.v4.widget.DrawerLayout>
+
