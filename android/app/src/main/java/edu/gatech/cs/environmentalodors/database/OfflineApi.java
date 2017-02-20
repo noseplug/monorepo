@@ -19,7 +19,7 @@ import edu.gatech.cs.environmentalodors.models.User;
 public class OfflineApi implements NoseplugApiInterface {
 
     public static final NoseplugApiInterface noseplug = new OfflineApi();
-    public static  final Map<String, OdorEvent> polygonEventMap = new ConcurrentHashMap<>();
+    public static final Map<String, OdorEvent> polygonEventMap = new ConcurrentHashMap<>();
     private Map<UUID, OdorEvent> odorEvents = new ConcurrentHashMap<>();
     private Map<UUID, User> users = new ConcurrentHashMap<>();
     private User dummyUser = new User();
