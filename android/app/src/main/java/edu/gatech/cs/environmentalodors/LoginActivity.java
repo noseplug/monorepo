@@ -11,6 +11,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText usernameEt;
@@ -47,6 +48,10 @@ public class LoginActivity extends AppCompatActivity {
                 username = usernameEt.getText().toString();
                 password = passwordEt.getText().toString();
                 //TODO: Check against the database if the username/email match
+                Toast.makeText(getApplicationContext(), "Congratulations! You have successfully logged in!", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(LoginActivity.this, ReportFormDateTimeActivity.class);
+                startActivity(intent);
 
 
 
@@ -62,7 +67,8 @@ public class LoginActivity extends AppCompatActivity {
         link2Pwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: add a reset password activity
+                Intent intent = new Intent(LoginActivity.this, ResetEmailActivity.class);
+                startActivity(intent);
             }
         });
     }

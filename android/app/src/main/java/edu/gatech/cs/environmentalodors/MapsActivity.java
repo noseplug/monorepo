@@ -53,7 +53,7 @@ import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
  * MapsActivity is the home page of the environmental odor app.
  */
 public class MapsActivity extends AppCompatActivity implements
-        OnMapReadyCallback {
+        OnMapReadyCallback, View.OnClickListener{
     private static final String TAG = MapsActivity.class.getSimpleName();
     private static final String MAP_FRAGMENT_TAG = "map_fragment";
     private static final float INITIAL_LOCATION_ZOOM_FACTOR = (float) 10.0;
@@ -91,6 +91,11 @@ public class MapsActivity extends AppCompatActivity implements
         googleApi = new GoogleApiClientWrapper(this);
         initOnClickListeners();
         EventBus.getDefault().register(this);
+        Button register = (Button) findViewById(R.id.register_btn);
+        register.setOnClickListener(this);
+
+        Button login = (Button) findViewById(R.id.login_btn);
+        login.setOnClickListener(this);
 
     }
 
@@ -119,7 +124,31 @@ public class MapsActivity extends AppCompatActivity implements
                 EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
             }
         });
+
     }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.report_fab:
+                Log.v(TAG, "Clicked FAB, launching odor report activity");
+                EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
+                break;
+            case R.id.register_btn:
+                Intent intent = new Intent(this, RegistrationActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.login_btn:
+                Intent intentLogin = new Intent(this, LoginActivity.class);
+                startActivity(intentLogin);
+                break;
+            default:
+                String name = this.getResources().getResourceEntryName(v.getId());
+                throw new FatalException("Clicked an unknown view: " + name);
+        }
+    }
+
+
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -187,7 +216,7 @@ public class MapsActivity extends AppCompatActivity implements
         map.addMarker(new MarkerOptions()
                 .position(odorReportEvent.odorReport.location)
                 .title("Odor Report"))
-            .setTag(odorReportEvent.odorReport.uuid);
+                .setTag(odorReportEvent.odorReport.uuid);
 
         updateMap();
     }
@@ -235,48 +264,7 @@ public class MapsActivity extends AppCompatActivity implements
                 }
             }
         });
-    private void initOnClickListeners() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.report_fab);
-        fab.setOnClickListener(this);
 
-        Button register = (Button) findViewById(R.id.register_btn);
-        register.setOnClickListener(this);
-
-        Button login = (Button) findViewById(R.id.login_btn);
-        login.setOnClickListener(this);
-    }
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        if(!marker.equals(userMarker)) {
-
-            Log.v(TAG, "Info Window clicked, starting odor event details activity");
-            Intent reportDetailsIntent = new Intent(this, OdorReportDetailsActivity.class);
-            reportDetailsIntent.putExtra(ODOR_REPORT_ID, new ParcelUuid((UUID) marker.getTag()));
-            this.startActivity(reportDetailsIntent);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.report_fab:
-                Log.v(TAG, "Clicked FAB, launching odor report activity");
-                EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
-                break;
-            case R.id.register_btn:
-                Intent intent = new Intent(this, RegistrationActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.login_btn:
-                Intent intentLogin = new Intent(this, LoginActivity.class);
-                startActivity(intentLogin);
-                break;
-            default:
-                String name = this.getResources().getResourceEntryName(v.getId());
-                throw new FatalException("Clicked an unknown view: " + name);
-        }
-    }
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {

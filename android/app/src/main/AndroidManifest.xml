@@ -40,22 +40,16 @@
         </activity>
         <activity
             android:name=".ReportFormDateTimeActivity"
-            android:label="@string/title_activity_report_form"
-            />
+            android:label="@string/title_activity_report_form" />
         <activity
             android:name=".OdorEventDetailsActivity"
-            android:label="@string/title_activity_odor_event_details"
-            android:theme="@style/AppTheme.NoActionBar" />
-
+            android:label="@string/title_activity_odor_event_details" />
         <activity android:name=".OdorReportDetailsActivity" />
-
         <activity
             android:name=".RegistrationActivity"
-            android:label="@string/title_activity_registration"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_registration" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ResetEmailActivity"></activity>
     </application>
 
 </manifest>

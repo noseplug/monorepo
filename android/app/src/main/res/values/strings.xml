@@ -29,5 +29,7 @@
     <string name="retype_password">Retype Password</string>
     <string name="already_user">Already has account! Login here</string>
     <string name="register_new_account">Register New Account</string>
+    <string name="email_to_reset">Please Enter Your Email</string>
+    <string name="reset_pwd_email">Send Email to Reset Password</string>
 
 </resources>
