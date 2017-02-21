@@ -20,6 +20,7 @@ import android.widget.ListView;
 import java.util.UUID;
 
 import edu.gatech.cs.environmentalodors.models.Comment;
+import edu.gatech.cs.environmentalodors.database.OfflineApi;
 import edu.gatech.cs.environmentalodors.models.OdorEvent;
 import edu.gatech.cs.environmentalodors.models.OdorReport;
 
@@ -44,7 +45,7 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         setSupportActionBar((Toolbar) this.findViewById(R.id.my_toolbar));
 
         UUID odorEventId = ((ParcelUuid) getIntent().getParcelableExtra(ODOR_EVENT_ID)).getUuid();
-        odorEvent = ApplicationState.getInstance().getOdorEvent(odorEventId);
+        odorEvent = OfflineApi.noseplug.getOdorEvent(odorEventId);
         String description = odorEvent.getOdorReports().get(0).odor.description;
 
         Log.v(TAG, String.format("Starting activity with odor event %s (%s)",
