@@ -36,6 +36,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.Date;
 import java.util.UUID;
 
+import edu.gatech.cs.environmentalodors.database.OfflineApi;
 import edu.gatech.cs.environmentalodors.events.CreateOdorReportEvent;
 import edu.gatech.cs.environmentalodors.events.LocationEvent;
 import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
@@ -190,7 +191,7 @@ public class MapsActivity extends AppCompatActivity implements
     public void onOdorReportEvent(OdorReportEvent odorReportEvent) {
         Log.v(TAG, "Received an odor report event");
         OdorEvent odorEvent = new OdorEvent(odorReportEvent.odorReport);
-        ApplicationState.getInstance().addOdorEvent(odorEvent);
+        OfflineApi.noseplug.addOdorEvent(odorEvent);
 
         map.addMarker(new MarkerOptions()
                 .position(odorReportEvent.odorReport.location)
@@ -249,7 +250,7 @@ public class MapsActivity extends AppCompatActivity implements
             @Override
             public void onPolygonClick(Polygon polygon) {
                 Log.v(TAG, "Polygon clicked, starting odor event details activity");
-                OdorEvent event = ApplicationState.getInstance().polygonEventMap.get(polygon.getId());
+                OdorEvent event = OfflineApi.polygonEventMap.get(polygon.getId());
                 Intent detailsIntent = new Intent(ctx, OdorEventDetailsActivity.class);
                 detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) event.uuid));
                 ctx.startActivity(detailsIntent);
@@ -270,9 +271,9 @@ public class MapsActivity extends AppCompatActivity implements
         userMarker = map.addMarker(new MarkerOptions().position(selectedLocation).title("You are Here").zIndex(-1.0f).icon(userIcon));
         userMarker.showInfoWindow();
 
-        ApplicationState.getInstance().polygonEventMap.clear();
+        OfflineApi.polygonEventMap.clear();
 
-        for(OdorEvent o : ApplicationState.getInstance().getOdorEvents())
+        for(OdorEvent o : OfflineApi.noseplug.getOdorEvents())
         {
             PolygonOptions polyOptions = new PolygonOptions();
             for(OdorReport r : o.getOdorReports()) {
@@ -287,8 +288,18 @@ public class MapsActivity extends AppCompatActivity implements
             polyOptions.strokeColor(Color.argb(80, 250, 250, 0));
             polyOptions.clickable(true);
             Polygon polygon = map.addPolygon(polyOptions);
-            ApplicationState.getInstance().polygonEventMap.put(polygon.getId(), o);
+            OfflineApi.polygonEventMap.put(polygon.getId(), o);
         }
+    }
+
+    //@Override
+    public void onPolygonClick(Polygon polygon)
+    {
+        Log.v(TAG, "Polygon clicked, starting odor event details activity");
+        OdorEvent event = OfflineApi.polygonEventMap.get(polygon.getId());
+        Intent detailsIntent = new Intent(this, OdorEventDetailsActivity.class);
+        detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) event.uuid));
+        this.startActivity(detailsIntent);
     }
 
     public void generateFakeData() {
@@ -317,7 +328,7 @@ public class MapsActivity extends AppCompatActivity implements
             event.addComment(tempComment);
         }
 
-        ApplicationState.getInstance().addOdorEvent(event);
+        OfflineApi.noseplug.addOdorEvent(event);
         //EventBus.getDefault().post(new OdorEvent(tempOdorReport));
     }
 }
