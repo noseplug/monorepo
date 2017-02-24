@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.ParcelUuid;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,6 +38,17 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.Date;
 import java.util.UUID;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.noseplugapp.android.database.OfflineApi;
 import com.noseplugapp.android.events.CreateOdorReportEvent;
 import com.noseplugapp.android.events.LocationEvent;
@@ -65,6 +78,9 @@ public class MapsActivity extends AppCompatActivity implements
     private GoogleApiClientWrapper googleApi;
     private GoogleMap map;
 
+    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
+
     private LatLng selectedLocation; // Starts at the user's last known location.
     private Marker userMarker;
 
@@ -93,6 +109,33 @@ public class MapsActivity extends AppCompatActivity implements
         initOnClickListeners();
         EventBus.getDefault().register(this);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Log.d(TAG, "onAuthstateChanged:signed_in:" + user.getUid());
+                } else {
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
+
+        firebaseAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
+
+                // If sign in fails, display a message to the user. If sign in succeeds
+                // the auth state listener will be notified and logic to handle the
+                // signed in user can be handled in the listener.
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "signInAnonymously", task.getException());
+                    Toast.makeText(ctx, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void initMap() {
@@ -154,12 +197,16 @@ public class MapsActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         googleApi.onStart();
+        firebaseAuth.addAuthStateListener(firebaseAuthStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         googleApi.onStop();
+        if (firebaseAuthStateListener != null) {
+            firebaseAuth.removeAuthStateListener(firebaseAuthStateListener);
+        }
     }
 
     @Override
