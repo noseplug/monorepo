@@ -48,8 +48,14 @@
   "wallposts" : {
     "22b7122a-e603-46d4-86d8-072b9ec608ed" : [ {
       "content" : "I think it's coming from the fire.",
+      "is-pinned" : false,
       "submit-time" : 1487975461,
       "user-id" : "ef0130b5-ab2e-484b-b863-c79f7da712e5"
+    }, {
+      "content" : "We are meeting at 5:00 pm at 123 Peachtree to discuss the next steps.",
+      "is-pinned" : true,
+      "submit-time" : 1488141353,
+      "user-id" : "53571a35-13c7-4af6-8c82-b20efb6cf515"
     } ]
   }
 }
