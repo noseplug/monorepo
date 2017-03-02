@@ -21,6 +21,8 @@ import java.util.UUID;
  */
 public class OdorEvent {
     public final UUID uuid = UUID.randomUUID();
+
+    public List<Comment> comments = new ArrayList<>();
     private List<OdorReport> odorReports = new ArrayList<>();
 
     public OdorEvent(OdorReport odorReport) {
@@ -30,9 +32,14 @@ public class OdorEvent {
         // We're allowed to create an odor event without an odor report for debugging purposes.
     }
 
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
+
     public List<OdorReport> getOdorReports() {
         return odorReports;
     }
+    public List<Comment> getComments() { return comments; }
     public void addOdorReport(OdorReport report) {
         odorReports.add(report);
     }
