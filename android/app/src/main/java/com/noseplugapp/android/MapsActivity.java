@@ -43,12 +43,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.noseplugapp.android.database.OfflineApi;
 import com.noseplugapp.android.events.CreateOdorReportEvent;
 import com.noseplugapp.android.events.LocationEvent;
@@ -250,7 +244,7 @@ public class MapsActivity extends AppCompatActivity implements
 
     @Subscribe
     public void onCreateOdorReportEvent(CreateOdorReportEvent e) {
-        Intent reportIntent = new Intent(this, ReportFormDateTimeActivity.class);
+        Intent reportIntent = new Intent(this, ReportFormActivity.class);
         reportIntent.putExtra(LOCATION, e.location);
         this.startActivity(reportIntent);
     }

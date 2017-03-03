@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ReportFormDateTimeActivity"
+            android:name=".ReportFormActivity"
             android:label="@string/title_activity_report_form"
             />
         <activity

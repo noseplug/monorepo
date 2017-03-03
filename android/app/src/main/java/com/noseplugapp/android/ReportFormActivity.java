@@ -28,7 +28,7 @@ import com.noseplugapp.android.models.User;
 
 import static com.noseplugapp.android.IntentExtraNames.LOCATION;
 
-public class ReportFormDateTimeActivity extends AppCompatActivity {
+public class ReportFormActivity extends AppCompatActivity {
     private Calendar myCalendar = Calendar.getInstance();
 
     private boolean firstClick = true;
@@ -120,7 +120,7 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
                 }
 
                 if (view.hasFocus()) {
-                    new DatePickerDialog(ReportFormDateTimeActivity.this, dateDialog, myCalendar
+                    new DatePickerDialog(ReportFormActivity.this, dateDialog, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                             myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 }
