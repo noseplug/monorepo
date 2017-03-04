@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
 
 import android.app.Dialog;
 import android.app.DialogFragment;

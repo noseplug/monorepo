@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors.models;
+package com.noseplugapp.android.models;
 
 /**
  * Class to represent comments, announcements, and surveys in odorEvents, to be held by the odorEvent and in the database

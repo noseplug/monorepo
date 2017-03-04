@@ -1,5 +1,4 @@
-Environmental Odor Service
-==========================
+Noseplug App
+============
 
-This repository is for the environmental odor app and server (and any
-other code we might need for this project).
+This repository is for the Nosplug environmental odor app.

@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors.models;
+package com.noseplugapp.android.models;
 
 import java.util.ArrayList;
 import java.util.List;

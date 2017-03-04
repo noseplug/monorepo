@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
 
 import android.os.Bundle;
 import android.os.ParcelUuid;
@@ -8,10 +8,10 @@ import android.widget.TextView;
 
 import java.util.UUID;
 
-import edu.gatech.cs.environmentalodors.database.OfflineApi;
-import edu.gatech.cs.environmentalodors.models.OdorReport;
+import com.noseplugapp.android.database.OfflineApi;
+import com.noseplugapp.android.models.OdorReport;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
+import static com.noseplugapp.android.IntentExtraNames.ODOR_REPORT_ID;
 
 public class OdorReportDetailsActivity extends AppCompatActivity {
 

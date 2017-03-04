@@ -1,10 +1,11 @@
-package edu.gatech.cs.environmentalodors.database;
+package com.noseplugapp.android.database;
+
+import com.noseplugapp.android.models.OdorEvent;
+import com.noseplugapp.android.models.OdorReport;
+import com.noseplugapp.android.models.User;
 
 import java.util.UUID;
 
-import edu.gatech.cs.environmentalodors.models.OdorEvent;
-import edu.gatech.cs.environmentalodors.models.OdorReport;
-import edu.gatech.cs.environmentalodors.models.User;
 
 /**
  * Created by Esteban on 2/8/17.

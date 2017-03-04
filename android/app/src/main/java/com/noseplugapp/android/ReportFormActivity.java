@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -21,14 +21,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import edu.gatech.cs.environmentalodors.events.OdorReportEvent;
-import edu.gatech.cs.environmentalodors.models.Odor;
-import edu.gatech.cs.environmentalodors.models.OdorReport;
-import edu.gatech.cs.environmentalodors.models.User;
+import com.noseplugapp.android.events.OdorReportEvent;
+import com.noseplugapp.android.models.Odor;
+import com.noseplugapp.android.models.OdorReport;
+import com.noseplugapp.android.models.User;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.LOCATION;
+import static com.noseplugapp.android.IntentExtraNames.LOCATION;
 
-public class ReportFormDateTimeActivity extends AppCompatActivity {
+public class ReportFormActivity extends AppCompatActivity {
     private Calendar myCalendar = Calendar.getInstance();
 
     private boolean firstClick = true;
@@ -120,7 +120,7 @@ public class ReportFormDateTimeActivity extends AppCompatActivity {
                 }
 
                 if (view.hasFocus()) {
-                    new DatePickerDialog(ReportFormDateTimeActivity.this, dateDialog, myCalendar
+                    new DatePickerDialog(ReportFormActivity.this, dateDialog, myCalendar
                             .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                             myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 }

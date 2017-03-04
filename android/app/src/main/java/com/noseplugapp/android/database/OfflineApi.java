@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors.database;
+package com.noseplugapp.android.database;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import edu.gatech.cs.environmentalodors.models.OdorReport;
-import edu.gatech.cs.environmentalodors.models.Odor;
-import edu.gatech.cs.environmentalodors.models.OdorEvent;
-import edu.gatech.cs.environmentalodors.models.User;
+import com.noseplugapp.android.models.OdorReport;
+import com.noseplugapp.android.models.Odor;
+import com.noseplugapp.android.models.OdorEvent;
+import com.noseplugapp.android.models.User;
 
 /**
  * Created by Esteban on 2/8/17.

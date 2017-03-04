@@ -1,4 +1,4 @@
-package edu.gatech.cs.environmentalodors;
+package com.noseplugapp.android;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,13 +19,13 @@ import android.widget.ListView;
 
 import java.util.UUID;
 
-import edu.gatech.cs.environmentalodors.models.Comment;
-import edu.gatech.cs.environmentalodors.database.OfflineApi;
-import edu.gatech.cs.environmentalodors.models.OdorEvent;
-import edu.gatech.cs.environmentalodors.models.OdorReport;
+import com.noseplugapp.android.models.Comment;
+import com.noseplugapp.android.database.OfflineApi;
+import com.noseplugapp.android.models.OdorEvent;
+import com.noseplugapp.android.models.OdorReport;
 
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_EVENT_ID;
-import static edu.gatech.cs.environmentalodors.IntentExtraNames.ODOR_REPORT_ID;
+import static com.noseplugapp.android.IntentExtraNames.ODOR_EVENT_ID;
+import static com.noseplugapp.android.IntentExtraNames.ODOR_REPORT_ID;
 
 public class OdorEventDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemClickListener {
