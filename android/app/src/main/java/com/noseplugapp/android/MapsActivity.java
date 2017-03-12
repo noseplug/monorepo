@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -79,6 +81,9 @@ public class MapsActivity extends AppCompatActivity implements
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
+    //Defining Variable
+    private NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +132,103 @@ public class MapsActivity extends AppCompatActivity implements
                 }
             }
         });
+
+        sideSlideMenu();
     }
+
+    private void sideSlideMenu() {
+        //Initializing NavigationView
+        navigationView = (NavigationView) findViewById(R.id.navigation);
+
+        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+        // This method will trigger on item Click of navigation menu
+        @Override
+        public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+
+        //Checking if the item is in checked state or not, if not make it in checked state
+            if(menuItem.isChecked()) menuItem.setChecked(false);
+            else menuItem.setChecked(true);
+            //Closing drawer on item click
+            drawerLayout.closeDrawers();
+            //Check to see which item was being clicked and perform appropriate action
+            switch (menuItem.getItemId()){
+
+            //Replacing the main content with ContentFragment Which is our Inbox View;
+                case R.id.register:
+//                    Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
+//                    ContentFragment fragment = new ContentFragment();
+//                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                    fragmentTransaction.replace(R.id.frame,fragment);
+//                    fragmentTransaction.commit();
+                    Intent intent = new Intent(ctx, RegistrationActivity.class);
+                    startActivity(intent);
+                    return true;
+                    // For rest of the options we just show a toast on click
+
+                case R.id.login:
+                    intent = new Intent(ctx, LoginActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(),"Login Selected",Toast.LENGTH_SHORT).show();
+                    return true;
+                case R.id.odor_classification:
+                    Toast.makeText(getApplicationContext(),"Send Selected",Toast.LENGTH_SHORT).show();
+                    Log.v(TAG, "Clicked Odors Button");
+                    new OdorsDialogFragment().show(getFragmentManager(), "dialog");
+                    return true;
+                default:
+                    return true;
+                }
+            }
+        });
+
+        // Initializing Drawer Layout and ActionBarToggle
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawer_open, R.string.drawer_open){
+                                                    //0x7f07003a
+        @Override
+        public void onDrawerClosed(View drawerView) {
+        // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+            super.onDrawerClosed(drawerView);
+        }
+        @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        //Setting the actionbarToggle to drawer layout
+        //drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        //calling sync state is necessay or else your hamburger icon wont show up
+        actionBarDrawerToggle.syncState();
+    }
+
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.nav, menu);
+            return true;
+        }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.register) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+
 
     private void initMap() {
         FragmentManager manager = getSupportFragmentManager();
@@ -154,30 +255,30 @@ public class MapsActivity extends AppCompatActivity implements
                 EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
             }
         });
-        Button registrationBtn = (Button) findViewById(R.id.register_btn);
-        registrationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ctx, RegistrationActivity.class);
-                startActivity(intent);
-            }
-        });
-        Button loginBtn = (Button) findViewById(R.id.login_btn);
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ctx, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-        FloatingActionButton odors = (FloatingActionButton) findViewById(R.id.odorsButton);
-        odors.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.v(TAG, "Clicked Odors Button");
-                new OdorsDialogFragment().show(getFragmentManager(), "dialog");
-            }
-        });
+//        Button registrationBtn = (Button) findViewById(R.id.register_btn);
+//        registrationBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(ctx, RegistrationActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//        Button loginBtn = (Button) findViewById(R.id.login_btn);
+//        loginBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(ctx, LoginActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//        FloatingActionButton odors = (FloatingActionButton) findViewById(R.id.odorsButton);
+//        odors.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.v(TAG, "Clicked Odors Button");
+//                new OdorsDialogFragment().show(getFragmentManager(), "dialog");
+//            }
+//        });
 
     }
 

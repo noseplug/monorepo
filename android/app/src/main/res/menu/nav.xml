@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item_settings"
-        android:title="@string/item_settings"
+        android:id="@+id/register"
+        android:title="Register"
         />
     <item
-        android:id="@+id/item_help"
-        android:title="@string/item_help"
+        android:id="@+id/login"
+        android:title="Login"
         />
     <item
-        android:id="@+id/item_about"
-        android:title="@string/item_about"
+        android:id="@+id/odor_classification"
+        android:title="Odor Classification"
         />
 </menu>
