@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                 //TODO: Check against the database if the username/email match
                 Toast.makeText(getApplicationContext(), "Congratulations! You have successfully logged in!", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(LoginActivity.this, ReportFormDateTimeActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ReportFormActivity.class);
                 startActivity(intent);
 
 
