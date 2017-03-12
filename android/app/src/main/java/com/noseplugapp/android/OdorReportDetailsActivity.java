@@ -11,8 +11,6 @@ import java.util.UUID;
 import com.noseplugapp.android.database.OfflineApi;
 import com.noseplugapp.android.models.OdorReport;
 
-import static com.noseplugapp.android.IntentExtraNames.ODOR_REPORT_ID;
-
 public class OdorReportDetailsActivity extends AppCompatActivity {
 
     @Override
@@ -21,7 +19,10 @@ public class OdorReportDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_odor_report_details);
         setTitle("Odor Report Details"); // TODO: find out where this shoud be set
 
-        UUID odorReportId = ((ParcelUuid) getIntent().getParcelableExtra(ODOR_REPORT_ID)).getUuid();
+        UUID odorReportId = ((ParcelUuid) getIntent().getParcelableExtra(
+                getResources().getString(R.string.intent_extra_odor_report_id))
+        ).getUuid();
+
         Log.d("asd", odorReportId.toString());
         OdorReport odorReport = OfflineApi.noseplug.getOdorReport(odorReportId);
 

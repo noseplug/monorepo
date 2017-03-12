@@ -26,8 +26,6 @@ import com.noseplugapp.android.models.Odor;
 import com.noseplugapp.android.models.OdorReport;
 import com.noseplugapp.android.models.User;
 
-import static com.noseplugapp.android.IntentExtraNames.LOCATION;
-
 public class ReportFormActivity extends AppCompatActivity {
     private Calendar myCalendar = Calendar.getInstance();
 
@@ -71,7 +69,8 @@ public class ReportFormActivity extends AppCompatActivity {
 
         findFormViews();
 
-        odorLocation = getIntent().getParcelableExtra(LOCATION);
+        odorLocation = getIntent().getParcelableExtra(
+                getResources().getString(R.string.intent_extra_location));
 
         odorTypeSpinner.setAdapter(new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, Odor.Type.values()));

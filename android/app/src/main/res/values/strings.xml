@@ -16,5 +16,10 @@
     <string name="item_about">About</string>
     <string name="drawer_open">Open the navigation drawer.</string>
     <string name="drawer_close">Close the navigation drawer.</string>
+    <string name="intent_extra_location">com.noseplugapp.android.Location</string>
+    <string name="intent_extra_create_date">com.noseplugapp.android.CreateDate</string>
+    <string name="intent_extra_report_date">com.noseplugapp.android.ReportDate</string>
+    <string name="intent_extra_odor_event_id">com.noseplugapp.android.OdorEventId</string>
+    <string name="intent_extra_odor_report_id">com.noseplugapp.android.OdorReportId</string>
 
 </resources>

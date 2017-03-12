@@ -24,9 +24,6 @@ import com.noseplugapp.android.database.OfflineApi;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.OdorReport;
 
-import static com.noseplugapp.android.IntentExtraNames.ODOR_EVENT_ID;
-import static com.noseplugapp.android.IntentExtraNames.ODOR_REPORT_ID;
-
 public class OdorEventDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemClickListener {
     private static final String TAG = OdorEventDetailsActivity.class.getSimpleName();
@@ -44,7 +41,10 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         setContentView(R.layout.activity_odor_event_details);
         setSupportActionBar((Toolbar) this.findViewById(R.id.my_toolbar));
 
-        UUID odorEventId = ((ParcelUuid) getIntent().getParcelableExtra(ODOR_EVENT_ID)).getUuid();
+        UUID odorEventId = ((ParcelUuid) getIntent().getParcelableExtra(
+                getResources().getString(R.string.intent_extra_odor_event_id))
+        ).getUuid();
+
         odorEvent = OfflineApi.noseplug.getOdorEvent(odorEventId);
         String description = odorEvent.getOdorReports().get(0).odor.description;
 
@@ -102,7 +102,8 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         Log.v(TAG, "Received click for odor report at index " + position);
         Intent intent = new Intent(this, OdorReportDetailsActivity.class);
         OdorReport report = odorEvent.getOdorReports().get(position);
-        intent.putExtra(ODOR_REPORT_ID, new ParcelUuid(report.uuid));
+        intent.putExtra(getResources().getString(R.string.intent_extra_odor_report_id),
+                new ParcelUuid(report.uuid));
         startActivity(intent);
     }
 }

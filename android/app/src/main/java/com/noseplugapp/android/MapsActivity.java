@@ -53,10 +53,6 @@ import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.OdorReport;
 import com.noseplugapp.android.models.User;
 
-import static com.noseplugapp.android.IntentExtraNames.LOCATION;
-import static com.noseplugapp.android.IntentExtraNames.ODOR_EVENT_ID;
-import static com.noseplugapp.android.IntentExtraNames.ODOR_REPORT_ID;
-
 /**
  * MapsActivity is the home page of the environmental odor app.
  */
@@ -245,7 +241,7 @@ public class MapsActivity extends AppCompatActivity implements
     @Subscribe
     public void onCreateOdorReportEvent(CreateOdorReportEvent e) {
         Intent reportIntent = new Intent(this, ReportFormActivity.class);
-        reportIntent.putExtra(LOCATION, e.location);
+        reportIntent.putExtra(getResources().getString(R.string.intent_extra_location), e.location);
         this.startActivity(reportIntent);
     }
 
@@ -281,7 +277,9 @@ public class MapsActivity extends AppCompatActivity implements
                 if(!marker.equals(userMarker)) {
                     Log.v(TAG, "Info Window clicked, starting odor event details activity");
                     Intent reportDetailsIntent = new Intent(ctx, OdorReportDetailsActivity.class);
-                    reportDetailsIntent.putExtra(ODOR_REPORT_ID, new ParcelUuid((UUID) marker.getTag()));
+                    reportDetailsIntent.putExtra(
+                            getResources().getString(R.string.intent_extra_odor_report_id),
+                            new ParcelUuid((UUID) marker.getTag()));
                     ctx.startActivity(reportDetailsIntent);
                 }
             }
@@ -293,7 +291,9 @@ public class MapsActivity extends AppCompatActivity implements
                 Log.v(TAG, "Polygon clicked, starting odor event details activity");
                 OdorEvent event = OfflineApi.polygonEventMap.get(polygon.getId());
                 Intent detailsIntent = new Intent(ctx, OdorEventDetailsActivity.class);
-                detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) event.uuid));
+                detailsIntent.putExtra(
+                        getResources().getString(R.string.intent_extra_odor_event_id),
+                        new ParcelUuid((UUID) event.uuid));
                 ctx.startActivity(detailsIntent);
             }
         });
@@ -339,7 +339,8 @@ public class MapsActivity extends AppCompatActivity implements
         Log.v(TAG, "Polygon clicked, starting odor event details activity");
         OdorEvent event = OfflineApi.polygonEventMap.get(polygon.getId());
         Intent detailsIntent = new Intent(this, OdorEventDetailsActivity.class);
-        detailsIntent.putExtra(ODOR_EVENT_ID, new ParcelUuid((UUID) event.uuid));
+        detailsIntent.putExtra(getResources().getString(R.string.intent_extra_odor_event_id),
+                new ParcelUuid((UUID) event.uuid));
         this.startActivity(detailsIntent);
     }
 
