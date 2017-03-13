@@ -46,7 +46,7 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         ).getUuid();
 
         odorEvent = OfflineApi.noseplug.getOdorEvent(odorEventId);
-        String description = odorEvent.getOdorReports().get(0).odor.getDescription();
+        String description = odorEvent.getOdorReports().get(0).getOdor().getDescription();
 
         Log.v(TAG, String.format("Starting activity with odor event %s (%s)",
                 odorEventId, description));
@@ -103,7 +103,7 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         Intent intent = new Intent(this, OdorReportDetailsActivity.class);
         OdorReport report = odorEvent.getOdorReports().get(position);
         intent.putExtra(getResources().getString(R.string.intent_extra_odor_report_id),
-                new ParcelUuid(report.uuid));
+                new ParcelUuid(report.getId()));
         startActivity(intent);
     }
 }

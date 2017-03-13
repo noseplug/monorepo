@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -353,9 +352,9 @@ public class MapsActivity extends AppCompatActivity implements
         OfflineApi.noseplug.addOdorEvent(odorEvent);
 
         map.addMarker(new MarkerOptions()
-                .position(odorReportEvent.odorReport.location)
+                .position(odorReportEvent.odorReport.getLocation())
                 .title("Odor Report"))
-                .setTag(odorReportEvent.odorReport.uuid);
+                .setTag(odorReportEvent.odorReport.getId());
 
         updateMap();
     }
@@ -440,12 +439,12 @@ public class MapsActivity extends AppCompatActivity implements
         {
             PolygonOptions polyOptions = new PolygonOptions();
             for(OdorReport r : o.getOdorReports()) {
-                polyOptions.add(r.location);
+                polyOptions.add(r.getLocation());
 
                 map.addMarker(new MarkerOptions()
-                        .position(r.location)
+                        .position(r.getLocation())
                         .title("Odor Report"))
-                        .setTag(r.uuid);
+                        .setTag(r.getId());
             }
             polyOptions.fillColor(Color.argb(50, 250, 250, 0));
             polyOptions.strokeColor(Color.argb(80, 250, 250, 0));
@@ -481,7 +480,7 @@ public class MapsActivity extends AppCompatActivity implements
             LatLng tempLocation = new LatLng(
                     center.latitude + Math.cos(((float) i / reportCount) * 2 * Math.PI) * radius,
                     center.longitude + Math.sin(((float) i / reportCount) * 2 * Math.PI) * radius);
-            OdorReport tempOdorReport = new OdorReport(new User(), new Date(), new Date(), tempLocation, tempOdor);
+            OdorReport tempOdorReport = new OdorReport(new User(), new Date(), tempLocation, tempOdor);
             event.addOdorReport(tempOdorReport);
             EventBus.getDefault().post(new OdorReportEvent(tempOdorReport));
         }
