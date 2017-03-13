@@ -46,7 +46,7 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         ).getUuid();
 
         odorEvent = OfflineApi.noseplug.getOdorEvent(odorEventId);
-        String description = odorEvent.getOdorReports().get(0).odor.description;
+        String description = odorEvent.getOdorReports().get(0).odor.getDescription();
 
         Log.v(TAG, String.format("Starting activity with odor event %s (%s)",
                 odorEventId, description));
