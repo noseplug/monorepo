@@ -1,34 +1,34 @@
 package com.noseplugapp.android.models;
 
 /**
- * Class to represent comments, announcements, and surveys in odorEvents, to be held by the odorEvent and in the database
+ * Class to represent wallposts, announcements, and surveys in odorEvents, to be held by the odorEvent and in the database
  * Owner: John Blum
  */
 
-public class Comment {
+public class Wallpost {
     public String author;
-    public CommentType type;
+    public Type type;
     public String content;
 
-    public Comment(String author, String content, CommentType type) {
+    public Wallpost(String author, String content, Type type) {
         this.author = author;
         this.content = content;
         this.type = type;
     }
 
-    public Comment(String author, String content) {
+    public Wallpost(String author, String content) {
         this.author = author;
         this.content = content;
-        this.type = CommentType.normal;
+        this.type = Type.normal;
     }
 
-    public Comment() {
+    public Wallpost() {
         this.author = "TestAuthor";
         this.content = "Test Content Please Ignore";
-        this.type = CommentType.normal;
+        this.type = Type.normal;
     }
 
-    public enum CommentType {
+    public enum Type {
         normal,
         pinned
     }

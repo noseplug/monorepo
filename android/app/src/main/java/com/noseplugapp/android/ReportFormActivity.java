@@ -37,7 +37,7 @@ public class ReportFormActivity extends AppCompatActivity {
     private LatLng odorLocation;
 
     // BEGIN form
-    // TODO: Note how there is no place in the model for start/end time and comments.
+    // TODO: Note how there is no place in the model for start/end time and wallposts.
     //       The model object is incomplete.
     private EditText reportDateEditText;
     // private TimePicker startTimePicker;

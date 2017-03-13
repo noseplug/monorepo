@@ -49,7 +49,7 @@ import com.noseplugapp.android.database.OfflineApi;
 import com.noseplugapp.android.events.CreateOdorReportEvent;
 import com.noseplugapp.android.events.LocationEvent;
 import com.noseplugapp.android.events.OdorReportEvent;
-import com.noseplugapp.android.models.Comment;
+import com.noseplugapp.android.models.Wallpost;
 import com.noseplugapp.android.models.Odor;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.OdorReport;
@@ -414,7 +414,7 @@ public class MapsActivity extends AppCompatActivity implements
                 Intent detailsIntent = new Intent(ctx, OdorEventDetailsActivity.class);
                 detailsIntent.putExtra(
                         getResources().getString(R.string.intent_extra_odor_event_id),
-                        new ParcelUuid((UUID) event.uuid));
+                        new ParcelUuid((UUID) event.getId()));
                 ctx.startActivity(detailsIntent);
             }
         });
@@ -461,7 +461,7 @@ public class MapsActivity extends AppCompatActivity implements
         OdorEvent event = OfflineApi.polygonEventMap.get(polygon.getId());
         Intent detailsIntent = new Intent(this, OdorEventDetailsActivity.class);
         detailsIntent.putExtra(getResources().getString(R.string.intent_extra_odor_event_id),
-                new ParcelUuid((UUID) event.uuid));
+                new ParcelUuid((UUID) event.getId()));
         this.startActivity(detailsIntent);
     }
 
@@ -487,8 +487,8 @@ public class MapsActivity extends AppCompatActivity implements
 
         for(int i = 0; i < commentCount; i++)
         {
-            Comment tempComment = new Comment();
-            event.addComment(tempComment);
+            Wallpost tempWallpost = new Wallpost();
+            event.addWallpost(tempWallpost);
         }
 
         OfflineApi.noseplug.addOdorEvent(event);

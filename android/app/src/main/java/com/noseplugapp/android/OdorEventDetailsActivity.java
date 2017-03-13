@@ -19,7 +19,7 @@ import android.widget.ListView;
 
 import java.util.UUID;
 
-import com.noseplugapp.android.models.Comment;
+import com.noseplugapp.android.models.Wallpost;
 import com.noseplugapp.android.database.OfflineApi;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.OdorReport;
@@ -58,7 +58,7 @@ public class OdorEventDetailsActivity extends AppCompatActivity
 
         final ListView commentList = (ListView) this.findViewById(R.id.comment_list);
         commentList.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, odorEvent.getComments()));
+                android.R.layout.simple_list_item_1, odorEvent.getWallposts()));
 
         findViewById(R.id.commentButton).setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
@@ -73,11 +73,11 @@ public class OdorEventDetailsActivity extends AppCompatActivity
 
 
                 alertDialogBuilder
-                        .setPositiveButton("Comment", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog,int id) {
                                         commentText = userInput.getText().toString();
-                                        Comment newComment = new Comment("You", commentText, Comment.CommentType.normal);
-                                        odorEvent.addComment(newComment);
+                                        Wallpost newWallpost = new Wallpost("You", commentText, Wallpost.Type.normal);
+                                        odorEvent.addWallpost(newWallpost);
                                         ((BaseAdapter) commentList.getAdapter()).notifyDataSetChanged();
                                     }
                                 })
