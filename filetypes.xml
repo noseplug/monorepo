@@ -1,8 +1,0 @@
-<application>
-  <component name="FileTypeManager" version="17">
-    <extensionMap>
-      <mapping pattern="OfflineNoseplugAPI" type="CLASS" />
-      <mapping pattern="OfflineNoseplugAPI.java" type="PLAIN_TEXT" />
-    </extensionMap>
-  </component>
-</application>

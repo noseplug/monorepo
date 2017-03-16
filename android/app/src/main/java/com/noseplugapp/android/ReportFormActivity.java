@@ -37,7 +37,7 @@ public class ReportFormActivity extends AppCompatActivity {
     private LatLng odorLocation;
 
     // BEGIN form
-    // TODO: Note how there is no place in the model for start/end time and comments.
+    // TODO: Note how there is no place in the model for start/end time and wallposts.
     //       The model object is incomplete.
     private EditText reportDateEditText;
     // private TimePicker startTimePicker;
@@ -88,8 +88,7 @@ public class ReportFormActivity extends AppCompatActivity {
                         odorEffectEditText.getText().toString());
 
                 // TODO: Fetch the user object from the API, don't just make a new one.
-                OdorReport report = new OdorReport(new User(), reportCreateDate,
-                        reportDate, odorLocation, odor);
+                OdorReport report = new OdorReport(new User(), reportDate, odorLocation, odor);
                 EventBus.getDefault().post(new OdorReportEvent(report));
                 // end HACK
                 finish();

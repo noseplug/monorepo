@@ -1,5 +1,8 @@
 package com.noseplugapp.android.models;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,27 +23,64 @@ import java.util.UUID;
  * Many OdorEvents will only have a single OdorReport.
  */
 public class OdorEvent {
-    public final UUID uuid = UUID.randomUUID();
 
-    public List<Comment> comments = new ArrayList<>();
-    private List<OdorReport> odorReports = new ArrayList<>();
+    private UUID id = UUID.randomUUID();
+    private String name; // TODO: populate name (when we create the event in User)
+    private User owner; // TODO: populate owner (when we create the event in User)
+    private List<OdorReport> reports = new ArrayList<>();
+    private List<User> subscribers = new ArrayList<>(); // TODO: add methods for subscribers
+    private List<Wallpost> wallposts = new ArrayList<>();
 
     public OdorEvent(OdorReport odorReport) {
-        odorReports.add(odorReport);
+        reports.add(odorReport);
     }
     public OdorEvent() {
         // We're allowed to create an odor event without an odor report for debugging purposes.
     }
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public List<OdorReport> getReports() {
+        return reports;
+    }
+
+    public List<User> getSubscribers() {
+        return subscribers;
+    }
+
+    public List<Wallpost> getWallposts() {
+        return wallposts;
+    }
+
+    public void addWallpost(Wallpost wallpost) {
+        wallposts.add(wallpost);
     }
 
     public List<OdorReport> getOdorReports() {
-        return odorReports;
+        return reports;
     }
-    public List<Comment> getComments() { return comments; }
+
     public void addOdorReport(OdorReport report) {
-        odorReports.add(report);
+        reports.add(report);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return EqualsBuilder.reflectionEquals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

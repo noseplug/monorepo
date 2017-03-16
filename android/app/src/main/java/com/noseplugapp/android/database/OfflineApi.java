@@ -27,13 +27,12 @@ public class OfflineApi implements NoseplugApiInterface {
     private OdorReport dummyOdorReport = new OdorReport(
             dummyUser,
             new Date(),
-            new Date(),
             new LatLng(0, 0),
             new Odor(Odor.Strength.STRONG, Odor.Type.SULFUR, "Ewww"));
 
     public OfflineApi() {
         dummyOdorEvent.addOdorReport(dummyOdorReport);
-        odorEvents.put(dummyOdorEvent.uuid, dummyOdorEvent);
+        odorEvents.put(dummyOdorEvent.getId(), dummyOdorEvent);
         users.put(dummyUser.uuid, dummyUser);
     }
 
@@ -46,7 +45,7 @@ public class OfflineApi implements NoseplugApiInterface {
 
         for(OdorEvent event : odorEvents.values()) {
             for (OdorReport report : event.getOdorReports()) {
-                if (report.uuid.equals(uuid)) {
+                if (report.getId().equals(uuid)) {
                     found = report;
                 }
             }
@@ -59,8 +58,8 @@ public class OfflineApi implements NoseplugApiInterface {
     }
 
     public UUID addOdorEvent(OdorEvent event) {
-        odorEvents.put(event.uuid, event);
-        return event.uuid;
+        odorEvents.put(event.getId(), event);
+        return event.getId();
     }
 
     public UUID registerUser(User user) {
