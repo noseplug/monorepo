@@ -17,20 +17,18 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.util.UUID;
-
-import com.noseplugapp.android.models.Wallpost;
-import com.noseplugapp.android.database.OfflineApi;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.OdorReport;
+import com.noseplugapp.android.models.Wallpost;
+
+import java.util.UUID;
 
 public class OdorEventDetailsActivity extends AppCompatActivity
         implements AdapterView.OnItemClickListener {
     private static final String TAG = OdorEventDetailsActivity.class.getSimpleName();
-
     private OdorEvent odorEvent;
-
-    final Context context = this;
+    private final Context context = this;
+    private final App app = App.getInstance();
 
     private String commentText;
 
@@ -45,7 +43,7 @@ public class OdorEventDetailsActivity extends AppCompatActivity
                 getResources().getString(R.string.intent_extra_odor_event_id))
         ).getUuid();
 
-        odorEvent = OfflineApi.noseplug.getOdorEvent(odorEventId);
+        odorEvent = app.api().getOdorEvent(odorEventId);
         String description = odorEvent.getOdorReports().get(0).getOdor().getDescription();
 
         Log.v(TAG, String.format("Starting activity with odor event %s (%s)",

@@ -1,5 +1,7 @@
 package com.noseplugapp.android.database;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
@@ -18,8 +20,8 @@ import com.noseplugapp.android.models.User;
 
 public class OfflineApi implements NoseplugApiInterface {
 
-    public static final NoseplugApiInterface noseplug = new OfflineApi();
-    public static final Map<String, OdorEvent> polygonEventMap = new ConcurrentHashMap<>();
+    private static final String TAG = OfflineApi.class.getSimpleName();
+
     private Map<UUID, OdorEvent> odorEvents = new ConcurrentHashMap<>();
     private Map<UUID, User> users = new ConcurrentHashMap<>();
     private User dummyUser = new User();
@@ -58,11 +60,13 @@ public class OfflineApi implements NoseplugApiInterface {
     }
 
     public UUID addOdorEvent(OdorEvent event) {
+        Log.d(TAG, "added odor event: " + event);
         odorEvents.put(event.getId(), event);
         return event.getId();
     }
 
     public UUID registerUser(User user) {
+        Log.d(TAG, "registered user: " + user);
         users.put(dummyUser.getUuid(), dummyUser);
         return dummyUser.getUuid();
     }

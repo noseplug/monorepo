@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.ParcelUuid;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -33,27 +32,24 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.noseplugapp.android.database.FirebaseApi;
+import com.noseplugapp.android.database.OfflineApi;
+import com.noseplugapp.android.events.CreateOdorReportEvent;
+import com.noseplugapp.android.events.LocationEvent;
+import com.noseplugapp.android.events.OdorReportEvent;
+import com.noseplugapp.android.models.Odor;
+import com.noseplugapp.android.models.OdorEvent;
+import com.noseplugapp.android.models.OdorReport;
+import com.noseplugapp.android.models.User;
+import com.noseplugapp.android.models.Wallpost;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.noseplugapp.android.database.OfflineApi;
-import com.noseplugapp.android.events.CreateOdorReportEvent;
-import com.noseplugapp.android.events.LocationEvent;
-import com.noseplugapp.android.events.OdorReportEvent;
-import com.noseplugapp.android.models.Wallpost;
-import com.noseplugapp.android.models.Odor;
-import com.noseplugapp.android.models.OdorEvent;
-import com.noseplugapp.android.models.OdorReport;
-import com.noseplugapp.android.models.User;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * MapsActivity is the home page of the environmental odor app.
@@ -66,12 +62,11 @@ public class MapsActivity extends AppCompatActivity implements
     private static final LatLng DEFAULT_LOCATION = new LatLng(32, -84);
 
     private final Context ctx = this;
+    private final App app = App.getInstance();
 
     private GoogleApiClientWrapper googleApi;
     private GoogleMap map;
-
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
+    public final Map<String, OdorEvent> polygonEventMap = new ConcurrentHashMap<>();
 
     private LatLng selectedLocation; // Starts at the user's last known location.
     private Marker userMarker;
@@ -100,39 +95,15 @@ public class MapsActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        sideSlideMenu();
+
         googleApi = new GoogleApiClientWrapper(this);
         initOnClickListeners();
         EventBus.getDefault().register(this);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Log.d(TAG, "onAuthstateChanged:signed_in:" + user.getUid());
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-            }
-        };
-
-        firebaseAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
-
-                // If sign in fails, display a message to the user. If sign in succeeds
-                // the auth state listener will be notified and logic to handle the
-                // signed in user can be handled in the listener.
-                if (!task.isSuccessful()) {
-                    Log.w(TAG, "signInAnonymously", task.getException());
-                    Toast.makeText(ctx, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        sideSlideMenu();
+        if (app.api() == null) {
+            app.api(new OfflineApi());
+        }
     }
 
     private void sideSlideMenu() {
@@ -263,16 +234,12 @@ public class MapsActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         googleApi.onStart();
-        firebaseAuth.addAuthStateListener(firebaseAuthStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         googleApi.onStop();
-        if (firebaseAuthStateListener != null) {
-            firebaseAuth.removeAuthStateListener(firebaseAuthStateListener);
-        }
     }
 
     @Override
@@ -304,7 +271,7 @@ public class MapsActivity extends AppCompatActivity implements
     public void onOdorReportEvent(OdorReportEvent odorReportEvent) {
         Log.v(TAG, "Received an odor report event");
         OdorEvent odorEvent = new OdorEvent(odorReportEvent.odorReport);
-        OfflineApi.noseplug.addOdorEvent(odorEvent);
+        app.api().addOdorEvent(odorEvent);
 
         map.addMarker(new MarkerOptions()
                 .position(odorReportEvent.odorReport.getLocation())
@@ -365,7 +332,7 @@ public class MapsActivity extends AppCompatActivity implements
             @Override
             public void onPolygonClick(Polygon polygon) {
                 Log.v(TAG, "Polygon clicked, starting odor event details activity");
-                OdorEvent event = OfflineApi.polygonEventMap.get(polygon.getId());
+                OdorEvent event = polygonEventMap.get(polygon.getId());
                 Intent detailsIntent = new Intent(ctx, OdorEventDetailsActivity.class);
                 detailsIntent.putExtra(
                         getResources().getString(R.string.intent_extra_odor_event_id),
@@ -388,9 +355,9 @@ public class MapsActivity extends AppCompatActivity implements
         userMarker = map.addMarker(new MarkerOptions().position(selectedLocation).title("You are Here").zIndex(-1.0f).icon(userIcon));
         userMarker.showInfoWindow();
 
-        OfflineApi.polygonEventMap.clear();
+        polygonEventMap.clear();
 
-        for(OdorEvent o : OfflineApi.noseplug.getOdorEvents())
+        for(OdorEvent o : app.api().getOdorEvents())
         {
             PolygonOptions polyOptions = new PolygonOptions();
             for(OdorReport r : o.getOdorReports()) {
@@ -405,7 +372,7 @@ public class MapsActivity extends AppCompatActivity implements
             polyOptions.strokeColor(Color.argb(80, 250, 250, 0));
             polyOptions.clickable(true);
             Polygon polygon = map.addPolygon(polyOptions);
-            OfflineApi.polygonEventMap.put(polygon.getId(), o);
+            polygonEventMap.put(polygon.getId(), o);
         }
     }
 
@@ -413,7 +380,7 @@ public class MapsActivity extends AppCompatActivity implements
     public void onPolygonClick(Polygon polygon)
     {
         Log.v(TAG, "Polygon clicked, starting odor event details activity");
-        OdorEvent event = OfflineApi.polygonEventMap.get(polygon.getId());
+        OdorEvent event = polygonEventMap.get(polygon.getId());
         Intent detailsIntent = new Intent(this, OdorEventDetailsActivity.class);
         detailsIntent.putExtra(getResources().getString(R.string.intent_extra_odor_event_id),
                 new ParcelUuid((UUID) event.getId()));
@@ -446,6 +413,6 @@ public class MapsActivity extends AppCompatActivity implements
             event.addWallpost(tempWallpost);
         }
 
-        OfflineApi.noseplug.addOdorEvent(event);
+        app.api().addOdorEvent(event);
     }
 }
