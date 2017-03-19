@@ -157,11 +157,6 @@ public class MapsActivity extends AppCompatActivity implements
 
             //Replacing the main content with ContentFragment Which is our Inbox View;
                 case R.id.register:
-//                    Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
-//                    ContentFragment fragment = new ContentFragment();
-//                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.frame,fragment);
-//                    fragmentTransaction.commit();
                     Intent intent = new Intent(ctx, RegistrationActivity.class);
                     startActivity(intent);
                     return true;
@@ -212,21 +207,6 @@ public class MapsActivity extends AppCompatActivity implements
             getMenuInflater().inflate(R.menu.nav, menu);
             return true;
         }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.register) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
 
     private void initMap() {
@@ -254,31 +234,6 @@ public class MapsActivity extends AppCompatActivity implements
                 EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
             }
         });
-//        Button registrationBtn = (Button) findViewById(R.id.register_btn);
-//        registrationBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(ctx, RegistrationActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//        Button loginBtn = (Button) findViewById(R.id.login_btn);
-//        loginBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(ctx, LoginActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//        FloatingActionButton odors = (FloatingActionButton) findViewById(R.id.odorsButton);
-//        odors.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.v(TAG, "Clicked Odors Button");
-//                new OdorsDialogFragment().show(getFragmentManager(), "dialog");
-//            }
-//        });
-
     }
 
 
@@ -492,6 +447,5 @@ public class MapsActivity extends AppCompatActivity implements
         }
 
         OfflineApi.noseplug.addOdorEvent(event);
-        //EventBus.getDefault().post(new OdorEvent(tempOdorReport));
     }
 }
