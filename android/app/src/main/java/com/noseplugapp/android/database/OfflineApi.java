@@ -33,7 +33,7 @@ public class OfflineApi implements NoseplugApiInterface {
     public OfflineApi() {
         dummyOdorEvent.addOdorReport(dummyOdorReport);
         odorEvents.put(dummyOdorEvent.getId(), dummyOdorEvent);
-        users.put(dummyUser.uuid, dummyUser);
+        users.put(dummyUser.getUuid(), dummyUser);
     }
 
     public OdorEvent getOdorEvent(UUID uuid) {
@@ -63,8 +63,8 @@ public class OfflineApi implements NoseplugApiInterface {
     }
 
     public UUID registerUser(User user) {
-        users.put(dummyUser.uuid, dummyUser);
-        return dummyUser.uuid;
+        users.put(dummyUser.getUuid(), dummyUser);
+        return dummyUser.getUuid();
     }
 
     public Iterable<OdorEvent> getOdorEvents() {
