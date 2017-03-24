@@ -4,13 +4,10 @@ const admin = require('firebase-admin')
 admin.initializeApp(functions.config().firebase)
 
 exports.notifyGlobalNewOdorEvent = functions.database.ref('/events/{id}').onWrite(event => {
-  const ref = event.data.ref
+  var odorEventName = event.data.child('name').val()
+  var odorEventOwner = event.data.child('owner-id').val()
 
-  const odorEventName = ref.name.val()
-  console.log('Odor Event Name: ' + odorEventName)
-  const odorEventOwner = ref['owner-id'].val()
-
-  const payload = {
+  var payload = {
     notification: {
       title: 'New Odor Event: ' + odorEventName,
       body: odorEventOwner + ' reported ' + odorEventName

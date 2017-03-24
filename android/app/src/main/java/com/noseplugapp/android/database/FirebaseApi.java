@@ -12,10 +12,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.OdorReport;
 import com.noseplugapp.android.models.User;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -34,6 +36,8 @@ public class FirebaseApi implements NoseplugApiInterface,
         this.ctx = ctx;
         auth.addAuthStateListener(this);
         auth.signInAnonymously().addOnCompleteListener(this);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("newOdorEvents");
     }
 
     @Override
@@ -81,7 +85,7 @@ public class FirebaseApi implements NoseplugApiInterface,
 
     @Override
     public Iterable<OdorEvent> getOdorEvents() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
