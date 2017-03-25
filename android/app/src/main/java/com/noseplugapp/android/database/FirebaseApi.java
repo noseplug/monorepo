@@ -17,6 +17,7 @@ import com.noseplugapp.android.models.User;
 
 import com.google.firebase.database.*;
 import com.noseplugapp.android.models.Wallpost;
+import com.noseplugapp.android.utils.NoseplugLatLng;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -107,26 +108,26 @@ public class FirebaseApi implements NoseplugApiInterface,
 
     @Override
     public UUID addOdorEvent(OdorEvent event) {
-//        try {
-//            db.getReference().child("events").child(event.getId().toString()).child("name").setValue(event.getName());
-//            db.getReference().child("events").child(event.getId().toString()).child("ownerid").setValue(event.ownerid);
-//            db.getReference().child("events").child(event.getId().toString()).child("reportids").setValue(event.reportids);
-//            db.getReference().child("events").child(event.getId().toString()).child("subscriberids").setValue(event.getSubscribers());
-//        }
-//        catch (DatabaseException e)
-//        {
-//            Log.d(TAG, "Error adding odor event: ", e);
-//
-//        }
+        try {
+            db.getReference().child("events").child(event.getId().toString()).child("name").setValue(event.getName());
+            db.getReference().child("events").child(event.getId().toString()).child("ownerid").setValue(event.ownerid);
+            db.getReference().child("events").child(event.getId().toString()).child("reportids").setValue(event.reportids);
+            db.getReference().child("events").child(event.getId().toString()).child("subscriberids").setValue(event.getSubscribers());
+        }
+        catch (DatabaseException e)
+        {
+            Log.d(TAG, "Error adding odor event: ", e);
+
+        }
         return event.getId();
     }
 
     @Override
     public UUID addOdorReport(OdorReport report) {
-//        db.getReference().child("reports").child(report.getId().toString()).child("filingTime").setValue(report.getFilingTime().hashCode());
-//        db.getReference().child("reports").child(report.getId().toString()).child("odor").setValue(report.getOdor());
-//        db.getReference().child("reports").child(report.getId().toString()).child("location").setValue(report.getLocation());
-//        db.getReference().child("reports").child(report.getId().toString()).child("userid").setValue(report.getUser().getUuid().toString());
+        db.getReference().child("reports").child(report.getId().toString()).child("filingTime").setValue(report.getFilingTime());
+        db.getReference().child("reports").child(report.getId().toString()).child("odor").setValue(report.getOdor());
+        db.getReference().child("reports").child(report.getId().toString()).child("location").setValue(report.getLocation());
+        db.getReference().child("reports").child(report.getId().toString()).child("userid").setValue(report.getUser().getUuid().toString());
         return report.getId();
     }
 
