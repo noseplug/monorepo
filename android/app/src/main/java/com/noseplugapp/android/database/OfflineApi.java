@@ -13,6 +13,7 @@ import com.noseplugapp.android.models.OdorReport;
 import com.noseplugapp.android.models.Odor;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.User;
+import com.noseplugapp.android.models.Wallpost;
 
 /**
  * Created by Esteban on 2/8/17.
@@ -69,6 +70,11 @@ public class OfflineApi implements NoseplugApiInterface {
         Log.d(TAG, "added odor report in offline mode, doing nothing: " + report);
         //doing nothing for now, online will add to db
         return report.getId();
+    }
+
+    @Override
+    public void addWallPost(Wallpost post, String eventID) {
+        odorEvents.get(UUID.fromString(eventID)).addWallpost(post);
     }
 
     public UUID registerUser(User user) {

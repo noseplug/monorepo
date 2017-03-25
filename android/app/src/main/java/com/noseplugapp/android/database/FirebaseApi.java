@@ -1,6 +1,7 @@
 package com.noseplugapp.android.database;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.noseplugapp.android.events.CommentAddedEvent;
 import com.noseplugapp.android.events.DataChangedEvent;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.OdorReport;
@@ -22,6 +24,7 @@ import com.noseplugapp.android.utils.NoseplugLatLng;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -132,6 +135,11 @@ public class FirebaseApi implements NoseplugApiInterface,
     }
 
     @Override
+    public void addWallPost(Wallpost post, String eventID) {
+        db.getReference().child("wallposts").child(eventID).child(post.id).setValue(post);
+    }
+
+    @Override
     public Iterable<OdorEvent> getOdorEvents() {
         return odorEvents;
     }
@@ -188,11 +196,23 @@ public class FirebaseApi implements NoseplugApiInterface,
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             for (DataSnapshot v : dataSnapshot.getChildren()) {
-                //Wallpost newPost = v.getValue(Wallpost.class);
-                //newPost.setFirebaseId(v.getKey());
-                //odorEvents.add(newEvent);
+                for(DataSnapshot e : v.getChildren()) {
+                    Wallpost newPost = e.getValue(Wallpost.class);
+                    OdorEvent o = getOdorEvent(UUID.fromString(v.getKey()));
+                    if (o == null)
+                    {
+                        OdorEvent t = new OdorEvent();
+                        t.setFirebaseId(v.getKey());
+                        odorEvents.add(t);
+                        o = t;
+                    }
+                    else {
+                        o.getWallposts().remove(newPost);
+                    }
+                    o.addWallpost(newPost);
+                }
             }
-
+            EventBus.getDefault().post(new CommentAddedEvent());
             Log.w(TAG, "onDataChange");
         }
 

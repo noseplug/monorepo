@@ -8,6 +8,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,6 +72,30 @@ public class OdorEvent {
     }
 
     public List<Wallpost> getWallposts() {
+        return wallposts;
+    }
+
+    public List<Wallpost> getSortedWallposts() {
+        wallposts = getWallposts();
+        Collections.sort(wallposts,new Comparator<Wallpost>() {
+            @Override
+            public int compare(Wallpost o1, Wallpost o2) {
+                if (o1.type != o2.type) {
+                    if (o1.type == Wallpost.Type.normal) {
+                        return 1;
+                    }
+                    else {
+                        return -1;
+                    }
+                }
+                else {
+                    return o2.date.compareTo(o1.date);
+                }
+
+            }
+        }
+        );
+
         return wallposts;
     }
 
