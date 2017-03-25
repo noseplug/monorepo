@@ -17,6 +17,7 @@ public interface NoseplugApiInterface {
     public OdorReport getOdorReport(UUID uuid);
     public User getUser(UUID uuid);
     public UUID addOdorEvent(OdorEvent event);
+    public UUID addOdorReport(OdorReport report);
     public Iterable<OdorEvent> getOdorEvents();
     public UUID registerUser(User user);
 }

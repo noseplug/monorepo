@@ -65,6 +65,12 @@ public class OfflineApi implements NoseplugApiInterface {
         return event.getId();
     }
 
+    public UUID addOdorReport(OdorReport report) {
+        Log.d(TAG, "added odor report in offline mode, doing nothing: " + report);
+        //doing nothing for now, online will add to db
+        return report.getId();
+    }
+
     public UUID registerUser(User user) {
         Log.d(TAG, "registered user: " + user);
         users.put(dummyUser.getUuid(), dummyUser);

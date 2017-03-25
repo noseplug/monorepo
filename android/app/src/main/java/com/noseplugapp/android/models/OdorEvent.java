@@ -1,7 +1,11 @@
 package com.noseplugapp.android.models;
 
+import com.noseplugapp.android.App;
+import com.noseplugapp.android.events.DataChangedEvent;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,22 +28,28 @@ import java.util.UUID;
  */
 public class OdorEvent {
 
-    private UUID id = UUID.randomUUID();
-    private String name; // TODO: populate name (when we create the event in User)
-    private User owner; // TODO: populate owner (when we create the event in User)
-    private List<OdorReport> reports = new ArrayList<>();
+    private String id = UUID.randomUUID().toString();
+    public String name; // TODO: populate name (when we create the event in User)
+    public String ownerid; // TODO: populate owner (when we create the event in User)
+    public List<String> reportids = new ArrayList<>();
     private List<User> subscribers = new ArrayList<>(); // TODO: add methods for subscribers
     private List<Wallpost> wallposts = new ArrayList<>();
 
+    private final App app = App.getInstance();
+
     public OdorEvent(OdorReport odorReport) {
-        reports.add(odorReport);
+
+        reportids.add(odorReport.getId().toString());
     }
     public OdorEvent() {
+        name = "TEST EVENT";
         // We're allowed to create an odor event without an odor report for debugging purposes.
     }
 
+    public void setFirebaseId(String fid) {id = fid;}
+
     public UUID getId() {
-        return id;
+        return UUID.fromString(id);
     }
 
     public String getName() {
@@ -47,11 +57,12 @@ public class OdorEvent {
     }
 
     public User getOwner() {
-        return owner;
-    }
-
-    public List<OdorReport> getReports() {
-        return reports;
+        if (ownerid == null) {
+            return null;
+        }
+        else {
+            return app.api().getUser(UUID.fromString(ownerid));
+        }
     }
 
     public List<User> getSubscribers() {
@@ -67,11 +78,18 @@ public class OdorEvent {
     }
 
     public List<OdorReport> getOdorReports() {
+        ArrayList<OdorReport> reports = new ArrayList<OdorReport>();
+        for (String reportid : reportids) {
+            OdorReport correspondingReport = app.api().getOdorReport(UUID.fromString(reportid));
+            if(correspondingReport != null) {
+                reports.add(correspondingReport);
+            }
+        }
         return reports;
     }
 
     public void addOdorReport(OdorReport report) {
-        reports.add(report);
+        reportids.add(report.getId().toString());
     }
 
     @Override

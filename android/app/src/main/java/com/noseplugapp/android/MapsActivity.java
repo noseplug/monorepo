@@ -33,9 +33,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.noseplugapp.android.database.FirebaseApi;
-import com.noseplugapp.android.database.OfflineApi;
 import com.noseplugapp.android.events.CreateOdorReportEvent;
 import com.noseplugapp.android.events.LocationEvent;
+import com.noseplugapp.android.events.DataChangedEvent;
 import com.noseplugapp.android.events.OdorReportEvent;
 import com.noseplugapp.android.models.Odor;
 import com.noseplugapp.android.models.OdorEvent;
@@ -102,7 +102,7 @@ public class MapsActivity extends AppCompatActivity implements
         EventBus.getDefault().register(this);
 
         if (app.api() == null) {
-            app.api(new OfflineApi());
+            app.api(new FirebaseApi(this.ctx));
         }
     }
 
@@ -268,9 +268,16 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     @Subscribe
+    public void onDataChangedEvent(DataChangedEvent dataChangedEvent)
+    {
+        updateMap();
+    }
+
+    @Subscribe
     public void onOdorReportEvent(OdorReportEvent odorReportEvent) {
         Log.v(TAG, "Received an odor report event");
         OdorEvent odorEvent = new OdorEvent(odorReportEvent.odorReport);
+        app.api().addOdorReport(odorReportEvent.odorReport);
         app.api().addOdorEvent(odorEvent);
 
         map.addMarker(new MarkerOptions()
@@ -368,11 +375,13 @@ public class MapsActivity extends AppCompatActivity implements
                         .title("Odor Report"))
                         .setTag(r.getId());
             }
-            polyOptions.fillColor(Color.argb(50, 250, 250, 0));
-            polyOptions.strokeColor(Color.argb(80, 250, 250, 0));
-            polyOptions.clickable(true);
-            Polygon polygon = map.addPolygon(polyOptions);
-            polygonEventMap.put(polygon.getId(), o);
+            if (polyOptions.getPoints().size() >= 3) {
+                polyOptions.fillColor(Color.argb(50, 250, 250, 0));
+                polyOptions.strokeColor(Color.argb(80, 250, 250, 0));
+                polyOptions.clickable(true);
+                Polygon polygon = map.addPolygon(polyOptions);
+                polygonEventMap.put(polygon.getId(), o);
+            }
         }
     }
 
@@ -404,9 +413,8 @@ public class MapsActivity extends AppCompatActivity implements
                     center.longitude + Math.sin(((float) i / reportCount) * 2 * Math.PI) * radius);
             OdorReport tempOdorReport = new OdorReport(new User(), new Date(), tempLocation, tempOdor);
             event.addOdorReport(tempOdorReport);
-            EventBus.getDefault().post(new OdorReportEvent(tempOdorReport));
+            app.api().addOdorReport(tempOdorReport);
         }
-
         for(int i = 0; i < commentCount; i++)
         {
             Wallpost tempWallpost = new Wallpost();
@@ -415,4 +423,5 @@ public class MapsActivity extends AppCompatActivity implements
 
         app.api().addOdorEvent(event);
     }
+
 }

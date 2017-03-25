@@ -1,7 +1,5 @@
 package com.noseplugapp.android.database;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -12,10 +10,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.noseplugapp.android.events.DataChangedEvent;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.OdorReport;
 import com.noseplugapp.android.models.User;
 
+import com.google.firebase.database.*;
+import com.noseplugapp.android.models.Wallpost;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -29,6 +34,13 @@ public class FirebaseApi implements NoseplugApiInterface,
     private final Context ctx;
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+
+    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+
+    private OfflineApi offline = new OfflineApi();
+
+    private ArrayList<OdorEvent> odorEvents = new ArrayList<OdorEvent>();
+    private ArrayList<OdorReport> odorReports = new ArrayList<OdorReport>();
 
     public FirebaseApi(Context ctx) {
         this.ctx = ctx;
@@ -57,35 +69,138 @@ public class FirebaseApi implements NoseplugApiInterface,
             Log.w(TAG, "signInAnonymously", task.getException());
             Toast.makeText(ctx, "Authentication failed.", Toast.LENGTH_SHORT).show();
         }
+        else
+        {
+            db.getReference().child("events").addValueEventListener(OdorEventsListener);
+            db.getReference().child("reports").addValueEventListener(OdorReportsListener);
+            db.getReference().child("wallposts").addValueEventListener(WallPostsListener);
+        }
     }
 
     @Override
     public OdorEvent getOdorEvent(UUID uuid) {
-        return null;
+        OdorEvent found = null;
+        for(OdorEvent e : odorEvents) {
+            if (e.getId().equals(uuid)) {
+                found = e;
+            }
+        }
+        return found;
     }
 
     @Override
     public OdorReport getOdorReport(UUID uuid) {
-        return null;
+        OdorReport found = null;
+        for(OdorReport r : odorReports) {
+            if (r.getId().equals(uuid)) {
+                found = r;
+            }
+        }
+        return found;
     }
 
     @Override
     public User getUser(UUID uuid) {
-        return null;
+
+        return offline.getUser(uuid);
     }
 
     @Override
     public UUID addOdorEvent(OdorEvent event) {
-        return null;
+//        try {
+//            db.getReference().child("events").child(event.getId().toString()).child("name").setValue(event.getName());
+//            db.getReference().child("events").child(event.getId().toString()).child("ownerid").setValue(event.ownerid);
+//            db.getReference().child("events").child(event.getId().toString()).child("reportids").setValue(event.reportids);
+//            db.getReference().child("events").child(event.getId().toString()).child("subscriberids").setValue(event.getSubscribers());
+//        }
+//        catch (DatabaseException e)
+//        {
+//            Log.d(TAG, "Error adding odor event: ", e);
+//
+//        }
+        return event.getId();
+    }
+
+    @Override
+    public UUID addOdorReport(OdorReport report) {
+//        db.getReference().child("reports").child(report.getId().toString()).child("filingTime").setValue(report.getFilingTime().hashCode());
+//        db.getReference().child("reports").child(report.getId().toString()).child("odor").setValue(report.getOdor());
+//        db.getReference().child("reports").child(report.getId().toString()).child("location").setValue(report.getLocation());
+//        db.getReference().child("reports").child(report.getId().toString()).child("userid").setValue(report.getUser().getUuid().toString());
+        return report.getId();
     }
 
     @Override
     public Iterable<OdorEvent> getOdorEvents() {
-        return null;
+        return odorEvents;
     }
 
     @Override
     public UUID registerUser(User user) {
-        return null;
+
+        return offline.registerUser(user);
     }
+
+    ValueEventListener OdorEventsListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            for (DataSnapshot v : dataSnapshot.getChildren()) {
+                OdorEvent newEvent = v.getValue(OdorEvent.class);
+                newEvent.setFirebaseId(v.getKey());
+                if (getOdorEvent(newEvent.getId()) != null) {
+                    odorEvents.remove(getOdorEvent(newEvent.getId()));
+                }
+                odorEvents.add(newEvent);
+            }
+            EventBus.getDefault().post(new DataChangedEvent());
+            Log.w(TAG, "onDataChange");
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+        }
+    };
+
+    ValueEventListener OdorReportsListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            for (DataSnapshot v : dataSnapshot.getChildren()) {
+                OdorReport newReport = v.getValue(OdorReport.class);
+                newReport.setFirebaseId(v.getKey());
+                if (getOdorReport(newReport.getId()) != null) {
+                    odorReports.remove(getOdorEvent(newReport.getId()));
+                }
+                odorReports.add(newReport);
+            }
+            EventBus.getDefault().post(new DataChangedEvent());
+            Log.w(TAG, "onDataChange");
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+        }
+    };
+
+    ValueEventListener WallPostsListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            for (DataSnapshot v : dataSnapshot.getChildren()) {
+                //Wallpost newPost = v.getValue(Wallpost.class);
+                //newPost.setFirebaseId(v.getKey());
+                //odorEvents.add(newEvent);
+            }
+
+            Log.w(TAG, "onDataChange");
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+        }
+    };
 }
+
+
+

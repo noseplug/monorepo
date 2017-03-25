@@ -11,6 +11,12 @@ public class Odor {
     private Type type;
     private String description;
 
+    public Odor() {
+        this.strength = Strength.MODERATE;
+        this.type = Type.OTHER;
+        this.description = "Default";
+    }
+
     public Odor(Strength strength, Type type, String description) {
         this.strength = strength;
         this.type = type;
