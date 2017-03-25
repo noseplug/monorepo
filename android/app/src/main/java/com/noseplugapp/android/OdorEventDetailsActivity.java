@@ -3,6 +3,7 @@ package com.noseplugapp.android;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.support.v7.app.AlertDialog;
@@ -37,7 +38,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import static android.R.attr.id;
 import static android.R.id.text1;
 
 public class OdorEventDetailsActivity extends AppCompatActivity
@@ -50,6 +50,7 @@ public class OdorEventDetailsActivity extends AppCompatActivity
     private String commentText;
 
     private ListView commentList = null;
+    ArrayAdapter<Wallpost> commentAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +74,13 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         reportList.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, odorEvent.getOdorReports()));
         reportList.setOnItemClickListener(this);
-        ArrayAdapter<Wallpost> x = new ArrayAdapter<Wallpost>(this,
+
+        commentAdapter = new WallPostAdapter<Wallpost>(this,
                 android.R.layout.simple_list_item_1, odorEvent.getSortedWallposts());
 
+
         commentList = (ListView) this.findViewById(R.id.comment_list);
-        commentList.setAdapter(new WallPostAdapter<Wallpost>(this,
-                android.R.layout.simple_list_item_1, odorEvent.getSortedWallposts()));
+        commentList.setAdapter(commentAdapter);
 
         findViewById(R.id.commentButton).setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {
@@ -130,11 +132,8 @@ public class OdorEventDetailsActivity extends AppCompatActivity
     @Subscribe
     public void onCommentAddedEvent(CommentAddedEvent commentAddedEvent)
     {
-
         Log.d(TAG, "Comment added event received at odorevent details");
-
-        ((BaseAdapter) commentList.getAdapter()).notifyDataSetChanged();
-        ((ArrayAdapter<Wallpost>) commentList.getAdapter()).sort(
+        commentAdapter.sort(
                 new Comparator<Wallpost>() {
                     @Override
                     public int compare(Wallpost o1, Wallpost o2) {
@@ -149,10 +148,11 @@ public class OdorEventDetailsActivity extends AppCompatActivity
                         else {
                             return o2.date.compareTo(o1.date);
                         }
+
                     }
                 }
         );
-        ((BaseAdapter) commentList.getAdapter()).notifyDataSetChanged();
+        commentAdapter.notifyDataSetChanged();
     }
 
     private class WallPostAdapter<Wallpost> extends ArrayAdapter<Wallpost> {
@@ -166,6 +166,7 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         }
 
         @Override
+        @SuppressWarnings("deprecation")
         public View getView(int position, View convertView, ViewGroup parent) {
 
             View v = convertView;
@@ -182,8 +183,12 @@ public class OdorEventDetailsActivity extends AppCompatActivity
                 TextView textView = (TextView) v.findViewById(text1);
 
                 if (textView != null) {
-
-                    Spanned text = Html.fromHtml(p.toString());
+                    Spanned text;
+                    if (Build.VERSION.SDK_INT >= 24) {
+                        text = Html.fromHtml(p.toString(), Html.FROM_HTML_MODE_LEGACY); // for 24 api and more
+                    } else {
+                        text = Html.fromHtml(p.toString()); // or for older api
+                    }
                     URLSpan[] currentSpans = text.getSpans(0, text.length(), URLSpan.class);
 
                     SpannableString buffer = new SpannableString(text);
@@ -196,7 +201,6 @@ public class OdorEventDetailsActivity extends AppCompatActivity
                     }
                     textView.setText(buffer);
                     textView.setMovementMethod(LinkMovementMethod.getInstance());
-                    //Linkify.addLinks(textView, Linkify.WEB_URLS);
                 }
             }
 

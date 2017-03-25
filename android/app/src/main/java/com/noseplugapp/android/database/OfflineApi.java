@@ -9,11 +9,14 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.noseplugapp.android.events.CommentAddedEvent;
 import com.noseplugapp.android.models.OdorReport;
 import com.noseplugapp.android.models.Odor;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.User;
 import com.noseplugapp.android.models.Wallpost;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by Esteban on 2/8/17.
@@ -24,6 +27,7 @@ public class OfflineApi implements NoseplugApiInterface {
     private static final String TAG = OfflineApi.class.getSimpleName();
 
     private Map<UUID, OdorEvent> odorEvents = new ConcurrentHashMap<>();
+    private Map<UUID, OdorReport> odorReports = new ConcurrentHashMap<>();
     private Map<UUID, User> users = new ConcurrentHashMap<>();
     private User dummyUser = new User();
     private OdorEvent dummyOdorEvent = new OdorEvent();
@@ -43,18 +47,7 @@ public class OfflineApi implements NoseplugApiInterface {
         return odorEvents.get(uuid);
     }
 
-    public OdorReport getOdorReport(UUID uuid) {
-        OdorReport found = null;
-
-        for(OdorEvent event : odorEvents.values()) {
-            for (OdorReport report : event.getOdorReports()) {
-                if (report.getId().equals(uuid)) {
-                    found = report;
-                }
-            }
-        }
-        return found;
-    }
+    public OdorReport getOdorReport(UUID uuid) { return odorReports.get(uuid); }
 
     public User getUser(UUID uuid) {
         return users.get(uuid);
@@ -67,14 +60,15 @@ public class OfflineApi implements NoseplugApiInterface {
     }
 
     public UUID addOdorReport(OdorReport report) {
-        Log.d(TAG, "added odor report in offline mode, doing nothing: " + report);
-        //doing nothing for now, online will add to db
+        Log.d(TAG, "added odor report: " + report);
+        odorReports.put(report.getId(), report);
         return report.getId();
     }
 
     @Override
     public void addWallPost(Wallpost post, String eventID) {
-        odorEvents.get(UUID.fromString(eventID)).addWallpost(post);
+        getOdorEvent(UUID.fromString(eventID)).addWallpost(post);
+        EventBus.getDefault().post(new CommentAddedEvent());
     }
 
     public UUID registerUser(User user) {

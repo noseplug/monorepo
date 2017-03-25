@@ -104,6 +104,7 @@ public class MapsActivity extends AppCompatActivity implements
 
         if (app.api() == null) {
             app.api(new FirebaseApi(this.ctx));
+            //app.api(new OfflineApi());
         }
     }
 
@@ -349,9 +350,9 @@ public class MapsActivity extends AppCompatActivity implements
             }
         });
 
-        //if (app.api() instanceof OfflineApi) {
-            //generateFakeData();
-        //}
+        if (app.api() instanceof OfflineApi) {
+            generateFakeData();
+        }
         updateMap();
     }
 
@@ -418,13 +419,16 @@ public class MapsActivity extends AppCompatActivity implements
             event.addOdorReport(tempOdorReport);
             app.api().addOdorReport(tempOdorReport);
         }
+
+        app.api().addOdorEvent(event);
+
         for(int i = 0; i < commentCount; i++)
         {
             Wallpost tempWallpost = new Wallpost();
             app.api().addWallPost(tempWallpost, event.getId().toString());
         }
 
-        app.api().addOdorEvent(event);
+
     }
 
 }

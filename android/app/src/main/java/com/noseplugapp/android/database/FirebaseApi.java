@@ -19,12 +19,10 @@ import com.noseplugapp.android.models.User;
 
 import com.google.firebase.database.*;
 import com.noseplugapp.android.models.Wallpost;
-import com.noseplugapp.android.utils.NoseplugLatLng;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
