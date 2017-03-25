@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.noseplugapp.android.database.FirebaseApi;
+import com.noseplugapp.android.database.OfflineApi;
 import com.noseplugapp.android.events.CreateOdorReportEvent;
 import com.noseplugapp.android.events.LocationEvent;
 import com.noseplugapp.android.events.DataChangedEvent;
@@ -348,7 +349,9 @@ public class MapsActivity extends AppCompatActivity implements
             }
         });
 
-        generateFakeData();
+        if (app.api() instanceof OfflineApi) {
+            generateFakeData();
+        }
         updateMap();
     }
 

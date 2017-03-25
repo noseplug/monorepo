@@ -5,6 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -50,9 +51,9 @@ public class OdorReport {
     public Date getFilingTime() {
         return filingTime;
     }
-    public void setFilingTime(int timeHash) {
-        filingTime = new Date(timeHash);
-    }
+//    public void setFilingTime(int d) {
+//        filingTime = new Date(d);
+//    }
 
     public LatLng getLocation() {
         return location.toGoogleLatLng();
