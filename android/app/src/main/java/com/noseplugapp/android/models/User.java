@@ -7,13 +7,13 @@ import java.util.UUID;
 
 public class User {
 
-    private UUID uuid = UUID.randomUUID();
+    public String uuid = UUID.randomUUID().toString();
     private String name;
     private String gender;
     private Type type;
 
     public UUID getUuid() {
-        return uuid;
+        return UUID.fromString(uuid);
     }
 
     public String getName() {
