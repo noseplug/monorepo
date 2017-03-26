@@ -24,13 +24,13 @@
             <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="@string/username"/>
-            <EditText android:id="@+id/login_username"
+                android:text="@string/email"/>
+            <EditText android:id="@+id/login_email"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
                 android:maxLines="1"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:layout_marginBottom="20dip"/>
             <!-- Password Label -->
             <TextView android:layout_width="fill_parent"
