@@ -1,5 +1,6 @@
 package com.noseplugapp.android;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class LoginActivity extends BaseActivity {
     private EditText emailEt;
@@ -144,6 +146,8 @@ public class LoginActivity extends BaseActivity {
                         }
                     }
                 });
+
+
     }
     private boolean validateForm() {
         boolean valid = true;

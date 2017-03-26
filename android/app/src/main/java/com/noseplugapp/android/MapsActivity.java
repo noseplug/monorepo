@@ -32,6 +32,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.noseplugapp.android.database.FirebaseApi;
 import com.noseplugapp.android.database.OfflineApi;
 import com.noseplugapp.android.events.CreateOdorReportEvent;
@@ -236,6 +238,11 @@ public class MapsActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         googleApi.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String email = user.getEmail();
+        if (email != null) {
+            getSupportActionBar().setTitle(user.getDisplayName()+"'s Noseplug");
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.noseplugapp.android;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class RegistrationActivity extends BaseActivity {
     private static final String TAG = "Registration";
@@ -167,6 +169,23 @@ public class RegistrationActivity extends BaseActivity {
                         } else {
                             Toast.makeText(RegistrationActivity.this, "Congratulations! You are now logged in!",
                                     Toast.LENGTH_SHORT).show();
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(username)
+                                    .build();
+
+                            user.updateProfile(profileUpdates)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "User profile created.");
+                                            }
+                                        }
+                                    });
+                            ActionBar ab = getActionBar();
+                            ab.setTitle(user.getDisplayName());
                             Intent intent = new Intent(RegistrationActivity.this, MapsActivity.class);
                             startActivity(intent);
                         }
