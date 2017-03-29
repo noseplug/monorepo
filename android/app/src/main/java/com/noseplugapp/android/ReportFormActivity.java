@@ -21,6 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.noseplugapp.android.events.OdorReportEvent;
 import com.noseplugapp.android.models.Odor;
 import com.noseplugapp.android.models.OdorReport;
@@ -28,6 +30,8 @@ import com.noseplugapp.android.models.User;
 
 public class ReportFormActivity extends AppCompatActivity {
     private Calendar myCalendar = Calendar.getInstance();
+
+    private DatabaseReference mDatabase;
 
     private boolean firstClick = true;
 
@@ -64,6 +68,8 @@ public class ReportFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_form);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 
@@ -89,6 +95,10 @@ public class ReportFormActivity extends AppCompatActivity {
 
                 // TODO: Fetch the user object from the API, don't just make a new one.
                 OdorReport report = new OdorReport(new User(), reportDate, odorLocation, odor);
+                mDatabase.child("reports").child(report.getId().toString()).child("filingTime").setValue(report.getFilingTime());
+                mDatabase.child("reports").child(report.getId().toString()).child("odor").setValue(report.getOdor());
+                mDatabase.child("reports").child(report.getId().toString()).child("location").setValue(report.getLocation());
+                mDatabase.child("reports").child(report.getId().toString()).child("userid").setValue(report.getUser().getUuid().toString());
                 EventBus.getDefault().post(new OdorReportEvent(report));
                 // end HACK
                 finish();
