@@ -239,6 +239,7 @@ public class MapsActivity extends AppCompatActivity implements
         super.onStart();
         googleApi.onStart();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        /*#DANGER: May run before signed in, causing race condition*/
         String email = user.getEmail();
         if (email != null) {
             getSupportActionBar().setTitle(user.getDisplayName()+"'s Noseplug");
