@@ -160,6 +160,11 @@ public class FirebaseApi implements NoseplugApiInterface,
                 OdorEvent newEvent = v.getValue(OdorEvent.class);
                 newEvent.setFirebaseId(v.getKey());
                 if (getOdorEvent(newEvent.getId()) != null) {
+                    //need to copy over wallposts from existing odor event
+                    //this compensates for wallposts loading before the odorevents owning them
+                    for(Wallpost wp : getOdorEvent(newEvent.getId()).getWallposts()) {
+                        newEvent.addWallpost(wp);
+                    }
                     odorEvents.remove(getOdorEvent(newEvent.getId()));
                 }
                 odorEvents.add(newEvent);
