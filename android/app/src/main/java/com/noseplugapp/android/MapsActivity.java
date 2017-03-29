@@ -105,7 +105,7 @@ public class MapsActivity extends AppCompatActivity implements
         EventBus.getDefault().register(this);
 
         if (app.api() == null) {
-            app.api(new FirebaseApi(this.ctx));
+            app.api(new FirebaseApi(this));
             //app.api(new OfflineApi());
         }
     }

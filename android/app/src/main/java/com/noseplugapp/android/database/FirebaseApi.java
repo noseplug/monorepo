@@ -1,7 +1,6 @@
 package com.noseplugapp.android.database;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,13 +10,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.noseplugapp.android.events.CommentAddedEvent;
 import com.noseplugapp.android.events.DataChangedEvent;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.OdorReport;
 import com.noseplugapp.android.models.User;
-
-import com.google.firebase.database.*;
 import com.noseplugapp.android.models.Wallpost;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,6 +51,8 @@ public class FirebaseApi implements NoseplugApiInterface,
         this.ctx = ctx;
         auth.addAuthStateListener(this);
         auth.signInAnonymously().addOnCompleteListener(this);
+
+        FirebaseMessaging.getInstance().subscribeToTopic("newOdorEvents");
     }
 
     @Override
