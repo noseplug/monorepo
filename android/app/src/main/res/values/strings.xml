@@ -36,5 +36,7 @@
     <string name="intent_extra_report_date">com.noseplugapp.android.ReportDate</string>
     <string name="intent_extra_odor_event_id">com.noseplugapp.android.OdorEventId</string>
     <string name="intent_extra_odor_report_id">com.noseplugapp.android.OdorReportId</string>
+    <string name="loading">Loading…</string>
+    <string name="auth_failed">Authentication failed</string>
 
 </resources>

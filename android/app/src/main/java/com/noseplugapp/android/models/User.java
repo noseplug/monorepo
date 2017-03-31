@@ -7,18 +7,30 @@ import java.util.UUID;
 
 public class User {
 
-    public final UUID uuid = UUID.randomUUID();
+    public String uuid = UUID.randomUUID().toString();
+    private String name;
+    private String gender;
+    private Type type;
 
-    /* // Things that may or may not be useful to us.
-    public enum Sex {MALE, FEMALE, NOT_AVAILABLE}
+    public UUID getUuid() {
+        return UUID.fromString(uuid);
+    }
 
-    private Date birthday; // TODO: age range instead of actual DOB?
-    private Sex sex;
-    private String address;
-    private String email;
-    private String phoneNumber;
-    private String username;
-    */
+    public String getName() {
+        return name;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public enum Type {
+        CITIZEN, RESEARCHER, GOV_OFFICIAL, ADMIN
+    }
 
     @Override
     public boolean equals(Object other) {

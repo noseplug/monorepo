@@ -13,6 +13,8 @@ import com.noseplugapp.android.models.OdorReport;
 
 public class OdorReportDetailsActivity extends AppCompatActivity {
 
+    private final App app = App.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +26,7 @@ public class OdorReportDetailsActivity extends AppCompatActivity {
         ).getUuid();
 
         Log.d("asd", odorReportId.toString());
-        OdorReport odorReport = OfflineApi.noseplug.getOdorReport(odorReportId);
+        OdorReport odorReport = app.api().getOdorReport(odorReportId);
 
         ((TextView) findViewById(R.id.odor_report_details_textview))
                 .setText(odorReport.toString());
