@@ -2,6 +2,7 @@ package com.noseplugapp.android;
 
 import android.content.Context;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.noseplugapp.android.database.NoseplugApiInterface;
 
 // Singleton for global variables.
@@ -18,6 +19,7 @@ public class App {
     }
 
     private NoseplugApiInterface api;
+    private LatLng userLastKnownLocation;
 
     public void api(NoseplugApiInterface api) {
         this.api = api;
@@ -25,5 +27,12 @@ public class App {
 
     public NoseplugApiInterface api() {
         return api;
+    }
+
+    public void setUserLastKnownLocation(LatLng location) {
+        this.userLastKnownLocation = location;
+    }
+    public LatLng getUserLastKnownLocation() {
+        return userLastKnownLocation;
     }
 }

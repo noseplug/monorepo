@@ -71,7 +71,6 @@ public class MapsActivity extends AppCompatActivity implements
     private GoogleMap map;
     public final Map<String, OdorEvent> polygonEventMap = new ConcurrentHashMap<>();
 
-    private LatLng selectedLocation; // Starts at the user's last known location.
     private Marker userMarker;
 
     private Toolbar toolbar;
@@ -206,7 +205,7 @@ public class MapsActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 Log.v(TAG, "Clicked FAB, launching odor report activity");
-                EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
+                EventBus.getDefault().post(new CreateOdorReportEvent(app.getUserLastKnownLocation()));
             }
         });
     }
@@ -261,7 +260,7 @@ public class MapsActivity extends AppCompatActivity implements
     @Subscribe
     public void onLocationEvent(LocationEvent locationEvent){
         Log.v(TAG, "Received a location event");
-        selectedLocation = locationEvent.location;
+        app.setUserLastKnownLocation(locationEvent.location);
         LatLng current = locationEvent.location;
 
         if (userMarker != null) {
@@ -325,7 +324,7 @@ public class MapsActivity extends AppCompatActivity implements
         EventBus.getDefault().post(new LocationEvent(DEFAULT_LOCATION));
 
         CameraPosition pos = new CameraPosition.Builder()
-                .target(selectedLocation)
+                .target(app.getUserLastKnownLocation())
                 .zoom(INITIAL_LOCATION_ZOOM_FACTOR)
                 .build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
@@ -371,7 +370,7 @@ public class MapsActivity extends AppCompatActivity implements
             userMarker.remove();
         }
         BitmapDescriptor userIcon = BitmapDescriptorFactory.fromAsset("user_icon.png");
-        userMarker = map.addMarker(new MarkerOptions().position(selectedLocation).title("You are Here").zIndex(-1.0f).icon(userIcon));
+        userMarker = map.addMarker(new MarkerOptions().position(app.getUserLastKnownLocation()).title("You are Here").zIndex(-1.0f).icon(userIcon));
         userMarker.showInfoWindow();
 
         polygonEventMap.clear();
