@@ -14,23 +14,52 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.noseplugapp.android.MapsActivity;
 import com.noseplugapp.android.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Map;
+
+import static android.R.attr.data;
+
 public class NoseplugFirebaseMessagingService extends FirebaseMessagingService{
     private static final String TAG = NoseplugFirebaseMessagingService.class.getSimpleName();
-
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "Message received from: " + remoteMessage.getFrom());
-
-
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+        if (remoteMessage.getData().size() <= 0) {
+            Log.e(TAG, "Missing data payload");
+            return;
         }
 
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+        JSONObject event;
+        try {
+            event = new JSONObject(remoteMessage.getData().get("event"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Unable to get parse event payload");
+            return;
+        }
+
+        JSONObject report;
+        try {
+            report = new JSONObject(remoteMessage.getData().get("report"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Unable to get parse report payload");
+            return;
+        }
+
+        Log.d(TAG, "Message data.event: " + event);
+        Log.d(TAG, "Message data.report: " + report);
+
+        String content;
+        try {
+            content = report.getJSONObject("odor").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Couldn't get new event report data");
+            return;
         }
 
         Intent intent = new Intent(this, MapsActivity.class);
@@ -41,8 +70,8 @@ public class NoseplugFirebaseMessagingService extends FirebaseMessagingService{
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_add_white_24dp)
-                .setContentTitle("FCM Message")
-                .setContentText(remoteMessage.getNotification().getBody())
+                .setContentTitle("New Odor Event")
+                .setContentText(content)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

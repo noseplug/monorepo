@@ -1,6 +1,5 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
-
 admin.initializeApp(functions.config().firebase)
 
 exports.notifyGlobalNewOdorEvent = functions.database.ref('/events/{id}').onWrite(event => {
@@ -11,17 +10,17 @@ exports.notifyGlobalNewOdorEvent = functions.database.ref('/events/{id}').onWrit
     return null
   }
 
-  var odorEventName = event.data.child('name').val()
-  var odorEventOwner = event.data.child('owner-id').val()
+  var odorEvent = event.data.val()
+  var reportId = odorEvent.reportids[0]
 
-  var payload = {
-    notification: {
-      title: 'New Odor Event: ' + odorEventName,
-      body: odorEventOwner + ' reported ' + odorEventName
+  return admin.database().ref('/reports').child(reportId).once('value').then(snapshot => {
+    var payload = {
+      data: {
+        event: JSON.stringify(odorEvent),
+        report: JSON.stringify(snapshot.val())
+      }
     }
-  }
 
-  admin.messaging().sendToTopic('newOdorEvents', payload)
-
-  return null
+    admin.messaging().sendToTopic('newOdorEvents', payload)
+  })
 })
