@@ -1,5 +1,16 @@
 */node_modules/
 
+### Esteban's computer ###
+IntelliLang.xml
+_mac/*
+colors.scheme.xml
+debugger.xml
+diff.xml
+gradle.run.settings.xml
+inspection/Default.xml
+ui.lnf.xml
+web-browsers.xml
+
 # Created by https://www.gitignore.io/api/java,intellij,vim,android,eclipse,windows,macos,linux
 
 ### Intellij ###
