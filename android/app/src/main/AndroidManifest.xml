@@ -52,6 +52,10 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".ResetEmailActivity"></activity>
 
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings" />
+
         <service
             android:name=".database.NoseplugFirebaseInstanceIdService">
             <intent-filter>

@@ -131,21 +131,24 @@ public class MapsActivity extends AppCompatActivity implements
 
             //Replacing the main content with ContentFragment Which is our Inbox View;
                 case R.id.register:
-                    Intent intent = new Intent(ctx, RegistrationActivity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(ctx, RegistrationActivity.class));
                     return true;
-                    // For rest of the options we just show a toast on click
 
                 case R.id.login:
-                    intent = new Intent(ctx, LoginActivity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(ctx, LoginActivity.class));
                     Toast.makeText(getApplicationContext(),"Login Selected",Toast.LENGTH_SHORT).show();
                     return true;
+
                 case R.id.odor_classification:
                     Toast.makeText(getApplicationContext(),"Send Selected",Toast.LENGTH_SHORT).show();
                     Log.v(TAG, "Clicked Odors Button");
                     new OdorsDialogFragment().show(getFragmentManager(), "dialog");
                     return true;
+
+                case R.id.settings:
+                    startActivity(new Intent(ctx, SettingsActivity.class));
+                    return true;
+
                 default:
                     return true;
                 }
