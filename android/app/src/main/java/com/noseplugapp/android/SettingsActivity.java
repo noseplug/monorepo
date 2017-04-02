@@ -10,7 +10,7 @@ import android.widget.EditText;
 
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = SettingsActivity.class.getSimpleName();
-    private static final int DEFAULT_NEW_EVENT_NOTIFICATION_DISTANCE_KM = 1000;
+    public static final int DEFAULT_NEW_EVENT_NOTIFICATION_DISTANCE_KM = 1000;
 
     private SharedPreferences preferences;
     private EditText newEventNotificationDistanceEditText;
@@ -42,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
             editor.putInt(getString(R.string.shared_preferences_newEventNotificationDistance),
                     dist);
             editor.apply();
+            Log.d(TAG, "Setting NewEventNotificationDistance to " + dist);
 
         } catch (NumberFormatException nfe) {
             Log.e(TAG, nfe.getMessage());

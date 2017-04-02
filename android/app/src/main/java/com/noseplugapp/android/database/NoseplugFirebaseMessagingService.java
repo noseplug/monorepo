@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -16,6 +17,7 @@ import com.google.gson.Gson;
 import com.noseplugapp.android.App;
 import com.noseplugapp.android.MapsActivity;
 import com.noseplugapp.android.R;
+import com.noseplugapp.android.SettingsActivity;
 import com.noseplugapp.android.utils.NoseplugLatLng;
 
 import org.json.JSONException;
@@ -49,8 +51,11 @@ public class NoseplugFirebaseMessagingService extends FirebaseMessagingService{
             Log.i(TAG, "New event occurred at " + eventLocation);
 
             double distance = greatCircleDistanceKm(app.getUserLastKnownLocation(), eventLocation);
-            if (distance > 1000.0) {
-                Log.i(TAG, String.format("Event too far away (%f km), not notifying user", distance));
+            double prefDistance = getPrefDistance();
+            if (distance > prefDistance) {
+                Log.i(TAG, String.format(
+                        "Event too far away (%f km > %f km), not notifying user",
+                        distance, prefDistance));
                 return;
             }
 
@@ -76,6 +81,13 @@ public class NoseplugFirebaseMessagingService extends FirebaseMessagingService{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private double getPrefDistance() {
+        String keyPref = getString(R.string.shared_preferences_noseplug);
+        String keyDist = getString(R.string.shared_preferences_newEventNotificationDistance);
+        SharedPreferences preferences = getSharedPreferences(keyPref, Context.MODE_PRIVATE);
+        return (double) preferences.getInt(keyDist, SettingsActivity.DEFAULT_NEW_EVENT_NOTIFICATION_DISTANCE_KM);
     }
 
     // Calculate the great-circle distance between two coordinates in kilometers.
