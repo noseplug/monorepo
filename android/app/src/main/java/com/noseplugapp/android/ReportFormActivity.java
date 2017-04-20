@@ -20,7 +20,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.noseplugapp.android.events.OdorReportEvent;
 import com.noseplugapp.android.models.Odor;
 import com.noseplugapp.android.models.OdorReport;
@@ -29,9 +32,12 @@ import com.noseplugapp.android.models.User;
 public class ReportFormActivity extends AppCompatActivity {
     private Calendar myCalendar = Calendar.getInstance();
 
+    private DatabaseReference mDatabase;
+
     private boolean firstClick = true;
 
     private Date reportDate;
+    private UUID eventId;
 
     private Date reportCreateDate = new Date(System.currentTimeMillis());
     private LatLng odorLocation;
@@ -64,6 +70,8 @@ public class ReportFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_form);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 
@@ -71,6 +79,8 @@ public class ReportFormActivity extends AppCompatActivity {
 
         odorLocation = getIntent().getParcelableExtra(
                 getResources().getString(R.string.intent_extra_location));
+
+        eventId = UUID.fromString(getIntent().getStringExtra(getResources().getString(R.string.intent_extra_odor_event_id)));
 
         odorTypeSpinner.setAdapter(new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, Odor.Type.values()));
@@ -89,6 +99,13 @@ public class ReportFormActivity extends AppCompatActivity {
 
                 // TODO: Fetch the user object from the API, don't just make a new one.
                 OdorReport report = new OdorReport(new User(), reportDate, odorLocation, odor);
+                if (App.getInstance().getIsNew() == false) {
+                    App.getInstance().api().getOdorEvent(eventId).addOdorReport(report);
+                }
+                mDatabase.child("reports").child(report.getId().toString()).child("filingTime").setValue(report.getFilingTime());
+                mDatabase.child("reports").child(report.getId().toString()).child("odor").setValue(report.getOdor());
+                mDatabase.child("reports").child(report.getId().toString()).child("location").setValue(report.getLocation());
+                mDatabase.child("reports").child(report.getId().toString()).child("userid").setValue(report.getUser().getUuid().toString());
                 EventBus.getDefault().post(new OdorReportEvent(report));
                 // end HACK
                 finish();

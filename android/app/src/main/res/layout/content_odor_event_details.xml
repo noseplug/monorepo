@@ -28,4 +28,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/commentButton" />
 
+    <Button
+        android:id="@+id/add_report"
+        android:layout_below="@id/commentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Report" />
+
 </RelativeLayout>

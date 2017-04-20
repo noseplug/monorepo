@@ -1,6 +1,7 @@
 package com.noseplugapp.android;
 
 import android.content.Context;
+import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.noseplugapp.android.database.NoseplugApiInterface;
@@ -34,5 +35,15 @@ public class App {
     }
     public LatLng getUserLastKnownLocation() {
         return userLastKnownLocation;
+    }
+
+    private boolean isNew;
+
+    public boolean getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(boolean isNew) {
+        this.isNew = isNew;
     }
 }
