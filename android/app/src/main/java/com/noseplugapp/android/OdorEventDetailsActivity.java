@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelUuid;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
+import android.util.EventLog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +24,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.noseplugapp.android.events.CommentAddedEvent;
+import com.noseplugapp.android.events.CreateOdorReportEvent;
 import com.noseplugapp.android.models.OdorEvent;
 import com.noseplugapp.android.models.OdorReport;
 import com.noseplugapp.android.models.Wallpost;
@@ -52,6 +56,8 @@ public class OdorEventDetailsActivity extends AppCompatActivity
     private ListView commentList = null;
     ArrayAdapter<Wallpost> commentAdapter = null;
 
+    private Button add_report;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +66,7 @@ public class OdorEventDetailsActivity extends AppCompatActivity
         setContentView(R.layout.activity_odor_event_details);
         setSupportActionBar((Toolbar) this.findViewById(R.id.my_toolbar));
 
-        UUID odorEventId = ((ParcelUuid) getIntent().getParcelableExtra(
+        final UUID odorEventId = ((ParcelUuid) getIntent().getParcelableExtra(
                 getResources().getString(R.string.intent_extra_odor_event_id))
         ).getUuid();
 
@@ -81,6 +87,18 @@ public class OdorEventDetailsActivity extends AppCompatActivity
 
         commentList = (ListView) this.findViewById(R.id.comment_list);
         commentList.setAdapter(commentAdapter);
+
+        Button add_report = (Button) findViewById(R.id.add_report);
+        add_report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.v(TAG, "Clicked button, launching odor report activity");
+                app.setIsNew(false);
+                CreateOdorReportEvent createNewOdorReport = new CreateOdorReportEvent(app.getMostRecentLocation(), odorEvent);
+                EventBus.getDefault().post(createNewOdorReport);
+                //odorEvent.addOdorReport(createNewOdorReport.event.getOdorReports().get(0));
+            }
+        });
 
         findViewById(R.id.commentButton).setOnClickListener(new View.OnClickListener(){
             public void onClick(View view) {

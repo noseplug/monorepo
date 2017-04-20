@@ -206,7 +206,8 @@ public class MapsActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 Log.v(TAG, "Clicked FAB, launching odor report activity");
-                EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation));
+                app.setIsNew(true);
+                EventBus.getDefault().post(new CreateOdorReportEvent(selectedLocation, new OdorEvent()));
             }
         });
     }
@@ -274,6 +275,7 @@ public class MapsActivity extends AppCompatActivity implements
                 .zoom(INITIAL_LOCATION_ZOOM_FACTOR)
                 .build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
+        App.getInstance().setMostRecentLocation(current);
     }
 
     @Subscribe
@@ -301,6 +303,7 @@ public class MapsActivity extends AppCompatActivity implements
     public void onCreateOdorReportEvent(CreateOdorReportEvent e) {
         Intent reportIntent = new Intent(this, ReportFormActivity.class);
         reportIntent.putExtra(getResources().getString(R.string.intent_extra_location), e.location);
+        reportIntent.putExtra(getResources().getString(R.string.intent_extra_odor_event_id), e.event.getId().toString());
         this.startActivity(reportIntent);
     }
 
@@ -317,7 +320,7 @@ public class MapsActivity extends AppCompatActivity implements
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                EventBus.getDefault().post(new CreateOdorReportEvent(latLng));
+                EventBus.getDefault().post(new CreateOdorReportEvent(latLng, new OdorEvent()));
             }
         });
 

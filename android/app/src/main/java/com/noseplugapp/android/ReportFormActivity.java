@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -36,6 +37,7 @@ public class ReportFormActivity extends AppCompatActivity {
     private boolean firstClick = true;
 
     private Date reportDate;
+    private UUID eventId;
 
     private Date reportCreateDate = new Date(System.currentTimeMillis());
     private LatLng odorLocation;
@@ -78,6 +80,8 @@ public class ReportFormActivity extends AppCompatActivity {
         odorLocation = getIntent().getParcelableExtra(
                 getResources().getString(R.string.intent_extra_location));
 
+        eventId = UUID.fromString(getIntent().getStringExtra(getResources().getString(R.string.intent_extra_odor_event_id)));
+
         odorTypeSpinner.setAdapter(new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, Odor.Type.values()));
         odorStrengthSpinner.setAdapter(new ArrayAdapter<>(
@@ -95,6 +99,9 @@ public class ReportFormActivity extends AppCompatActivity {
 
                 // TODO: Fetch the user object from the API, don't just make a new one.
                 OdorReport report = new OdorReport(new User(), reportDate, odorLocation, odor);
+                if (App.getInstance().getIsNew() == false) {
+                    App.getInstance().api().getOdorEvent(eventId).addOdorReport(report);
+                }
                 mDatabase.child("reports").child(report.getId().toString()).child("filingTime").setValue(report.getFilingTime());
                 mDatabase.child("reports").child(report.getId().toString()).child("odor").setValue(report.getOdor());
                 mDatabase.child("reports").child(report.getId().toString()).child("location").setValue(report.getLocation());
