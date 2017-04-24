@@ -10,7 +10,7 @@ Contents:
 - `./android/`: Android app source code, using Android Studio with Gradle.
 - `./functions/`: [Cloud Functions for Firebase][] source code.
 
-Releases can be found on the [Releases page][].
+Releases details and downloads can be found on the [Releases page][].
 
 [Cloud Functions for Firebase]: https://firebase.google.com/docs/functions/
 [Releases page]: https://github.com/noseplug/monorepo/releases
