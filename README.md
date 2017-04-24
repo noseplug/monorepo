@@ -32,16 +32,18 @@ Noseplug should now be available in your launcher.
 [noseplug-v1.zip]: https://github.com/noseplug/monorepo/files/952695/noseplug-v1.zip
 
 # Development and Deployment
+
 ## Android
-Clone this repository
+
+Clone this repository.
 ```
- $  git clone https://github.com/noseplug/monorepo.git noseplug
+$  git clone https://github.com/noseplug/monorepo.git noseplug
 ```
-Build the Android app with Gradle
+Build the Android app with Gradle.
 ```
- $  cd noseplug/android
- $  ./gradlew assembleDebug  # This will take longer the first time it is run.
- $  cp app/build/outputs/apk/app-debug.apk noseplug.apk
+$  cd noseplug/android
+$  ./gradlew assembleDebug  # This will take longer the first time it is run.
+$  cp app/build/outputs/apk/app-debug.apk noseplug.apk
 ```
 
 After the APK is built, it can be installed by following the [getting started instructions][].
@@ -52,3 +54,36 @@ a connected Android phone with USB debugging enabled.
 [getting started instructions]: #getting-started-with-noseplug-for-android
 
 ## Functions
+
+[Install Node.js and NPM.](https://docs.npmjs.com/getting-started/installing-node)
+
+Install `firebase-tools`
+```
+$ sudo npm install -g firebase-tools
+```
+
+Switch to the `functions` directory of your clone of this repository.
+```
+$ cd noseplug/functions
+```
+
+Install dependencies using NPM.
+```
+$ npm install
+```
+
+Login to `firebase-cli`. Follow the prompts and sign in to your Google Account
+in your Web browser. Note that you have to be added as a contributor to the
+project: [noseplug-af01c][]
+
+[noseplug-af01c]: https://console.firebase.google.com/project/noseplug-af01c/
+
+
+```
+$ firebase login
+```
+
+Deploy the cloud functions to Google Cloud.
+```
+$ firebase --only functions deploy  # NOTE: 
+```
