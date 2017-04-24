@@ -74,7 +74,7 @@ $ npm install
 
 Login to `firebase-cli`. Follow the prompts and sign in to your Google Account
 in your Web browser. Note that you have to be added as a contributor to the
-project: [noseplug-af01c][]
+project before you can log in: [noseplug-af01c][]
 
 [noseplug-af01c]: https://console.firebase.google.com/project/noseplug-af01c/
 
@@ -85,5 +85,5 @@ $ firebase login
 
 Deploy the cloud functions to Google Cloud.
 ```
-$ firebase --only functions deploy  # NOTE: 
+$ firebase --only functions deploy
 ```
