@@ -146,5 +146,5 @@ You may need to run the command as `root` depending on your computer.
 $ su
 # npm install -g firebase-tools
 # exit
-$ firebase-tools --help
+$ firebase --help
 ```
